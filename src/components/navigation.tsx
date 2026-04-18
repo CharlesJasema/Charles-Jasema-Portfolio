@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { ThemeToggle } from './ThemeToggle';
+import { imagesConfig } from '@/config/images';
 
 interface NavItem {
   label: string;
@@ -77,8 +79,14 @@ export function Navigation(): JSX.Element {
             className="flex items-center space-x-3 group"
             aria-label="Charles Jasema Home"
           >
-            <div className="w-10 h-10 bg-primary-gold rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <span className="text-background-dark font-bold text-lg">CJ</span>
+            <div className="relative w-10 h-10 rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-110">
+              <Image
+                src={imagesConfig.logos.codeDesignLogo}
+                alt="Charles Jasema Logo"
+                fill
+                className="object-cover"
+                sizes="40px"
+              />
             </div>
             <span className="hidden sm:inline text-primary-gold font-heading font-bold text-lg group-hover:text-primary-gold/80 transition-colors">
               Charles Jasema

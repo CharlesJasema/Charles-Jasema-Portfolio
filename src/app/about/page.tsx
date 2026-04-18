@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaGraduationCap, FaBriefcase, FaAward, FaDownload } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
+import { imagesConfig } from '@/config/images';
 
 export const metadata = {
   title: `About ${siteConfig.name} - Software Engineer, Designer & Gospel Artist`,
@@ -19,12 +20,14 @@ export default function AboutPage() {
             {/* Profile Image */}
             <div className="relative">
               <div className="aspect-square max-w-md mx-auto relative rounded-lg overflow-hidden shadow-2xl shadow-primary-gold/20">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <FaCode className="text-8xl text-primary-gold mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">Professional Image</p>
-                  </div>
-                </div>
+                <Image
+                  src={imagesConfig.profile.professional}
+                  alt={`${siteConfig.name} - Professional Photo`}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
               {/* Decorative Elements */}
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-gold/10 rounded-full blur-2xl"></div>

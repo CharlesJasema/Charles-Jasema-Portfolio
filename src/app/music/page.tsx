@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaPlay, FaMusic, FaYoutube, FaCalendar, FaMicrophone, FaExternalLinkAlt } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
 import { Button, Card } from '@/components/ui';
 import { siteConfig } from '@/config/site';
 import { musicConfig } from '@/config/music';
+import { imagesConfig } from '@/config/images';
 import { clsx } from 'clsx';
 
 export default function MusicPage() {
@@ -13,25 +15,47 @@ export default function MusicPage() {
     <div className="min-h-screen pt-24 pb-20">
       {/* Hero Section */}
       <section className="px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-6">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-red/10 rounded-full mb-6">
-              <FaMusic className="text-4xl text-accent-red" />
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Ministry Image */}
+            <div className="relative">
+              <div className="aspect-square max-w-md mx-auto relative rounded-lg overflow-hidden shadow-2xl shadow-accent-red/20">
+                <Image
+                  src={imagesConfig.profile.ministry}
+                  alt={`${siteConfig.name} - Music Ministry`}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              {/* Decorative Elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent-red/10 rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary-gold/10 rounded-full blur-2xl"></div>
             </div>
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
-            <span className="text-gray-900 dark:text-white">{musicConfig.story.title}</span>
-          </h1>
-          <p className="text-2xl text-accent-red font-semibold mb-6">
-            {musicConfig.story.subtitle}
-          </p>
-          <p className="text-lg text-gray-700 dark:text-text-secondary max-w-3xl mx-auto mb-8">
-            {musicConfig.story.description}
-          </p>
-          <div className="inline-block bg-gradient-to-r from-accent-red/10 to-primary-gold/10 rounded-lg p-6 max-w-2xl">
-            <p className="text-gray-800 dark:text-text-primary font-semibold">
-              <span className="text-accent-red">Mission:</span> {musicConfig.story.mission}
-            </p>
+
+            {/* Text Content */}
+            <div className="text-center lg:text-left">
+              <div className="mb-6 lg:hidden">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-red/10 rounded-full">
+                  <FaMusic className="text-4xl text-accent-red" />
+                </div>
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
+                <span className="text-gray-900 dark:text-white">{musicConfig.story.title}</span>
+              </h1>
+              <p className="text-2xl text-accent-red font-semibold mb-6">
+                {musicConfig.story.subtitle}
+              </p>
+              <p className="text-lg text-gray-700 dark:text-text-secondary mb-8">
+                {musicConfig.story.description}
+              </p>
+              <div className="inline-block bg-gradient-to-r from-accent-red/10 to-primary-gold/10 rounded-lg p-6">
+                <p className="text-gray-800 dark:text-text-primary font-semibold">
+                  <span className="text-accent-red">Mission:</span> {musicConfig.story.mission}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
