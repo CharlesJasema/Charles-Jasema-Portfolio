@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Playfair+Display:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Light mode (default) */
+body {
+  @apply bg-white text-gray-900;
+}
+
+/* Dark mode */
+.dark body {
+  @apply bg-background-dark text-text-primary;
+}
+
+h1 {
+  @apply font-heading text-4xl font-bold text-primary-gold;
+}
+
+h2 {
+  @apply font-heading text-3xl font-bold;
+}
+
+.dark h2 {
+  @apply text-white;
+}
+
+h2 {
+  @apply text-gray-900;
+}
+
+h3 {
+  @apply font-heading text-2xl font-bold;
+}
+
+.dark h3 {
+  @apply text-white;
+}
+
+h3 {
+  @apply text-gray-900;
+}
+
+p {
+  @apply font-body text-base;
+}
+
+.dark p {
+  @apply text-text-secondary;
+}
+
+p {
+  @apply text-gray-700;
+}
+
+a {
+  @apply transition-colors duration-300;
+}
+
+a:hover {
+  @apply text-primary-gold;
+}
+
+button {
+  @apply transition-all duration-300;
+}
+
+input,
+textarea,
+select {
+  @apply border border-primary-gold border-opacity-30 rounded-sm px-4 py-2 placeholder-text-tertiary transition-all duration-300;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-background-dark text-text-primary;
+}
+
+input,
+textarea,
+select {
+  @apply bg-white text-gray-900;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  @apply outline-none border-primary-gold border-opacity-100;
+}
+
+.glass-effect {
+  @apply backdrop-blur-md border border-primary-gold border-opacity-20;
+}
+
+.dark .glass-effect {
+  @apply bg-background-dark bg-opacity-80;
+}
+
+.glass-effect {
+  @apply bg-white bg-opacity-80;
+}
+
+.gold-glow {
+  @apply shadow-lg shadow-primary-gold/50;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-background-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-gold rounded-full;
+}
+
+::selection {
+  @apply bg-primary-gold text-background-dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
