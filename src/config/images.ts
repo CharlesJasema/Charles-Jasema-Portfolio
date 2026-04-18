@@ -24,6 +24,11 @@ export const imagesConfig = {
     kglScreenshot: '/images/KGL Screenshot.jpg',
   },
 
+  // Banners
+  banners: {
+    codeDesignBanner: '/images/Code & Design Banner.jpeg',
+  },
+
   // Placeholder for future images
   placeholders: {
     default: '/placeholder',

@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button, Card } from '@/components/ui';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight, FaDownload } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
+import { imagesConfig } from '@/config/images';
 
 export default function HomePage() {
   return (
@@ -211,6 +213,56 @@ export default function HomePage() {
                 <FaArrowRight className="ml-2" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Music Ministry Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-accent-red/5 via-primary-gold/5 to-accent-red/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Music Logo */}
+            <div className="relative">
+              <div className="aspect-square max-w-md mx-auto relative rounded-lg overflow-hidden shadow-2xl shadow-accent-red/20">
+                <Image
+                  src={imagesConfig.logos.musicLogo}
+                  alt="Charles Jasema Music Logo"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              {/* Decorative Elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent-red/10 rounded-full blur-2xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary-gold/10 rounded-full blur-2xl"></div>
+            </div>
+
+            {/* Music Ministry Info */}
+            <div className="text-center lg:text-left">
+              <h2 className="text-4xl sm:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-6">
+                <span className="text-accent-red">Music</span> Ministry
+              </h2>
+              <p className="text-xl text-gray-700 dark:text-text-secondary mb-6">
+                Spreading Hope Through Worship Since 2015
+              </p>
+              <p className="text-gray-600 dark:text-text-tertiary mb-8 leading-relaxed">
+                With 12 singles released and 9+ years of ministry, I create worship music that inspires faith and brings glory to God. 
+                My songs have touched hearts across Uganda and South Sudan, leading many to Christ.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link href="/music">
+                  <Button variant="primary" size="lg" className="w-full sm:w-auto bg-accent-red hover:bg-accent-red/90">
+                    <FaMusic className="mr-2" />
+                    Listen to My Music
+                  </Button>
+                </Link>
+                <Link href="/booking">
+                  <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                    Book for Event
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

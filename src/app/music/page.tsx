@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaPlay, FaMusic, FaYoutube, FaCalendar, FaMicrophone, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaPlay, FaMusic, FaYoutube, FaExternalLinkAlt, FaDrum, FaGuitar, FaMicrophone } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
 import { Button, Card } from '@/components/ui';
 import { siteConfig } from '@/config/site';
@@ -36,23 +36,23 @@ export default function MusicPage() {
 
             {/* Text Content */}
             <div className="text-center lg:text-left">
-              <div className="mb-6 lg:hidden">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-red/10 rounded-full">
-                  <FaMusic className="text-4xl text-accent-red" />
-                </div>
-              </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
                 <span className="text-gray-900 dark:text-white">{musicConfig.story.title}</span>
               </h1>
               <p className="text-2xl text-accent-red font-semibold mb-6">
                 {musicConfig.story.subtitle}
               </p>
-              <p className="text-lg text-gray-700 dark:text-text-secondary mb-8">
+              <p className="text-lg text-gray-700 dark:text-text-secondary mb-6 leading-relaxed">
                 {musicConfig.story.description}
               </p>
-              <div className="inline-block bg-gradient-to-r from-accent-red/10 to-primary-gold/10 rounded-lg p-6">
+              <div className="bg-gradient-to-r from-accent-red/10 to-primary-gold/10 rounded-lg p-6 mb-6">
                 <p className="text-gray-800 dark:text-text-primary font-semibold">
                   <span className="text-accent-red">Mission:</span> {musicConfig.story.mission}
+                </p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-4">
+                <p className="text-sm text-gray-700 dark:text-text-secondary italic">
+                  "{musicConfig.story.philosophy}"
                 </p>
               </div>
             </div>
@@ -83,20 +83,181 @@ export default function MusicPage() {
         </div>
       </section>
 
-      {/* Featured Songs */}
+      {/* Musical Skills */}
+      <section className="px-4 sm:px-6 lg:px-8 mb-20 bg-slate-100 dark:bg-slate-900 py-12">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-8">
+            Musical Skills & Influences
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Instruments */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6">
+              <h3 className="text-xl font-heading font-bold text-accent-red mb-4">Instruments</h3>
+              <div className="space-y-3">
+                {musicConfig.instruments.map((instrument, index) => (
+                  <div key={index} className="flex items-center gap-3 text-gray-700 dark:text-text-secondary">
+                    {instrument.includes('Drum') && <FaDrum className="text-accent-red" />}
+                    {instrument.includes('Guitar') && <FaGuitar className="text-accent-red" />}
+                    {instrument.includes('Vocal') && <FaMicrophone className="text-accent-red" />}
+                    {instrument.includes('Keyboard') && <FaMusic className="text-accent-red" />}
+                    <span>{instrument}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Influences */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6">
+              <h3 className="text-xl font-heading font-bold text-accent-red mb-4">Musical Influences</h3>
+              <div className="space-y-3">
+                {musicConfig.influences.map((influence, index) => (
+                  <div key={index} className="flex items-center gap-3 text-gray-700 dark:text-text-secondary">
+                    <FaMusic className="text-primary-gold" />
+                    <span>{influence}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Music Videos Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+              Music Videos
+            </h2>
+            <p className="text-gray-700 dark:text-text-secondary text-lg">
+              Watch official music videos with full production
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {musicConfig.musicVideos.map((video) => (
+              <Card
+                key={video.id}
+                variant="elevated"
+                padding="none"
+                className="overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300"
+              >
+                {/* Video Thumbnail */}
+                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
+                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative">
+                    <FaPlay className="text-6xl text-accent-red/50 group-hover:scale-110 transition-transform duration-300" />
+                    {video.featured && (
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full">
+                        FEATURED
+                      </div>
+                    )}
+                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded">
+                      {video.views} views
+                    </div>
+                  </div>
+
+                  {/* Video Info */}
+                  <div className="p-6">
+                    <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
+                      {video.category}
+                    </span>
+                    <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-accent-red transition-colors duration-300">
+                      {video.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-4">
+                      {video.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500 dark:text-text-tertiary">
+                        {video.releaseDate}
+                      </span>
+                      <span className="inline-flex items-center gap-2 text-accent-red hover:text-accent-red/80 text-sm font-semibold">
+                        Watch on YouTube
+                        <FaExternalLinkAlt className="text-xs" />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Lyrical Videos Section */}
       <section className="px-4 sm:px-6 lg:px-8 mb-20 bg-slate-100 dark:bg-slate-900 py-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Latest Songs
+              Lyrical Videos
             </h2>
             <p className="text-gray-700 dark:text-text-secondary text-lg">
-              Listen to my recent releases and worship songs
+              Worship along with lyrics on screen
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {musicConfig.lyricalVideos.map((video) => (
+              <Card
+                key={video.id}
+                variant="elevated"
+                padding="none"
+                className="overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300"
+              >
+                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
+                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center relative">
+                    <FaPlay className="text-6xl text-primary-gold/50 group-hover:scale-110 transition-transform duration-300" />
+                    {video.featured && (
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded-full">
+                        FEATURED
+                      </div>
+                    )}
+                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded">
+                      {video.views} views
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
+                      {video.category}
+                    </span>
+                    <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-primary-gold transition-colors duration-300">
+                      {video.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-4">
+                      {video.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500 dark:text-text-tertiary">
+                        {video.releaseDate}
+                      </span>
+                      <span className="inline-flex items-center gap-2 text-primary-gold hover:text-primary-gold/80 text-sm font-semibold">
+                        Watch on YouTube
+                        <FaExternalLinkAlt className="text-xs" />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Audio Songs Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+              Audio Songs
+            </h2>
+            <p className="text-gray-700 dark:text-text-secondary text-lg">
+              Listen to all 12 singles on Mdundo and other platforms
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {musicConfig.songs.map((song) => (
+            {musicConfig.audioSongs.map((song) => (
               <Card
                 key={song.id}
                 variant="elevated"
@@ -120,12 +281,22 @@ export default function MusicPage() {
                           {song.title}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-text-tertiary">
-                          {song.album} • {song.duration}
+                          {song.album} • {song.duration} • {song.releaseDate}
                         </p>
                       </div>
                       {song.featured && (
                         <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
                           NEW
+                        </span>
+                      )}
+                      {song.isFirstSong && (
+                        <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded">
+                          FIRST
+                        </span>
+                      )}
+                      {song.isCollaboration && (
+                        <span className="px-2 py-1 bg-tech-teal text-white text-xs font-bold rounded">
+                          COLLAB
                         </span>
                       )}
                     </div>
@@ -136,16 +307,7 @@ export default function MusicPage() {
                     {/* Streaming Links */}
                     <div className="flex flex-wrap gap-2">
                       <a
-                        href={song.streamingLinks.youtube}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-red text-white rounded-lg hover:bg-accent-red/90 transition-colors text-sm"
-                      >
-                        <FaYoutube />
-                        <span>YouTube</span>
-                      </a>
-                      <a
-                        href={song.streamingLinks.mdundo}
+                        href={song.mdundoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-gold text-background-dark rounded-lg hover:bg-primary-gold/90 transition-colors text-sm"
@@ -153,69 +315,17 @@ export default function MusicPage() {
                         <FaMusic />
                         <span>Mdundo</span>
                       </a>
+                      {song.directUpload && (
+                        <a
+                          href={song.directUpload}
+                          download
+                          className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-red text-white rounded-lg hover:bg-accent-red/90 transition-colors text-sm"
+                        >
+                          <FaPlay />
+                          <span>Play</span>
+                        </a>
+                      )}
                     </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Music Videos */}
-      <section className="px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Music Videos
-            </h2>
-            <p className="text-gray-700 dark:text-text-secondary text-lg">
-              Watch official music videos and live performances
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {musicConfig.videos.map((video) => (
-              <Card
-                key={video.id}
-                variant="elevated"
-                padding="none"
-                className="overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300"
-              >
-                {/* Video Thumbnail */}
-                <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative">
-                  <FaPlay className="text-6xl text-accent-red/50 group-hover:scale-110 transition-transform duration-300" />
-                  {video.featured && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full">
-                      FEATURED
-                    </div>
-                  )}
-                  <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded">
-                    {video.views} views
-                  </div>
-                </div>
-
-                {/* Video Info */}
-                <div className="p-6">
-                  <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 group-hover:text-accent-red transition-colors duration-300">
-                    {video.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-text-secondary mb-4">
-                    {video.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500 dark:text-text-tertiary">
-                      {video.releaseDate}
-                    </span>
-                    <a
-                      href={siteConfig.music.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-accent-red hover:text-accent-red/80 text-sm font-semibold"
-                    >
-                      Watch
-                      <FaExternalLinkAlt className="text-xs" />
-                    </a>
                   </div>
                 </div>
               </Card>
