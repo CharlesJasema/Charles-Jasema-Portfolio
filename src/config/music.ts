@@ -115,6 +115,7 @@ export const musicConfig = {
       mdundoUrl: 'https://mdundo.com/a/148492',
       directUpload: null,
       featured: true,
+      isNew: true,
       isCollaboration: true,
     },
     {

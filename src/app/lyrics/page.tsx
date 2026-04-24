@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaDownload } from 'react-icons/fa';
 import { Button, Card } from '@/components/ui';
 import { lyricsConfig } from '@/config/lyrics';
@@ -10,6 +10,48 @@ import { clsx } from 'clsx';
 export default function LyricsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSong, setSelectedSong] = useState<string | null>(null);
+
+  // Add structured data for SEO
+  useEffect(() => {
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'MusicPlaylist',
+      name: 'Charles Jasema Song Lyrics Collection',
+      description: 'Complete lyrics collection for all Charles Jasema worship songs',
+      author: {
+        '@type': 'Person',
+        name: 'Charles Jasema',
+        url: 'https://charlesjasema.com',
+      },
+      track: lyricsConfig.lyrics.map((song) => ({
+        '@type': 'MusicRecording',
+        name: song.songTitle,
+        byArtist: {
+          '@type': 'Person',
+          name: song.artist,
+        },
+        inLanguage: song.language,
+        datePublished: song.releaseYear,
+        recordingOf: {
+          '@type': 'MusicComposition',
+          name: song.songTitle,
+          lyricist: {
+            '@type': 'Person',
+            name: 'Charles Jasema',
+          },
+        },
+      })),
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   // Filter lyrics based on search
   const filteredLyrics = lyricsConfig.lyrics.filter((song) =>
@@ -87,11 +129,18 @@ export default function LyricsPage() {
                       {song.album} • {song.releaseYear}
                     </p>
                   </div>
-                  {song.featured && (
-                    <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
-                      FEATURED
-                    </span>
-                  )}
+                  <div className="flex flex-col gap-2">
+                    {song.isNew && (
+                      <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded animate-pulse">
+                        NEW
+                      </span>
+                    )}
+                    {song.featured && (
+                      <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
+                        FEATURED
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <p className="text-sm text-gray-700 dark:text-text-secondary mb-4">

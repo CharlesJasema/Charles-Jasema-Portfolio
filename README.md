@@ -2,28 +2,31 @@
 
 A modern, responsive portfolio website showcasing my work as a Software Engineer, Gospel Music Artist, and Graphics Designer.
 
-## 🌟 Features
+## Features
 
-### 🎵 Music Ministry
+### Music Ministry
 - **12 Original Songs** - All available on Mdundo
 - **Music Videos** - Full production and lyrical videos on YouTube
-- **Lyrics Section** - Read, search, and download song lyrics
-- **Streaming Links** - Direct links to YouTube and Mdundo
+- **Lyrics Section** - Read, search, and download song lyrics (10 songs with complete lyrics)
+- **NEW Content Badges** - Easily identify latest releases with animated badges
+- **Streaming Links** - Direct links to YouTube, Mdundo, Spotify, and Apple Music
+- **SEO Optimized** - Structured data for Google rich snippets and better discoverability
+- **Download Lyrics** - One-click download of any song lyrics as .txt file
 
-### 💼 Professional Portfolio
+### Professional Portfolio
 - **About Me** - Education, work experience, and journey
 - **Portfolio** - Showcase of software and design projects
 - **Blog** - Articles and insights
 - **Contact** - Get in touch
 - **Booking** - Book for events and performances
 
-### 🎨 Design Features
+### Design Features
 - **Dark Mode** - Toggle between light and dark themes
 - **Responsive Design** - Works on all devices (mobile, tablet, desktop)
 - **Fast Loading** - Optimized for performance
 - **Accessibility** - WCAG compliant design
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework**: Next.js 14
 - **Language**: TypeScript
@@ -31,7 +34,7 @@ A modern, responsive portfolio website showcasing my work as a Software Engineer
 - **Icons**: React Icons
 - **Deployment**: Vercel (recommended)
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -60,14 +63,22 @@ A modern, responsive portfolio website showcasing my work as a Software Engineer
    http://localhost:3001
    ```
 
-## 🛠️ Available Scripts
+## Available Scripts
 
 - `npm run dev` - Start development server (port 3001)
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
 
-## 📝 Content Management
+## Content Management
+
+### SEO & Discoverability
+See **SEO_GUIDE.md** for detailed instructions on:
+- Google Search Console setup
+- Structured data implementation
+- Meta tags and keywords
+- Social media optimization
+- Tracking and analytics
 
 ### Adding Music
 See **ADD_YOUR_SONGS.md** for detailed instructions on:
@@ -95,7 +106,7 @@ See **ADMIN_GUIDE.md** for detailed instructions on:
 - Managing configuration files
 - Best practices
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 charles-jasema-portfolio/
@@ -135,23 +146,25 @@ charles-jasema-portfolio/
 ├── ADD_YOUR_SONGS.md     # Music guide
 ├── IMAGE_USAGE_GUIDE.md  # Image guide
 ├── MUSIC_MEDIA_GUIDE.md  # Media guide
+├── SEO_GUIDE.md          # SEO & Google optimization guide
+├── MUSIC_SEO_ENHANCEMENT_SUMMARY.md  # Latest enhancements summary
 └── README.md             # This file
 ```
 
-## 🎵 Music Links
+## Music Links
 
 - **YouTube**: [@CharlesJasemaMusic](https://www.youtube.com/@CharlesJasemaMusic)
 - **Mdundo**: [Charles Jasema on Mdundo](https://mdundo.com/a/148492)
 
-## 🌐 Live Site
+## Live Site
 
 Visit the live site: [Coming Soon]
 
-## 📞 Contact
+## Contact
 
-- **Email**: [Your Email]
-- **Phone**: [Your Phone]
-- **Location**: Kampala, Uganda
+- **Email**: brocharles001@gmail.com
+- **Phone**: +256-785-446877
+- **Location**: Koboko, Uganda
 
 ## 🤝 Contributing
 
@@ -168,10 +181,23 @@ This is a personal portfolio project. However, if you find any bugs or have sugg
 - Icons from [React Icons](https://react-icons.github.io/react-icons/)
 - Hosted on [Vercel](https://vercel.com/)
 
+## Recent Updates (April 24, 2026)
+
+### ✅ Music & SEO Enhancements
+- **Added 3 New Song Lyrics**: Jesus You Are Lord, Nyadru - Love, Where Will You Be (full version)
+- **SEO Optimization**: Implemented structured data (JSON-LD) for Google rich snippets
+- **NEW Badges**: Animated badges to highlight latest releases
+- **Enhanced Meta Tags**: Comprehensive keywords and social media tags
+- **Download Feature**: One-click lyrics download as .txt files
+- **Search Functionality**: Real-time search across all songs
+- **Total Lyrics**: 10 songs with complete lyrics now available
+
+See **MUSIC_SEO_ENHANCEMENT_SUMMARY.md** for complete details.
+
 ---
 
-**Version**: 4.0.0  
-**Last Updated**: April 18, 2026  
-**Status**: ✅ Production Ready
+**Version**: 5.0.0  
+**Last Updated**: April 24, 2026  
+**Status**: ✅ Production Ready - SEO Optimized
 
 For detailed documentation, see the guide files in the project root.

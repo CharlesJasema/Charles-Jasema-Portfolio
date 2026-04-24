@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { FaPlay, FaMusic, FaYoutube, FaExternalLinkAlt, FaDrum, FaGuitar, FaMicrophone } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
 import { Button, Card } from '@/components/ui';
@@ -11,6 +12,62 @@ import { imagesConfig } from '@/config/images';
 import { clsx } from 'clsx';
 
 export default function MusicPage() {
+  // Add structured data for SEO
+  useEffect(() => {
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'MusicGroup',
+      name: 'Charles Jasema',
+      genre: ['Contemporary Gospel', 'Worship', 'Christian Music'],
+      description: musicConfig.story.description,
+      foundingDate: '2015',
+      foundingLocation: {
+        '@type': 'Place',
+        name: 'Yei, South Sudan',
+      },
+      member: {
+        '@type': 'Person',
+        name: 'Charles Jasema',
+        alternateName: 'Bro Charles',
+        jobTitle: 'Gospel Artist, Vocalist, Multi-Instrumentalist',
+      },
+      album: musicConfig.audioSongs.map((song) => ({
+        '@type': 'MusicAlbum',
+        name: song.title,
+        datePublished: song.releaseDate,
+        byArtist: {
+          '@type': 'Person',
+          name: 'Charles Jasema',
+        },
+      })),
+      track: musicConfig.audioSongs.map((song) => ({
+        '@type': 'MusicRecording',
+        name: song.title,
+        duration: song.duration,
+        datePublished: song.releaseDate,
+        description: song.description,
+        url: song.mdundoUrl,
+      })),
+      sameAs: [
+        'https://www.youtube.com/@CharlesJasemaMusic',
+        'https://mdundo.com/a/148492',
+        'https://www.instagram.com/charlesjasemamusic',
+        'https://x.com/JasemaMusic',
+        'https://www.facebook.com/share/1Aoqf2FLQ9/',
+        'https://www.tiktok.com/@charlesjasemamusic',
+      ],
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen pt-24 pb-20">
       {/* Hero Section */}
@@ -284,21 +341,28 @@ export default function MusicPage() {
                           {song.album} • {song.duration} • {song.releaseDate}
                         </p>
                       </div>
-                      {song.featured && (
-                        <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
-                          NEW
-                        </span>
-                      )}
-                      {song.isFirstSong && (
-                        <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded">
-                          FIRST
-                        </span>
-                      )}
-                      {song.isCollaboration && (
-                        <span className="px-2 py-1 bg-tech-teal text-white text-xs font-bold rounded">
-                          COLLAB
-                        </span>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {song.isNew && (
+                          <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded animate-pulse">
+                            NEW
+                          </span>
+                        )}
+                        {song.featured && (
+                          <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
+                            NEW
+                          </span>
+                        )}
+                        {song.isFirstSong && (
+                          <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded">
+                            FIRST
+                          </span>
+                        )}
+                        {song.isCollaboration && (
+                          <span className="px-2 py-1 bg-tech-teal text-white text-xs font-bold rounded">
+                            COLLAB
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-text-secondary mb-4">
                       {song.description}
