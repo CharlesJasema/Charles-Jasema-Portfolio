@@ -20,6 +20,7 @@ const navItems: NavItem[] = [
   { label: 'Music', href: '/music' },
   { label: 'Lyrics', href: '/lyrics' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Support', href: '/support' },
   { label: 'Contact', href: '/contact' },
   { label: 'Booking', href: '/booking' },
 ];

@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
 import { SkipLink } from '@/components/SkipLink';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -80,6 +81,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0F172A" />
       </head>
       <body className={inter.className}>
+        <GoogleAnalytics />
         <SkipLink />
         <Providers>
           <Navigation />

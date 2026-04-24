@@ -6,6 +6,7 @@ import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaDownload } from 'rea
 import { Button, Card } from '@/components/ui';
 import { lyricsConfig } from '@/config/lyrics';
 import { clsx } from 'clsx';
+import { trackDownload, trackSearch } from '@/lib/analytics';
 
 export default function LyricsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -94,7 +95,12 @@ export default function LyricsPage() {
               type="text"
               placeholder="Search for a song..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (e.target.value) {
+                  trackSearch(e.target.value);
+                }
+              }}
               className="w-full pl-12 pr-4 py-4 rounded-lg border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:border-accent-red focus:outline-none transition-colors"
             />
           </div>
@@ -245,6 +251,9 @@ export default function LyricsPage() {
                     a.href = url;
                     a.download = `${selectedSongData.songTitle} - Lyrics.txt`;
                     a.click();
+                    
+                    // Track download
+                    trackDownload(selectedSongData.songTitle, 'txt');
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-tech-teal text-white rounded-lg hover:bg-tech-teal/90 transition-colors text-sm"
                 >
