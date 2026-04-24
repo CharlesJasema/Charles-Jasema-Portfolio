@@ -20,6 +20,13 @@ A modern, responsive portfolio website showcasing my work as a Software Engineer
 - **Contact** - Get in touch
 - **Booking** - Book for events and performances
 
+### Analytics & Monetization
+- **Google Analytics 4** - Track visitors, downloads, and user behavior
+- **Donation System** - Accept donations via Mobile Money (MTN, Airtel) and PayPal
+- **Download Tracking** - Monitor lyrics and music downloads
+- **Search Tracking** - Understand what fans are looking for
+- **Event Tracking** - Track bookings, contact forms, and donations
+
 ### Design Features
 - **Dark Mode** - Toggle between light and dark themes
 - **Responsive Design** - Works on all devices (mobile, tablet, desktop)
@@ -100,6 +107,21 @@ See **IMAGE_USAGE_GUIDE.md** for detailed instructions on:
 - Optimizing images
 - Using images in components
 
+### Analytics & Donations Setup
+See **SETUP_ANALYTICS_DONATIONS.md** for detailed instructions on:
+- Setting up Google Analytics 4
+- Configuring Flutterwave (Mobile Money)
+- Setting up PayPal donations
+- Adding your account IDs
+- Testing the system
+
+### Admin Dashboard
+See **ADMIN_SYSTEM_GUIDE.md** for detailed instructions on:
+- Accessing the admin dashboard at `/admin`
+- Managing content without coding
+- Viewing analytics and donations
+- Current workflow and future CMS plans
+
 ### General Administration
 See **ADMIN_GUIDE.md** for detailed instructions on:
 - Updating content across all pages
@@ -113,16 +135,20 @@ charles-jasema-portfolio/
 ├── src/
 │   ├── app/              # Next.js app directory (pages)
 │   │   ├── about/        # About page
+│   │   ├── admin/        # Admin dashboard
 │   │   ├── blog/         # Blog page
 │   │   ├── booking/      # Booking page
 │   │   ├── contact/      # Contact page
 │   │   ├── lyrics/       # Lyrics page
 │   │   ├── music/        # Music page
 │   │   ├── portfolio/    # Portfolio page
+│   │   ├── support/      # Donation/Support page
 │   │   ├── layout.tsx    # Root layout
 │   │   └── page.tsx      # Homepage
 │   ├── components/       # React components
 │   │   ├── ui/           # UI components (Button, Card, etc.)
+│   │   ├── DonationSection.tsx  # Donation component
+│   │   ├── GoogleAnalytics.tsx  # Analytics component
 │   │   ├── footer.tsx    # Footer component
 │   │   ├── navigation.tsx # Navigation component
 │   │   └── ...
@@ -137,16 +163,23 @@ charles-jasema-portfolio/
 │   │   ├── music.ts      # Music content
 │   │   ├── portfolio.ts  # Portfolio content
 │   │   └── site.ts       # Site-wide settings
+│   ├── lib/              # Utility libraries
+│   │   └── analytics.ts  # Analytics functions
 │   └── styles/           # Global styles
 ├── public/               # Static assets
 │   ├── images/           # Images
 │   └── media/            # Audio/video files
+├── .env.local.example    # Environment variables template
 ├── ADMIN_GUIDE.md        # Admin documentation
+├── ADMIN_SYSTEM_GUIDE.md # Admin dashboard guide
 ├── ADD_YOUR_LYRICS.md    # Lyrics guide
 ├── ADD_YOUR_SONGS.md     # Music guide
 ├── IMAGE_USAGE_GUIDE.md  # Image guide
 ├── MUSIC_MEDIA_GUIDE.md  # Media guide
 ├── SEO_GUIDE.md          # SEO & Google optimization guide
+├── SETUP_ANALYTICS_DONATIONS.md  # Analytics & donations setup
+├── ADMIN_CMS_ANALYTICS_MONETIZATION_PLAN.md  # Full implementation plan
+├── PHASE_1_COMPLETE.md   # Phase 1 completion summary
 ├── MUSIC_SEO_ENHANCEMENT_SUMMARY.md  # Latest enhancements summary
 └── README.md             # This file
 ```
@@ -183,6 +216,16 @@ This is a personal portfolio project. However, if you find any bugs or have sugg
 
 ## Recent Updates (April 24, 2026)
 
+### ✅ Phase 1: Analytics & Donations (COMPLETED)
+- **Google Analytics 4**: Track visitors, downloads, searches, and user behavior
+- **Donation System**: Accept donations via Flutterwave (MTN, Airtel) and PayPal
+- **Support Page**: Dedicated `/support` page for donations
+- **Event Tracking**: Download tracking, search tracking, booking tracking
+- **Admin Dashboard**: Basic admin interface at `/admin`
+- **Documentation**: Complete setup guides for all features
+
+See **PHASE_1_COMPLETE.md** for full details.
+
 ### ✅ Music & SEO Enhancements
 - **Added 3 New Song Lyrics**: Jesus You Are Lord, Nyadru - Love, Where Will You Be (full version)
 - **SEO Optimization**: Implemented structured data (JSON-LD) for Google rich snippets
@@ -193,6 +236,15 @@ This is a personal portfolio project. However, if you find any bugs or have sugg
 - **Total Lyrics**: 10 songs with complete lyrics now available
 
 See **MUSIC_SEO_ENHANCEMENT_SUMMARY.md** for complete details.
+
+### 🎯 Next Steps
+1. **Create Accounts**: Set up Google Analytics, Flutterwave, and PayPal accounts
+2. **Add Account IDs**: Update `.env.local` with your account IDs
+3. **Test System**: Test analytics and donations locally
+4. **Deploy**: Deploy to live site with environment variables
+5. **Full CMS**: Implement Sanity CMS for no-code content editing (optional)
+
+See **SETUP_ANALYTICS_DONATIONS.md** for step-by-step instructions.
 
 ---
 
