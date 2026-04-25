@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Button } from '@/components/ui';
-import { FaMusic, FaFileAlt, FaBlog, FaImage, FaCog } from 'react-icons/fa';
+import { Card } from '@/components/ui';
+import { FaMusic, FaBlog, FaImage, FaCog } from 'react-icons/fa';
 
 /**
  * Simple Admin Dashboard

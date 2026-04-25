@@ -1,7 +1,6 @@
 'use client';
 
-import { FaHeart, FaPaypal, FaMobileAlt, FaUniversity } from 'react-icons/fa';
-import { SiFlutterwave } from 'react-icons/si';
+import { FaHeart, FaPaypal, FaMobileAlt } from 'react-icons/fa';
 import { Button, Card } from '@/components/ui';
 import { trackDonation } from '@/lib/analytics';
 

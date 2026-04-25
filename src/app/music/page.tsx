@@ -342,7 +342,7 @@ export default function MusicPage() {
                         </p>
                       </div>
                       <div className="flex flex-col gap-1">
-                        {song.isNew && (
+                        {(song as any).isNew && (
                           <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded animate-pulse">
                             NEW
                           </span>
@@ -352,12 +352,12 @@ export default function MusicPage() {
                             NEW
                           </span>
                         )}
-                        {song.isFirstSong && (
+                        {(song as any).isFirstSong && (
                           <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded">
                             FIRST
                           </span>
                         )}
-                        {song.isCollaboration && (
+                        {(song as any).isCollaboration && (
                           <span className="px-2 py-1 bg-tech-teal text-white text-xs font-bold rounded">
                             COLLAB
                           </span>

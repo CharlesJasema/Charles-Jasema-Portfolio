@@ -35,11 +35,11 @@ export default function BlogPage() {
     return blogConfig.articles.filter(a => a.category === category).length;
   };
 
-  // Get category color
-  const getCategoryColor = (category: string) => {
-    const cat = blogConfig.categories.find(c => c.id === category);
-    return cat?.color || 'primary-gold';
-  };
+  // Get category color (unused for now)
+  // const getCategoryColor = (category: string) => {
+  //   const cat = blogConfig.categories.find(c => c.id === category);
+  //   return cat?.color || 'primary-gold';
+  // };
 
   // Format date
   const formatDate = (dateString: string) => {

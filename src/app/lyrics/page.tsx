@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaDownload } from 'react-icons/fa';
 import { Button, Card } from '@/components/ui';
@@ -136,7 +135,7 @@ export default function LyricsPage() {
                     </p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {song.isNew && (
+                    {(song as any).isNew && (
                       <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded animate-pulse">
                         NEW
                       </span>

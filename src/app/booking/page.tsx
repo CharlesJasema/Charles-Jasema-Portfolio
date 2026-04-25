@@ -185,7 +185,7 @@ export default function BookingPage() {
       {selectedService && (
         <section className="px-4 sm:px-6 lg:px-8 mb-16">
           <div className="max-w-4xl mx-auto">
-            <Card variant="elevated" padding="xl">
+            <Card variant="elevated" padding="lg">
               {/* Selected Service Info */}
               <div className="mb-8 pb-8 border-b border-gray-200 dark:border-slate-700">
                 <div className="flex items-start justify-between gap-4">

@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { FaEnvelope, FaWhatsapp, FaPhone, FaLinkedin, FaTwitter, FaYoutube, FaGithub, FaInstagram, FaFacebook, FaMusic, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import { Button, Card, Input, TextArea, Select } from '@/components/ui';
 import { siteConfig } from '@/config/site';
 import { contactConfig } from '@/config/contact';
-import { clsx } from 'clsx';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -126,7 +124,7 @@ export default function ContactPage() {
       {/* Contact Form */}
       <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
-          <Card variant="elevated" padding="xl">
+          <Card variant="elevated" padding="lg">
             <div className="mb-8">
               <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-2">
                 {contactConfig.form.title}

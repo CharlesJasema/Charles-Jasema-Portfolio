@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Music Ministry - Charles Jasema | Gospel Artist',
     description: 'Explore Charles Jasema\'s music ministry - 12 singles, music videos, and worship songs. Contemporary gospel spreading hope through worship since 2015.',
-    type: 'music.musician',
+    type: 'website',
     locale: 'en_US',
     siteName: 'Charles Jasema',
   },
