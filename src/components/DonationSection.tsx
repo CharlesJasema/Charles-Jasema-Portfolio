@@ -23,22 +23,21 @@ const donationConfig = {
   mobileMoneyDetails: {
     mtn: {
       name: 'MTN Mobile Money',
-      number: '+256-785-446877',
-      accountName: 'Charles Jasema',
+      number: '+256785446877',
+      accountName: 'Charles Jada Sebit Emmanuel',
     },
     airtel: {
       name: 'Airtel Money',
-      number: '+256-745-063600',
-      accountName: 'Charles Jasema',
+      number: '+256745063600',
+      accountName: 'Charles Jada Sebit Emmanuel',
     },
   },
   
   // Bank Details (for manual donations)
   bankDetails: {
-    bankName: 'Your Bank Name',
-    accountNumber: 'Your Account Number',
-    accountName: 'Charles Jasema',
-    swiftCode: 'Your SWIFT Code',
+    bankName: 'Centenary Bank',
+    accountNumber: '3203558027',
+    accountName: 'Charles Jada Sebit Emmanuel',
   },
 };
 
