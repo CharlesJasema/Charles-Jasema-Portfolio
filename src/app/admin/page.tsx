@@ -88,7 +88,7 @@ function OverviewTab() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-red/10 rounded-full mb-4">
             <FaMusic className="text-3xl text-accent-red" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">12</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">13</h3>
           <p className="text-gray-600 dark:text-text-secondary">Total Songs</p>
         </div>
       </Card>
