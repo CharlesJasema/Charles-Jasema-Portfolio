@@ -1,17 +1,10 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { Providers } from '@/components/providers';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
 import { SkipLink } from '@/components/SkipLink';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
-  fallback: ['system-ui', 'arial'],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -84,7 +77,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0F172A" />
       </head>
-      <body className={inter.className}>
+      <body className="font-sans">
         <GoogleAnalytics />
         <SkipLink />
         <Providers>
