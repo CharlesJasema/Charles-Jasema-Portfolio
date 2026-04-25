@@ -224,13 +224,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Admin Note */}
-        <div className="mt-6 pt-6 border-t border-gold/10">
-          <p className="text-gray-600 text-xs text-center">
-            💡 <strong>Admin:</strong> To update social media links and contact information, edit{' '}
-            <code className="bg-slate-800 px-2 py-1 rounded text-gold">src/config/site.ts</code>
-          </p>
-        </div>
       </div>
     </footer>
   );
