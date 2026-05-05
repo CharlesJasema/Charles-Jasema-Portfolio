@@ -4,8 +4,16 @@ import { Button, Card } from '@/components/ui';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight, FaDownload } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
 import { imagesConfig } from '@/config/images';
+import { getProjects } from '@/lib/sanity.queries';
+import { urlForImage } from '@/lib/sanity.image';
 
-export default function HomePage() {
+export const revalidate = 60; // Revalidate every 60 seconds
+
+export default async function HomePage() {
+  // Fetch featured content from Sanity
+  const [featuredProjects] = await Promise.all([
+    getProjects().then(projects => projects.filter(p => p.featured).slice(0, 3)),
+  ]).catch(() => [[]]); // Fallback to empty arrays on error
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -139,71 +147,119 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Software Project */}
-            <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-              <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center">
-                <FaCode className="text-6xl text-primary-gold group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-6">
-                <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
-                  Software Development
-                </span>
-                <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                  E-Commerce Platform
-                </h3>
-                <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                  Full-stack web application with payment integration and real-time inventory management
-                </p>
-                <Link href="/portfolio" className="text-primary-gold hover:text-primary-gold/80 text-sm font-semibold inline-flex items-center">
-                  View Project
-                  <FaArrowRight className="ml-2" />
-                </Link>
-              </div>
-            </Card>
+            {featuredProjects.length > 0 ? (
+              featuredProjects.map((project) => {
+                const categoryColors = {
+                  software: { bg: 'from-primary-gold/20 to-tech-teal/20', text: 'text-primary-gold', icon: FaCode },
+                  design: { bg: 'from-tech-teal/20 to-primary-gold/20', text: 'text-tech-teal', icon: FaPalette },
+                  videography: { bg: 'from-primary-gold/20 to-accent-red/20', text: 'text-primary-gold', icon: FaVideo },
+                  music: { bg: 'from-accent-red/20 to-primary-gold/20', text: 'text-accent-red', icon: FaMusic },
+                };
+                const colors = categoryColors[project.category as keyof typeof categoryColors] || categoryColors.software;
+                const IconComponent = colors.icon;
 
-            {/* Design Project */}
-            <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-              <div className="aspect-video bg-gradient-to-br from-tech-teal/20 to-primary-gold/20 flex items-center justify-center">
-                <FaPalette className="text-6xl text-tech-teal group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-6">
-                <span className="text-xs text-tech-teal font-semibold uppercase tracking-wide">
-                  Graphics Design
-                </span>
-                <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                  Brand Identity Design
-                </h3>
-                <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                  Complete brand identity including logo, color palette, and marketing materials
-                </p>
-                <Link href="/portfolio" className="text-tech-teal hover:text-tech-teal/80 text-sm font-semibold inline-flex items-center">
-                  View Project
-                  <FaArrowRight className="ml-2" />
-                </Link>
-              </div>
-            </Card>
+                return (
+                  <Card key={project._id} variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
+                    {project.images && project.images.length > 0 ? (
+                      <div className="aspect-video relative">
+                        <Image
+                          src={urlForImage(project.images[0]).width(600).height(400).url()}
+                          alt={project.images[0].alt || project.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    ) : (
+                      <div className={`aspect-video bg-gradient-to-br ${colors.bg} flex items-center justify-center`}>
+                        <IconComponent className={`text-6xl ${colors.text} group-hover:scale-110 transition-transform duration-300`} />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <span className={`text-xs ${colors.text} font-semibold uppercase tracking-wide`}>
+                        {project.category}
+                      </span>
+                      <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-700 dark:text-text-secondary text-sm mb-4 line-clamp-2">
+                        {project.description}
+                      </p>
+                      <Link href="/portfolio" className={`${colors.text} hover:opacity-80 text-sm font-semibold inline-flex items-center`}>
+                        View Project
+                        <FaArrowRight className="ml-2" />
+                      </Link>
+                    </div>
+                  </Card>
+                );
+              })
+            ) : (
+              // Fallback static content if no featured projects
+              <>
+                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center">
+                    <FaCode className="text-6xl text-primary-gold group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
+                      Software Development
+                    </span>
+                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
+                      E-Commerce Platform
+                    </h3>
+                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
+                      Full-stack web application with payment integration and real-time inventory management
+                    </p>
+                    <Link href="/portfolio" className="text-primary-gold hover:text-primary-gold/80 text-sm font-semibold inline-flex items-center">
+                      View Project
+                      <FaArrowRight className="ml-2" />
+                    </Link>
+                  </div>
+                </Card>
 
-            {/* Music Project */}
-            <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-              <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center">
-                <FaMusic className="text-6xl text-accent-red group-hover:scale-110 transition-transform duration-300" />
-              </div>
-              <div className="p-6">
-                <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
-                  Gospel Music
-                </span>
-                <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                  Latest Worship Album
-                </h3>
-                <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                  Collection of original worship songs inspiring faith and hope
-                </p>
-                <Link href="/music" className="text-accent-red hover:text-accent-red/80 text-sm font-semibold inline-flex items-center">
-                  Listen Now
-                  <FaArrowRight className="ml-2" />
-                </Link>
-              </div>
-            </Card>
+                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-tech-teal/20 to-primary-gold/20 flex items-center justify-center">
+                    <FaPalette className="text-6xl text-tech-teal group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs text-tech-teal font-semibold uppercase tracking-wide">
+                      Graphics Design
+                    </span>
+                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
+                      Brand Identity Design
+                    </h3>
+                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
+                      Complete brand identity including logo, color palette, and marketing materials
+                    </p>
+                    <Link href="/portfolio" className="text-tech-teal hover:text-tech-teal/80 text-sm font-semibold inline-flex items-center">
+                      View Project
+                      <FaArrowRight className="ml-2" />
+                    </Link>
+                  </div>
+                </Card>
+
+                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
+                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center">
+                    <FaMusic className="text-6xl text-accent-red group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
+                      Gospel Music
+                    </span>
+                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
+                      Latest Worship Album
+                    </h3>
+                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
+                      Collection of original worship songs inspiring faith and hope
+                    </p>
+                    <Link href="/music" className="text-accent-red hover:text-accent-red/80 text-sm font-semibold inline-flex items-center">
+                      Listen Now
+                      <FaArrowRight className="ml-2" />
+                    </Link>
+                  </div>
+                </Card>
+              </>
+            )}
           </div>
 
           <div className="text-center mt-12">

@@ -5,6 +5,7 @@ import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
 import { SkipLink } from '@/components/SkipLink';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import { generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: {
@@ -70,12 +71,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  // Generate structured data for SEO
+  const personSchema = generatePersonSchema();
+  const websiteSchema = generateWebsiteSchema();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0F172A" />
+        
+        {/* Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
       </head>
       <body className="font-sans">
         <GoogleAnalytics />

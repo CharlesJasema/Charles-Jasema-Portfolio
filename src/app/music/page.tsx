@@ -1,8 +1,5 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import { FaPlay, FaMusic, FaYoutube, FaExternalLinkAlt, FaDrum, FaGuitar, FaMicrophone } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
 import { Button, Card } from '@/components/ui';
@@ -10,66 +7,107 @@ import { siteConfig } from '@/config/site';
 import { musicConfig } from '@/config/music';
 import { imagesConfig } from '@/config/images';
 import { clsx } from 'clsx';
+import { getSongs, getVideos } from '@/lib/sanity.queries';
+import { urlFor } from '@/lib/sanity.image';
 
-export default function MusicPage() {
-  // Add structured data for SEO
-  useEffect(() => {
-    const structuredData = {
-      '@context': 'https://schema.org',
-      '@type': 'MusicGroup',
+// Enable ISR with 60-second revalidation
+export const revalidate = 60;
+
+export default async function MusicPage() {
+  // Fetch data from Sanity with error handling
+  let songs = [];
+  let videos = [];
+  let error = null;
+
+  try {
+    [songs, videos] = await Promise.all([
+      getSongs(),
+      getVideos()
+    ]);
+  } catch (err) {
+    console.error('Error fetching music data from Sanity:', err);
+    error = err;
+    // Fallback to config data if Sanity fails
+    songs = musicConfig.audioSongs.map((song, index) => ({
+      _id: `fallback-song-${index}`,
+      ...song,
+      albumArt: null
+    }));
+    videos = [...musicConfig.musicVideos, ...musicConfig.lyricalVideos].map((video, index) => ({
+      _id: `fallback-video-${index}`,
+      ...video,
+      thumbnail: null
+    }));
+  }
+
+  // Separate videos by category
+  const musicVideos = videos.filter(v => v.category === 'Music Video');
+  const lyricalVideos = videos.filter(v => v.category === 'Lyrical Video');
+
+  // Generate structured data for SEO
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'MusicGroup',
+    name: 'Charles Jasema',
+    genre: ['Contemporary Gospel', 'Worship', 'Christian Music'],
+    description: musicConfig.story.description,
+    foundingDate: '2015',
+    foundingLocation: {
+      '@type': 'Place',
+      name: 'Yei, South Sudan',
+    },
+    member: {
+      '@type': 'Person',
       name: 'Charles Jasema',
-      genre: ['Contemporary Gospel', 'Worship', 'Christian Music'],
-      description: musicConfig.story.description,
-      foundingDate: '2015',
-      foundingLocation: {
-        '@type': 'Place',
-        name: 'Yei, South Sudan',
-      },
-      member: {
+      alternateName: 'Bro Charles',
+      jobTitle: 'Gospel Artist, Vocalist, Multi-Instrumentalist',
+    },
+    album: songs.map((song) => ({
+      '@type': 'MusicAlbum',
+      name: song.title,
+      datePublished: song.releaseDate,
+      byArtist: {
         '@type': 'Person',
         name: 'Charles Jasema',
-        alternateName: 'Bro Charles',
-        jobTitle: 'Gospel Artist, Vocalist, Multi-Instrumentalist',
       },
-      album: musicConfig.audioSongs.map((song) => ({
-        '@type': 'MusicAlbum',
-        name: song.title,
-        datePublished: song.releaseDate,
-        byArtist: {
-          '@type': 'Person',
-          name: 'Charles Jasema',
-        },
-      })),
-      track: musicConfig.audioSongs.map((song) => ({
-        '@type': 'MusicRecording',
-        name: song.title,
-        duration: song.duration,
-        datePublished: song.releaseDate,
-        description: song.description,
-        url: song.mdundoUrl,
-      })),
-      sameAs: [
-        'https://www.youtube.com/@CharlesJasemaMusic',
-        'https://mdundo.com/a/148492',
-        'https://www.instagram.com/charlesjasemamusic',
-        'https://x.com/JasemaMusic',
-        'https://www.facebook.com/share/1Aoqf2FLQ9/',
-        'https://www.tiktok.com/@charlesjasemamusic',
-      ],
-    };
-
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
+    })),
+    track: songs.map((song) => ({
+      '@type': 'MusicRecording',
+      name: song.title,
+      duration: song.duration,
+      datePublished: song.releaseDate,
+      description: song.description,
+      url: song.mdundoUrl,
+    })),
+    sameAs: [
+      'https://www.youtube.com/@CharlesJasemaMusic',
+      'https://mdundo.com/a/148492',
+      'https://www.instagram.com/charlesjasemamusic',
+      'https://x.com/JasemaMusic',
+      'https://www.facebook.com/share/1Aoqf2FLQ9/',
+      'https://www.tiktok.com/@charlesjasemamusic',
+    ],
+  };
 
   return (
-    <div className="min-h-screen pt-24 pb-20">
+    <>
+      {/* Add structured data script in head */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        suppressHydrationWarning
+      />
+      
+      <div className="min-h-screen pt-24 pb-20">
+      {(error as any) && (
+        <div className="px-4 sm:px-6 lg:px-8 mb-8">
+          <div className="max-w-7xl mx-auto bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-400 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200 px-4 py-3 rounded">
+            <p className="text-sm">
+              <strong>Note:</strong> Displaying cached content. Some information may not be up to date.
+            </p>
+          </div>
+        </div>
+      )}
       {/* Hero Section */}
       <section className="px-4 sm:px-6 lg:px-8 mb-20">
         <div className="max-w-7xl mx-auto">
@@ -192,9 +230,9 @@ export default function MusicPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {musicConfig.musicVideos.map((video) => (
+            {musicVideos.map((video) => (
               <Card
-                key={video.id}
+                key={video._id}
                 variant="elevated"
                 padding="none"
                 className="overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300"
@@ -202,13 +240,23 @@ export default function MusicPage() {
                 {/* Video Thumbnail */}
                 <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
                   <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative">
-                    <FaPlay className="text-6xl text-accent-red/50 group-hover:scale-110 transition-transform duration-300" />
+                    {video.thumbnail ? (
+                      <Image
+                        src={urlFor(video.thumbnail).width(640).height(360).url()}
+                        alt={video.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <FaPlay className="text-6xl text-accent-red/50 group-hover:scale-110 transition-transform duration-300" />
+                    )}
                     {video.featured && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full">
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full z-10">
                         FEATURED
                       </div>
                     )}
-                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded">
+                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded z-10">
                       {video.views} views
                     </div>
                   </div>
@@ -254,22 +302,32 @@ export default function MusicPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {musicConfig.lyricalVideos.map((video) => (
+            {lyricalVideos.map((video) => (
               <Card
-                key={video.id}
+                key={video._id}
                 variant="elevated"
                 padding="none"
                 className="overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300"
               >
                 <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
                   <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center relative">
-                    <FaPlay className="text-6xl text-primary-gold/50 group-hover:scale-110 transition-transform duration-300" />
+                    {video.thumbnail ? (
+                      <Image
+                        src={urlFor(video.thumbnail).width(640).height(360).url()}
+                        alt={video.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <FaPlay className="text-6xl text-primary-gold/50 group-hover:scale-110 transition-transform duration-300" />
+                    )}
                     {video.featured && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded-full">
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded-full z-10">
                         FEATURED
                       </div>
                     )}
-                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded">
+                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded z-10">
                       {video.views} views
                     </div>
                   </div>
@@ -309,14 +367,14 @@ export default function MusicPage() {
               Audio Songs
             </h2>
             <p className="text-gray-700 dark:text-text-secondary text-lg">
-              Listen to all 12 singles on Mdundo and other platforms
+              Listen to all {songs.length} singles on Mdundo and other platforms
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {musicConfig.audioSongs.map((song) => (
+            {songs.map((song) => (
               <Card
-                key={song.id}
+                key={song._id}
                 variant="elevated"
                 padding="lg"
                 className={clsx(
@@ -325,10 +383,22 @@ export default function MusicPage() {
                 )}
               >
                 <div className="flex items-start gap-4">
-                  {/* Album Art Placeholder */}
-                  <div className="w-20 h-20 bg-gradient-to-br from-accent-red/20 to-primary-gold/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaMusic className="text-3xl text-accent-red" />
-                  </div>
+                  {/* Album Art */}
+                  {song.albumArt ? (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 relative">
+                      <Image
+                        src={urlFor(song.albumArt).width(80).height(80).url()}
+                        alt={`${song.title} album art`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 bg-gradient-to-br from-accent-red/20 to-primary-gold/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaMusic className="text-3xl text-accent-red" />
+                    </div>
+                  )}
 
                   {/* Song Info */}
                   <div className="flex-1">
@@ -349,7 +419,7 @@ export default function MusicPage() {
                         )}
                         {song.featured && (
                           <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
-                            NEW
+                            FEATURED
                           </span>
                         )}
                         {(song as any).isFirstSong && (
@@ -379,16 +449,6 @@ export default function MusicPage() {
                         <FaMusic />
                         <span>Mdundo</span>
                       </a>
-                      {song.directUpload && (
-                        <a
-                          href={song.directUpload}
-                          download
-                          className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-red text-white rounded-lg hover:bg-accent-red/90 transition-colors text-sm"
-                        >
-                          <FaPlay />
-                          <span>Play</span>
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -452,6 +512,7 @@ export default function MusicPage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

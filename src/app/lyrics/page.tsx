@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaDownload } from 'react-icons/fa';
+import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaFilePdf, FaFileAlt } from 'react-icons/fa';
 import { Button, Card } from '@/components/ui';
 import { lyricsConfig } from '@/config/lyrics';
 import { clsx } from 'clsx';
 import { trackDownload, trackSearch } from '@/lib/analytics';
+import { generateLyricsPDF, downloadLyricsTXT } from '@/lib/pdf-generator';
 
 export default function LyricsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -241,23 +242,23 @@ export default function LyricsPage() {
                 </a>
                 <button
                   onClick={() => {
-                    const lyricsText = selectedSongData.verses
-                      .map((verse) => `${verse.type}\n${verse.lines.join('\n')}`)
-                      .join('\n\n');
-                    const blob = new Blob([lyricsText], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${selectedSongData.songTitle} - Lyrics.txt`;
-                    a.click();
-                    
-                    // Track download
-                    trackDownload(selectedSongData.songTitle, 'txt');
+                    generateLyricsPDF(selectedSongData as any);
+                    trackDownload(selectedSongData.songTitle, 'pdf');
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-tech-teal text-white rounded-lg hover:bg-tech-teal/90 transition-colors text-sm"
                 >
-                  <FaDownload />
-                  <span>Download Lyrics</span>
+                  <FaFilePdf />
+                  <span>Download PDF</span>
+                </button>
+                <button
+                  onClick={() => {
+                    downloadLyricsTXT(selectedSongData as any);
+                    trackDownload(selectedSongData.songTitle, 'txt');
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm"
+                >
+                  <FaFileAlt />
+                  <span>Download TXT</span>
                 </button>
               </div>
             </div>
