@@ -22,7 +22,7 @@ export default defineType({
       name: 'youtubeUrl',
       title: 'YouTube URL',
       type: 'url',
-      validation: Rule => Rule.required().uri({
+      validation: Rule => Rule.uri({
         scheme: ['http', 'https']
       })
     }),
@@ -30,8 +30,16 @@ export default defineType({
       name: 'youtubeId',
       title: 'YouTube Video ID',
       type: 'string',
-      description: 'Extract from YouTube URL (e.g., 5LJ2kqwd5jM)',
-      validation: Rule => Rule.required()
+      description: 'Extract from YouTube URL (e.g., 5LJ2kqwd5jM)'
+    }),
+    defineField({
+      name: 'videoFile',
+      title: '🎬 Upload Video File (Optional)',
+      type: 'file',
+      description: 'Upload MP4 file for preview (max 500MB). Keep using YouTube for full videos and better reach.',
+      options: {
+        accept: 'video/*'
+      }
     }),
     defineField({
       name: 'releaseDate',

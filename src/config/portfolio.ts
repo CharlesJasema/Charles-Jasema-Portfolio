@@ -15,6 +15,76 @@
 
 export const portfolioProjects = [
   {
+    id: 'portfolio-system',
+    title: 'Charles Jasema Portfolio & Digital Platform',
+    category: 'software' as const,
+    description: 'Comprehensive digital platform featuring portfolio showcase, music ministry platform, blog system, and business website with advanced CMS integration, analytics, and performance optimization.',
+    image: '/images/Code & Design Banner.jpeg',
+    tags: ['Next.js 14', 'TypeScript', 'Sanity CMS', 'Tailwind CSS', 'Vercel', 'Google Analytics', 'PWA', 'SEO'],
+    link: 'https://charlesjasema.com',
+    github: 'https://github.com/charlesjasema/portfolio',
+    featured: true,
+    order: 1,
+    challenges: [
+      'Integrating multiple content types (music, projects, blog) in a unified CMS',
+      'Implementing advanced SEO with structured data for different content types',
+      'Optimizing performance while maintaining rich interactive features',
+      'Creating a responsive design that works across all devices and screen sizes',
+      'Building a scalable architecture for future growth and content expansion'
+    ],
+    solutions: [
+      'Designed flexible Sanity CMS schemas with validation and relationships',
+      'Implemented comprehensive SEO system with dynamic metadata generation',
+      'Used Next.js 14 with ISR, image optimization, and code splitting',
+      'Applied mobile-first responsive design with Tailwind CSS',
+      'Built modular component architecture with TypeScript for maintainability'
+    ],
+    detailedTechStack: [
+      {
+        category: 'frontend',
+        technologies: ['Next.js 14', 'React 18', 'TypeScript', 'Tailwind CSS', 'Framer Motion']
+      },
+      {
+        category: 'backend',
+        technologies: ['Next.js API Routes', 'Sanity CMS', 'Webhook Integration', 'ISR']
+      },
+      {
+        category: 'database',
+        technologies: ['Sanity Content Lake', 'GROQ Queries', 'Real-time Updates']
+      },
+      {
+        category: 'devops',
+        technologies: ['Vercel Deployment', 'GitHub Actions', 'Environment Management', 'Performance Monitoring']
+      },
+      {
+        category: 'design',
+        technologies: ['Figma', 'Adobe Creative Suite', 'Responsive Design', 'Accessibility (WCAG 2.1)']
+      }
+    ],
+    duration: '3 months',
+    teamSize: 1,
+    myRole: 'Full-Stack Developer & Designer',
+    testimonial: {
+      text: 'This portfolio system perfectly captures Charles\'s diverse talents and provides an excellent platform for showcasing his work across multiple disciplines.',
+      author: 'Development Team',
+      role: 'Technical Review',
+      company: 'Charles Jasema Digital'
+    },
+    keyFeatures: [
+      'Multi-content CMS with Sanity integration for music, projects, and blog',
+      'Advanced SEO with structured data and social media optimization',
+      'Performance-optimized with Core Web Vitals scores above 95',
+      'Fully responsive design with mobile-first approach',
+      'Analytics integration with Google Analytics 4 and conversion tracking',
+      'Live chat system with context-aware greetings',
+      'Progressive Web App (PWA) capabilities',
+      'Accessibility compliant (WCAG 2.1 AA)',
+      'Social media integration with sharing and follow functionality',
+      'Contact and booking system with multiple conversion paths'
+    ],
+    lessonsLearned: 'Building this comprehensive platform taught me the importance of balancing feature richness with performance, the value of proper content architecture planning, and how to create scalable systems that can grow with business needs.'
+  },
+  {
     id: '1',
     title: 'E-Commerce Platform',
     category: 'software' as const,
@@ -24,6 +94,7 @@ export const portfolioProjects = [
     link: '#', // Update with actual project link
     github: '#', // Update with actual GitHub link
     featured: true,
+    order: 2,
   },
   {
     id: '2',
@@ -35,6 +106,7 @@ export const portfolioProjects = [
     link: '#',
     github: '#',
     featured: true,
+    order: 3,
   },
   {
     id: '3',
@@ -45,6 +117,7 @@ export const portfolioProjects = [
     tags: ['Adobe Illustrator', 'Photoshop', 'Branding'],
     link: '#',
     featured: true,
+    order: 4,
   },
   {
     id: '4',
@@ -55,6 +128,7 @@ export const portfolioProjects = [
     tags: ['Figma', 'UI/UX', 'Mobile Design'],
     link: '#',
     featured: false,
+    order: 5,
   },
   {
     id: '5',
@@ -65,6 +139,7 @@ export const portfolioProjects = [
     tags: ['Premiere Pro', 'After Effects', 'Color Grading'],
     link: '#',
     featured: true,
+    order: 6,
   },
   {
     id: '6',
@@ -75,6 +150,7 @@ export const portfolioProjects = [
     tags: ['Final Cut Pro', 'Motion Graphics', 'Cinematography'],
     link: '#',
     featured: false,
+    order: 7,
   },
   {
     id: '7',
@@ -85,6 +161,7 @@ export const portfolioProjects = [
     tags: ['Songwriting', 'Production', 'Worship'],
     link: '#',
     featured: true,
+    order: 8,
   },
   {
     id: '8',
@@ -95,17 +172,7 @@ export const portfolioProjects = [
     tags: ['Gospel', 'Worship', 'Original'],
     link: '#',
     featured: false,
-  },
-  {
-    id: '9',
-    title: 'Portfolio Website',
-    category: 'software' as const,
-    description: 'Custom portfolio website built with modern web technologies and best practices.',
-    image: '/placeholder',
-    tags: ['Next.js', 'Tailwind CSS', 'TypeScript'],
-    link: '#',
-    github: '#',
-    featured: false,
+    order: 9,
   },
   {
     id: '10',
@@ -116,6 +183,7 @@ export const portfolioProjects = [
     tags: ['Branding', 'Print Design', 'Adobe Suite'],
     link: '#',
     featured: false,
+    order: 10,
   },
   {
     id: '11',
@@ -126,6 +194,7 @@ export const portfolioProjects = [
     tags: ['Video Editing', 'Color Grading', 'Sound Design'],
     link: '#',
     featured: false,
+    order: 11,
   },
   {
     id: '12',
@@ -136,6 +205,7 @@ export const portfolioProjects = [
     tags: ['Live Performance', 'Worship', 'Recording'],
     link: '#',
     featured: false,
+    order: 12,
   },
 ];
 

@@ -87,6 +87,125 @@ export default defineType({
       type: 'number',
       description: 'Lower numbers appear first',
       validation: Rule => Rule.integer().min(0)
+    }),
+    defineField({
+      name: 'challenges',
+      title: '🎯 Project Challenges',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'What challenges did you face during this project?',
+      options: {
+        layout: 'list'
+      }
+    }),
+    defineField({
+      name: 'solutions',
+      title: '💡 Solutions Implemented',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'How did you solve the challenges?',
+      options: {
+        layout: 'list'
+      }
+    }),
+    defineField({
+      name: 'detailedTechStack',
+      title: '🛠️ Detailed Tech Stack',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          {
+            name: 'category',
+            title: 'Category',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'Frontend', value: 'frontend' },
+                { title: 'Backend', value: 'backend' },
+                { title: 'Database', value: 'database' },
+                { title: 'DevOps', value: 'devops' },
+                { title: 'Design', value: 'design' },
+                { title: 'Other', value: 'other' }
+              ]
+            }
+          },
+          {
+            name: 'technologies',
+            title: 'Technologies',
+            type: 'array',
+            of: [{ type: 'string' }]
+          }
+        ]
+      }],
+      description: 'Organize technologies by category'
+    }),
+    defineField({
+      name: 'duration',
+      title: '⏱️ Project Duration',
+      type: 'string',
+      description: 'e.g., "2 weeks", "3 months", "6 months"',
+      placeholder: '2 weeks'
+    }),
+    defineField({
+      name: 'teamSize',
+      title: '👥 Team Size',
+      type: 'number',
+      description: 'How many people worked on this project?',
+      validation: Rule => Rule.integer().min(1).max(50),
+      initialValue: 1
+    }),
+    defineField({
+      name: 'myRole',
+      title: '🎭 My Role',
+      type: 'string',
+      description: 'What was your role in this project?',
+      placeholder: 'Full-Stack Developer, UI/UX Designer, etc.'
+    }),
+    defineField({
+      name: 'testimonial',
+      title: '💬 Client Testimonial (Optional)',
+      type: 'object',
+      fields: [
+        {
+          name: 'text',
+          title: 'Testimonial Text',
+          type: 'text',
+          rows: 3
+        },
+        {
+          name: 'author',
+          title: 'Author Name',
+          type: 'string'
+        },
+        {
+          name: 'role',
+          title: 'Author Role/Title',
+          type: 'string'
+        },
+        {
+          name: 'company',
+          title: 'Company (Optional)',
+          type: 'string'
+        }
+      ]
+    }),
+    defineField({
+      name: 'keyFeatures',
+      title: '✨ Key Features',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Main features or highlights of this project',
+      options: {
+        layout: 'list'
+      }
+    }),
+    defineField({
+      name: 'lessonsLearned',
+      title: '📚 Lessons Learned',
+      type: 'text',
+      rows: 3,
+      description: 'What did you learn from this project?'
     })
   ],
   preview: {

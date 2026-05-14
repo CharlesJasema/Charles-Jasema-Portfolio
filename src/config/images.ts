@@ -11,6 +11,7 @@ export const imagesConfig = {
     musicLogo: '/images/CJ Music Logo.jpeg',
     codeDesignLogo: '/images/Code & Design Logo.jpeg',
     codeDesignBanner: '/images/Code & Design Banner.jpeg',
+    jasemaWorshipTeam: '/images/jasema-worship-team-logo.png',
   },
 
   // Profile Images

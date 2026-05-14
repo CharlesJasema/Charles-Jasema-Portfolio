@@ -1,21 +1,159 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button, Card } from '@/components/ui';
+import { HomePageCTAs } from '@/components/cta';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight, FaDownload } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
 import { imagesConfig } from '@/config/images';
 import { getProjects } from '@/lib/sanity.queries';
 import { urlForImage } from '@/lib/sanity.image';
+import { generateMetadata as generateSEOMetadata, generateKeywords, generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every 60 seconds
+
+export const metadata = generateSEOMetadata({
+  title: `${siteConfig.name} - Software Engineer, Gospel Artist & Worship Leader`,
+  description: 'Welcome to the official website of Charles Jasema - a passionate software engineer, creative designer, and gospel music artist. Discover innovative web applications, inspiring gospel music, professional design work, and faith-driven technology solutions. Specializing in React, Next.js, TypeScript, and modern web development.',
+  keywords: generateKeywords([
+    'Charles Jasema',
+    'Software Engineer',
+    'Gospel Artist',
+    'Worship Leader',
+    'Full Stack Developer',
+    'Web Developer',
+    'React Developer',
+    'Next.js Developer',
+    'TypeScript Developer',
+    'JavaScript Developer',
+    'Frontend Developer',
+    'Backend Developer',
+    'Graphics Designer',
+    'UI/UX Designer',
+    'Web Designer',
+    'Brand Designer',
+    'Logo Designer',
+    'Videographer',
+    'Video Producer',
+    'Video Editor',
+    'Music Producer',
+    'Audio Engineer',
+    'Gospel Music',
+    'Worship Music',
+    'Christian Music',
+    'Contemporary Gospel',
+    'African Gospel Music',
+    'Uganda Gospel Artist',
+    'South Sudan Gospel Music',
+    'Faith-based Technology',
+    'Christian Developer',
+    'Ministry Through Technology',
+    'Church Technology',
+    'Nonprofit Technology',
+    'Purpose-driven Development',
+    'Ethical Programming',
+    'Professional Portfolio',
+    'Creative Portfolio',
+    'Music Portfolio',
+    'Software Portfolio',
+    'Design Portfolio',
+    'Freelance Developer',
+    'Remote Developer',
+    'Tech Entrepreneur',
+    'Digital Solutions',
+    'Custom Development',
+    'Web Applications',
+    'Mobile Applications',
+    'E-commerce Development',
+    'CMS Development',
+    'API Development',
+    'Database Design',
+    'Cloud Solutions',
+    'Performance Optimization',
+    'SEO Optimization',
+    'Accessibility Compliance',
+    'Responsive Design',
+    'Modern Web Technologies',
+    'Progressive Web Apps',
+    'Single Page Applications',
+    'Server-side Rendering',
+    'Static Site Generation',
+    'Jamstack Development',
+    'Headless CMS',
+    'Sanity CMS',
+    'Content Management',
+    'Digital Marketing',
+    'Brand Identity',
+    'Visual Identity',
+    'Corporate Design',
+    'Marketing Materials',
+    'Print Design',
+    'Digital Design',
+    'Motion Graphics',
+    'Animation',
+    'Video Production',
+    'Live Streaming',
+    'Event Coverage',
+    'Documentary Production',
+    'Music Videos',
+    'Lyrical Videos',
+    'Audio Production',
+    'Studio Recording',
+    'Live Performance',
+    'Worship Leading',
+    'Song Writing',
+    'Music Composition',
+    'Music Arrangement',
+    'Gospel Streaming',
+    'Music Distribution',
+    'Digital Music',
+    'Spotify Artist',
+    'Apple Music Artist',
+    'YouTube Creator',
+    'Content Creator',
+    'Digital Creator',
+    'Creative Professional',
+    'Multi-disciplinary Artist',
+    'Technology and Faith',
+    'Innovation',
+    'Excellence',
+    'Quality',
+    'Professional Services',
+    'Consultation',
+    'Collaboration',
+    'Partnership',
+  ]),
+  url: '/',
+  type: 'website',
+  image: '/images/professional image.JPG',
+});
 
 export default async function HomePage() {
   // Fetch featured content from Sanity
   const [featuredProjects] = await Promise.all([
     getProjects().then(projects => projects.filter(p => p.featured).slice(0, 3)),
   ]).catch(() => [[]]); // Fallback to empty arrays on error
+
+  // Generate structured data
+  const personSchema = generatePersonSchema();
+  const websiteSchema = generateWebsiteSchema();
+
   return (
-    <div className="min-h-screen">
+    <>
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema),
+        }}
+      />
+      
+      <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-slate-200 to-slate-100 dark:from-background-dark dark:via-slate-900 dark:to-background-dark opacity-50" />
@@ -324,29 +462,12 @@ export default async function HomePage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary-gold/10 via-accent-red/10 to-tech-teal/10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-            Let's Work Together
-          </h2>
-          <p className="text-gray-700 dark:text-text-secondary text-lg mb-8">
-            Have a project in mind? Whether it's software development, design, or music production,
-            I'd love to hear from you.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                Start a Project
-              </Button>
-            </Link>
-            <Link href="/music">
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                Explore Music Ministry
-              </Button>
-            </Link>
-          </div>
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <HomePageCTAs />
         </div>
       </section>
     </div>
+    </>
   );
 }

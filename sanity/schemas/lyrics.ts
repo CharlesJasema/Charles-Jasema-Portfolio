@@ -44,9 +44,41 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'rawLyricsText',
+      title: '📝 Easy Upload: Paste Full Lyrics Here',
+      type: 'text',
+      rows: 20,
+      description: `Paste your complete lyrics here! Format example:
+
+Verse 1
+Jesus You are Lord
+You are the King of Kings
+
+Chorus
+We worship You
+We praise Your name
+
+Verse 2
+Your love endures forever
+Your grace is sufficient
+
+The system will automatically organize them into sections.`,
+      placeholder: 'Paste your full lyrics here...'
+    }),
+    defineField({
+      name: 'lyricsDocument',
+      title: '📄 Or Upload Document',
+      type: 'file',
+      description: 'Upload a PDF, Word, or TXT file with your lyrics',
+      options: {
+        accept: '.pdf,.docx,.doc,.txt'
+      }
+    }),
+    defineField({
       name: 'verses',
-      title: 'Verses',
+      title: 'Structured Lyrics (Auto-generated or Manual)',
       type: 'array',
+      description: 'This will be auto-filled from the text above, or you can add manually',
       of: [{
         type: 'object',
         fields: [
@@ -77,8 +109,7 @@ export default defineType({
             of: [{ type: 'string' }]
           }
         ]
-      }],
-      validation: Rule => Rule.required().min(1)
+      }]
     }),
     defineField({
       name: 'notes',

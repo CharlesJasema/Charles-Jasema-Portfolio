@@ -1,19 +1,84 @@
-import Link from 'next/link';
-import { FaCode, FaPalette, FaVideo, FaMusic } from 'react-icons/fa';
-import { Button } from '@/components/ui';
+import { AnimatedContainer } from '@/components/ui';
+import { SocialFollow, SocialProof } from '@/components/social';
+import { PortfolioPageCTAs } from '@/components/cta';
 import { getProjects } from '@/lib/sanity.queries';
 import { portfolioProjects } from '@/config/portfolio';
 import PortfolioClient from './PortfolioClient';
+import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
+import { siteConfig } from '@/config/site';
 
 // Enable ISR with 60-second revalidation
 export const revalidate = 60;
 
+export const metadata = generateSEOMetadata({
+  title: `${siteConfig.name} Portfolio - Software Development, Design & Creative Projects`,
+  description: 'Explore the comprehensive portfolio of Charles Jasema showcasing professional software development projects, creative design work, videography, and music production. View web applications, mobile apps, brand identities, UI/UX designs, and multimedia projects built with modern technologies like React, Next.js, TypeScript, and more.',
+  keywords: generateKeywords([
+    'Charles Jasema Portfolio',
+    'Software Development Portfolio',
+    'Web Development Projects',
+    'Full Stack Developer Portfolio',
+    'React Projects',
+    'Next.js Applications',
+    'TypeScript Projects',
+    'JavaScript Portfolio',
+    'Frontend Development',
+    'Backend Development',
+    'Mobile App Development',
+    'UI/UX Design Portfolio',
+    'Graphics Design Projects',
+    'Brand Identity Design',
+    'Logo Design',
+    'Web Design',
+    'Responsive Design',
+    'User Experience Design',
+    'User Interface Design',
+    'Design Systems',
+    'Videography Portfolio',
+    'Video Production',
+    'Video Editing',
+    'Motion Graphics',
+    'Music Production Portfolio',
+    'Audio Engineering',
+    'Creative Projects',
+    'Professional Portfolio',
+    'Freelance Developer',
+    'Client Projects',
+    'Case Studies',
+    'Project Showcase',
+    'Technical Skills',
+    'Creative Skills',
+    'Professional Work',
+    'Software Engineer Portfolio',
+    'Designer Portfolio',
+    'Multimedia Portfolio',
+    'Digital Solutions',
+    'Custom Development',
+    'E-commerce Development',
+    'CMS Development',
+    'API Development',
+    'Database Design',
+    'Cloud Solutions',
+    'Performance Optimization',
+    'SEO Optimization',
+    'Accessibility Compliance',
+    'Cross-browser Compatibility',
+    'Mobile-first Design',
+    'Progressive Web Apps',
+    'Modern Web Technologies',
+  ]),
+  url: '/portfolio',
+  type: 'website',
+  image: '/images/Code & Design Banner.jpeg',
+});
+
+// Category configuration with icon names (not components)
 const categories = [
   { id: 'all', label: 'All Projects', icon: null },
-  { id: 'software', label: 'Software', icon: FaCode },
-  { id: 'design', label: 'Design', icon: FaPalette },
-  { id: 'videography', label: 'Videography', icon: FaVideo },
-  { id: 'music', label: 'Music', icon: FaMusic },
+  { id: 'software', label: 'Software', icon: 'FaCode' },
+  { id: 'design', label: 'Design', icon: 'FaPalette' },
+  { id: 'videography', label: 'Videography', icon: 'FaVideo' },
+  { id: 'music', label: 'Music', icon: 'FaMusic' },
 ] as const;
 
 export default async function PortfolioPage() {
@@ -49,14 +114,23 @@ export default async function PortfolioPage() {
       {/* Header */}
       <section className="px-4 sm:px-6 lg:px-8 mb-12">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
-            <span className="text-gray-900 dark:text-white">My </span>
-            <span className="text-primary-gold">Portfolio</span>
-          </h1>
-          <p className="text-xl text-gray-700 dark:text-text-secondary max-w-3xl mx-auto">
-            Explore my collection of projects across software development, graphics design, 
-            videography, and gospel music ministry.
-          </p>
+          <AnimatedContainer>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
+              <span className="text-gray-900 dark:text-white">My </span>
+              <span className="text-primary-gold">Portfolio</span>
+            </h1>
+            <p className="text-xl text-gray-700 dark:text-text-secondary max-w-3xl mx-auto mb-8">
+              Explore my collection of projects across software development, graphics design, 
+              videography, and gospel music ministry. Each project tells a story of challenges overcome, 
+              solutions implemented, and lessons learned.
+            </p>
+            <div className="bg-gradient-to-r from-primary-gold/10 via-tech-teal/10 to-accent-red/10 rounded-lg p-6 max-w-2xl mx-auto">
+              <p className="text-gray-800 dark:text-text-primary font-semibold">
+                <span className="text-primary-gold">Featured:</span> Projects with detailed case studies, 
+                technical challenges, and client testimonials
+              </p>
+            </div>
+          </AnimatedContainer>
         </div>
       </section>
 
@@ -65,26 +139,30 @@ export default async function PortfolioPage() {
 
       {/* Call to Action */}
       <section className="px-4 sm:px-6 lg:px-8 mt-20">
-        <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-primary-gold/10 via-accent-red/10 to-tech-teal/10 rounded-2xl p-12">
-          <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-            Have a Project in Mind?
-          </h2>
-          <p className="text-gray-700 dark:text-text-secondary text-lg mb-8">
-            Let's collaborate and bring your vision to life. Whether it's software, design, or creative work, 
-            I'm here to help.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                Start a Project
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                Learn More About Me
-              </Button>
-            </Link>
-          </div>
+        <div className="max-w-7xl mx-auto">
+          <PortfolioPageCTAs />
+        </div>
+      </section>
+
+      {/* Social Follow Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mt-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <AnimatedContainer>
+            <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+              Connect with Charles Jasema
+            </h2>
+            <p className="text-gray-700 dark:text-text-secondary mb-8">
+              Follow my journey across platforms for project updates, behind-the-scenes content, and professional insights.
+            </p>
+            <SocialFollow variant="grid" showLabels={true} showUsernames={true} />
+          </AnimatedContainer>
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mt-16 mb-20">
+        <div className="max-w-4xl mx-auto">
+          <SocialProof variant="grid" animated={true} />
         </div>
       </section>
     </div>

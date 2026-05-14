@@ -66,12 +66,15 @@ export function Navigation(): JSX.Element {
 
   return (
     <nav
+      id="main-navigation"
       className={clsx(
         'fixed top-0 w-full z-50 transition-all duration-300',
         scrolled
           ? 'bg-background-dark/95 backdrop-blur-md shadow-lg border-b border-primary-gold/20'
           : 'bg-background-dark border-b border-primary-gold/20'
       )}
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
@@ -97,42 +100,48 @@ export function Navigation(): JSX.Element {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <div className="flex items-center space-x-8">
+            <ul className="flex items-center space-x-8" role="list">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={clsx(
-                    'relative font-nav font-medium transition-colors duration-300',
-                    'hover:text-primary-gold',
-                    'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-background-dark rounded px-2 py-1',
-                    isActive(item.href)
-                      ? 'text-primary-gold'
-                      : 'text-text-secondary'
-                  )}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                  {isActive(item.href) && (
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary-gold" />
-                  )}
-                </Link>
+                <li key={item.href} role="listitem">
+                  <Link
+                    href={item.href}
+                    className={clsx(
+                      'relative font-nav font-medium transition-colors duration-300',
+                      'hover:text-primary-gold',
+                      'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-background-dark rounded px-2 py-1',
+                      isActive(item.href)
+                        ? 'text-primary-gold'
+                        : 'text-text-secondary'
+                    )}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                    {isActive(item.href) && (
+                      <span 
+                        className="absolute bottom-0 left-0 w-full h-0.5 bg-primary-gold" 
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
             <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <button
+            id="mobile-menu-button"
             onClick={() => setIsOpen(!isOpen)}
             className={clsx(
-              'md:hidden p-2 rounded transition-colors duration-300',
+              'md:hidden p-2 rounded transition-colors duration-300 min-h-[44px] min-w-[44px]',
               'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-background-dark',
               isOpen ? 'text-accent-red' : 'text-primary-gold hover:text-primary-gold/80'
             )}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
+            aria-haspopup="true"
           >
             <svg
               className="w-6 h-6 transition-transform duration-300"
@@ -165,24 +174,30 @@ export function Navigation(): JSX.Element {
           <div
             id="mobile-menu"
             className="md:hidden pb-6 space-y-2 animate-fadeIn"
+            role="menu"
+            aria-labelledby="mobile-menu-button"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={clsx(
-                  'block px-4 py-3 rounded-sm font-nav font-medium transition-all duration-300',
-                  'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-background-dark',
-                  isActive(item.href)
-                    ? 'bg-primary-gold/10 text-primary-gold border-l-4 border-primary-gold'
-                    : 'text-text-secondary hover:bg-primary-gold/5 hover:text-primary-gold hover:border-l-4 hover:border-primary-gold/50'
-                )}
-                onClick={() => setIsOpen(false)}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <ul className="space-y-2" role="list">
+              {navItems.map((item) => (
+                <li key={item.href} role="listitem">
+                  <Link
+                    href={item.href}
+                    className={clsx(
+                      'block px-4 py-3 rounded-sm font-nav font-medium transition-all duration-300',
+                      'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-background-dark',
+                      isActive(item.href)
+                        ? 'bg-primary-gold/10 text-primary-gold border-l-4 border-primary-gold'
+                        : 'text-text-secondary hover:bg-primary-gold/5 hover:text-primary-gold hover:border-l-4 hover:border-primary-gold/50'
+                    )}
+                    onClick={() => setIsOpen(false)}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    role="menuitem"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <div className="px-4 py-3 flex items-center justify-between">
               <span className="text-text-secondary text-sm font-medium">Theme</span>
               <ThemeToggle />

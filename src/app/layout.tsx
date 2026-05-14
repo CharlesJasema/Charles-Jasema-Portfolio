@@ -3,9 +3,13 @@ import '@/styles/globals.css';
 import { Providers } from '@/components/providers';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
-import { SkipLink } from '@/components/SkipLink';
+import SkipLinks from '@/components/SkipLinks';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import { StickyContactCTA } from '@/components/cta';
 import { generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
+import { PerformanceOptimizer } from '@/components/PerformanceOptimizer';
+import { AnalyticsTestPanel } from '@/components/AnalyticsTestPanel';
+import TawkToChat from '@/components/TawkToChat';
 
 export const metadata: Metadata = {
   title: {
@@ -82,6 +86,29 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0F172A" />
         
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        
+        {/* DNS prefetch for performance */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="//cdn.sanity.io" />
+        
+        {/* Apple PWA meta tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Charles Jasema" />
+        <link rel="apple-touch-icon" href="/images/CJ Music Logo.jpeg" />
+        
+        {/* Microsoft PWA meta tags */}
+        <meta name="msapplication-TileColor" content="#0F172A" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
@@ -94,12 +121,18 @@ export default function RootLayout({
       </head>
       <body className="font-sans">
         <GoogleAnalytics />
-        <SkipLink />
+        <PerformanceOptimizer />
+        <SkipLinks />
         <Providers>
           <Navigation />
-          <main id="main-content" className="min-h-screen">{children}</main>
+          <main id="main-content" className="min-h-screen" role="main" tabIndex={-1}>
+            {children}
+          </main>
           <Footer />
+          <StickyContactCTA />
+          <TawkToChat />
         </Providers>
+        <AnalyticsTestPanel />
       </body>
     </html>
   );

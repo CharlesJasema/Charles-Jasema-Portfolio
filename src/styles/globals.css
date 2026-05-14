@@ -11,11 +11,17 @@ html {
 /* Light mode (default) */
 body {
   @apply bg-white text-gray-900;
+  --toast-bg: #ffffff;
+  --toast-color: #1f2937;
+  --toast-border: #d1d5db;
 }
 
 /* Dark mode */
 .dark body {
   @apply bg-background-dark text-text-primary;
+  --toast-bg: #1e293b;
+  --toast-color: #f1f5f9;
+  --toast-border: #475569;
 }
 
 h1 {
@@ -152,6 +158,606 @@ select:focus {
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out forwards;
 }
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .loading-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Button loading states */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== ACCESSIBILITY STYLES ===== */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Show screen reader content when focused */
+.sr-only:focus,
+.sr-only:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Skip links */
+.skip-links a {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.skip-links a:focus {
+  top: 6px;
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* Enhanced focus for interactive elements */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+  outline: 3px solid #D4AF37;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Focus within for containers */
+.focus-within:focus-within {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-gold: #FFD700;
+    --tech-teal: #00FFFF;
+    --accent-red: #FF0000;
+    --text-primary: #000000;
+    --text-secondary: #000000;
+    --background: #FFFFFF;
+  }
+  
+  .dark {
+    --text-primary: #FFFFFF;
+    --text-secondary: #FFFFFF;
+    --background: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-fadeIn,
+  .animate-slideIn,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+
+/* Ensure sufficient color contrast */
+.text-contrast-aa {
+  color: #000000;
+}
+
+.dark .text-contrast-aa {
+  color: #FFFFFF;
+}
+
+.bg-contrast-aa {
+  background-color: #FFFFFF;
+}
+
+.dark .bg-contrast-aa {
+  background-color: #000000;
+}
+
+/* Interactive element states */
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button[aria-pressed="true"] {
+  background-color: #D4AF37;
+  color: #000000;
+}
+
+[aria-expanded="true"] {
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+/* Loading states */
+[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* Error states */
+[aria-invalid="true"] {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 1px #EF4444;
+}
+
+/* Required field indicators */
+[aria-required="true"]::after {
+  content: " *";
+  color: #EF4444;
+  font-weight: bold;
+}
+
+/* Live regions */
+[aria-live] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Modal and dialog accessibility */
+[aria-modal="true"] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+/* Ensure clickable areas are large enough (44px minimum) */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Touch target improvements */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    min-height: 48px;
+  }
+}
+
+/* Print accessibility */
+@media print {
+  .skip-links,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+
+/* Keyboard navigation improvements */
+.keyboard-navigation button:focus,
+.keyboard-navigation a:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation textarea:focus,
+.keyboard-navigation select:focus {
+  outline: 3px solid #D4AF37;
+  outline-offset: 2px;
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+/* Ensure text remains readable when zoomed to 200% */
+@media (min-resolution: 2dppx) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+/* Color-only information alternatives */
+.error-text::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+.success-text::before {
+  content: "✓ ";
+  font-weight: bold;
+}
+
+.warning-text::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+.info-text::before {
+  content: "ℹ ";
+  font-weight: bold;
+}
+
+/* Ensure form labels are properly associated */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* Improve table accessibility */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.dark th {
+  background-color: #374151;
+}
+
+/* Improve list accessibility */
+ul,
+ol {
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.25em;
+}
+
+/* Ensure headings maintain hierarchy */
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+/* Improve link accessibility */
+a:not([class]) {
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+}
+
+a:hover,
+a:focus {
+  text-decoration-thickness: 2px;
+}
+
+/* Ensure sufficient spacing for readability */
+p + p {
+  margin-top: 1em;
+}
+
+/* Improve button accessibility */
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font: inherit;
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Improve form accessibility */
+fieldset {
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 0.5em;
+}
+
+/* Ensure error messages are accessible */
+.error-message {
+  color: #EF4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.error-message::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+/* Improve card accessibility */
+.card:focus-within {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* Ensure animations respect user preferences */
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Ensure proper spacing for touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Improve navigation accessibility */
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav a[aria-current="page"] {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Ensure proper contrast for placeholder text */
+::placeholder {
+  color: #6B7280;
+  opacity: 1;
+}
+
+.dark ::placeholder {
+  color: #9CA3AF;
+}
+
+/* Improve tooltip accessibility */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* Ensure proper focus management for modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.dark .modal-content {
+  background: #1e293b;
+}
+
+/* Improve carousel/slider accessibility */
+.carousel-button {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.carousel-button:hover,
+.carousel-button:focus {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Ensure proper heading structure */
+.heading-1 { font-size: 2.5rem; font-weight: bold; }
+.heading-2 { font-size: 2rem; font-weight: bold; }
+.heading-3 { font-size: 1.75rem; font-weight: bold; }
+.heading-4 { font-size: 1.5rem; font-weight: bold; }
+.heading-5 { font-size: 1.25rem; font-weight: bold; }
+.heading-6 { font-size: 1rem; font-weight: bold; }

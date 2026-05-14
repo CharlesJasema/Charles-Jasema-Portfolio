@@ -333,3 +333,138 @@ export const DEFAULT_KEYWORDS = [
 export function generateKeywords(pageKeywords: string[]): string[] {
   return [...new Set([...DEFAULT_KEYWORDS, ...pageKeywords])];
 }
+
+/**
+ * Enhanced Open Graph image generation for social sharing
+ */
+export function generateOpenGraphImage(
+  _title: string,
+  category?: string,
+  customImage?: string
+): string {
+  if (customImage) {
+    return customImage.startsWith('http') ? customImage : `${SITE_URL}${customImage}`;
+  }
+
+  // Category-specific default images
+  const categoryImages = {
+    music: '/images/CJ Music Logo.jpeg',
+    portfolio: '/images/Code & Design Banner.jpeg',
+    blog: '/images/Code & Design Banner.jpeg',
+    about: '/images/professional image.JPG',
+    default: '/images/professional image.JPG'
+  };
+
+  const imageKey = category && categoryImages[category as keyof typeof categoryImages] 
+    ? category as keyof typeof categoryImages 
+    : 'default';
+  
+  return `${SITE_URL}${categoryImages[imageKey]}`;
+}
+
+/**
+ * Generate social media optimized metadata
+ */
+export function generateSocialMetadata(config: {
+  title: string;
+  description: string;
+  url?: string;
+  image?: string;
+  category?: string;
+  type?: 'website' | 'article' | 'music.song' | 'music.album';
+  publishedTime?: string;
+  tags?: string[];
+}) {
+  const {
+    title,
+    description,
+    url = SITE_URL,
+    image,
+    category,
+    type = 'website',
+    publishedTime,
+    tags = []
+  } = config;
+
+  const fullUrl = url.startsWith('http') ? url : `${SITE_URL}${url}`;
+  const ogImage = generateOpenGraphImage(title, category, image);
+
+  return {
+    title: title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`,
+    description,
+    openGraph: {
+      type,
+      title,
+      description,
+      url: fullUrl,
+      siteName: SITE_NAME,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      locale: 'en_US',
+      ...(publishedTime && { publishedTime }),
+      ...(tags.length > 0 && { tags }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      creator: TWITTER_HANDLE,
+      images: [ogImage],
+    },
+  };
+}
+
+/**
+ * Generate social sharing URLs for different platforms
+ */
+export function generateSocialShareUrls(
+  url: string,
+  title: string,
+  description?: string
+) {
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+  const encodedDescription = encodeURIComponent(description || '');
+
+  return {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedTitle}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&title=${encodedTitle}&summary=${encodedDescription}`,
+    whatsapp: `https://wa.me/?text=${encodedTitle} ${encodedUrl}`,
+    telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
+    reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`,
+    pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedTitle}`,
+  };
+}
+
+/**
+ * Validate and optimize meta description length
+ */
+export function optimizeMetaDescription(description: string): string {
+  const maxLength = 160;
+  if (description.length <= maxLength) {
+    return description;
+  }
+  
+  // Truncate at word boundary
+  const truncated = description.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  
+  return lastSpace > 0 
+    ? truncated.substring(0, lastSpace) + '...'
+    : truncated + '...';
+}
+
+/**
+ * Generate canonical URL
+ */
+export function generateCanonicalUrl(path: string): string {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${SITE_URL}${cleanPath}`;
+}

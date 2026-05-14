@@ -1,0 +1,75 @@
+{
+  "name": "Charles Jasema - Software Engineer, Designer & Gospel Artist",
+  "short_name": "Charles Jasema",
+  "description": "Professional portfolio showcasing software engineering, design work, and gospel music ministry by Charles Jasema",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#d4af37",
+  "orientation": "portrait-primary",
+  "categories": ["portfolio", "music", "technology", "design"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/images/CJ Music Logo.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/CJ Music Logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/Code & Design Banner.jpeg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Music",
+      "short_name": "Music",
+      "description": "Listen to Charles Jasema's gospel music",
+      "url": "/music",
+      "icons": [
+        {
+          "src": "/images/CJ Music Logo.jpeg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "short_name": "Portfolio",
+      "description": "View Charles Jasema's software and design projects",
+      "url": "/portfolio",
+      "icons": [
+        {
+          "src": "/images/Code & Design Logo.jpeg",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Get in touch with Charles Jasema",
+      "url": "/contact",
+      "icons": [
+        {
+          "src": "/images/professional image.JPG",
+          "sizes": "192x192",
+          "type": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

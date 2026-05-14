@@ -54,9 +54,59 @@ export default defineType({
       title: 'Mdundo URL',
       type: 'url',
       description: 'Link to song on Mdundo platform',
-      validation: Rule => Rule.required().uri({
+      validation: Rule => Rule.uri({
         scheme: ['http', 'https']
       })
+    }),
+    defineField({
+      name: 'spotifyUrl',
+      title: 'Spotify URL (Optional)',
+      type: 'url',
+      description: 'Link to song on Spotify',
+      validation: Rule => Rule.uri({
+        scheme: ['http', 'https']
+      })
+    }),
+    defineField({
+      name: 'appleMusicUrl',
+      title: 'Apple Music URL (Optional)',
+      type: 'url',
+      description: 'Link to song on Apple Music',
+      validation: Rule => Rule.uri({
+        scheme: ['http', 'https']
+      })
+    }),
+    defineField({
+      name: 'audioFile',
+      title: '🎵 Upload Audio File (Optional)',
+      type: 'file',
+      description: 'Upload MP3 or WAV file for preview (max 50MB). Keep using Mdundo/Spotify for full streaming.',
+      options: {
+        accept: 'audio/*'
+      }
+    }),
+    defineField({
+      name: 'songStory',
+      title: '📖 Song Story/Inspiration',
+      type: 'text',
+      rows: 5,
+      description: 'Share the story behind this song - what inspired it, when you wrote it, etc.',
+      placeholder: 'This song was inspired by...'
+    }),
+    defineField({
+      name: 'recordingDetails',
+      title: '🎙️ Recording Details',
+      type: 'text',
+      rows: 3,
+      description: 'Where and when was this recorded? Any special details?',
+      placeholder: 'Recorded at...'
+    }),
+    defineField({
+      name: 'collaborators',
+      title: '👥 Collaborators',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'List any collaborators (producers, featured artists, etc.)'
     }),
     defineField({
       name: 'albumArt',

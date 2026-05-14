@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FaEnvelope, FaWhatsapp, FaPhone, FaLinkedin, FaTwitter, FaYoutube, FaGithub, FaInstagram, FaFacebook, FaMusic, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import { Button, Card, Input, TextArea, Select } from '@/components/ui';
+import { ContactPageCTAs } from '@/components/cta';
 import { siteConfig } from '@/config/site';
 import { contactConfig } from '@/config/contact';
 
@@ -320,7 +321,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 sm:px-6 lg:px-8">
+      <section className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
@@ -340,6 +341,13 @@ export default function ContactPage() {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Additional CTAs */}
+      <section className="px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <ContactPageCTAs />
         </div>
       </section>
     </div>

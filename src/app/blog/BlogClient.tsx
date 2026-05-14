@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaCalendar, FaClock, FaTag, FaArrowRight, FaSearch } from 'react-icons/fa';
 import { Card, Button } from '@/components/ui';
+import { SocialShare, SocialFollow, SocialProof } from '@/components/social';
+import { BlogPageCTAs } from '@/components/cta';
 import { blogConfig, BlogCategory } from '@/config/blog';
 import { clsx } from 'clsx';
 
@@ -245,13 +247,26 @@ export default function BlogClient({ articles, error }: BlogClientProps) {
                   </div>
 
                   {/* Read More Link */}
-                  <Link
-                    href={`/blog/${article.slug.current}`}
-                    className="inline-flex items-center gap-2 text-primary-gold hover:text-primary-gold/80 font-semibold text-sm group-hover:gap-3 transition-all duration-300"
-                  >
-                    Read Article
-                    <FaArrowRight />
-                  </Link>
+                  <div className="flex items-center justify-between">
+                    <Link
+                      href={`/blog/${article.slug.current}`}
+                      className="inline-flex items-center gap-2 text-primary-gold hover:text-primary-gold/80 font-semibold text-sm group-hover:gap-3 transition-all duration-300"
+                    >
+                      Read Article
+                      <FaArrowRight />
+                    </Link>
+
+                    {/* Quick Share Button */}
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <SocialShare
+                        url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://charlesjasema.com'}/blog/${article.slug.current}`}
+                        title={article.title}
+                        description={article.excerpt}
+                        variant="compact"
+                        className="scale-75"
+                      />
+                    </div>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -279,23 +294,28 @@ export default function BlogClient({ articles, error }: BlogClientProps) {
 
       {/* Newsletter CTA */}
       <section className="px-4 sm:px-6 lg:px-8 mt-20">
-        <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-primary-gold/10 via-accent-red/10 to-tech-teal/10 rounded-2xl p-12">
-          <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-            Stay Updated
+        <div className="max-w-7xl mx-auto">
+          <BlogPageCTAs />
+        </div>
+      </section>
+
+      {/* Social Follow Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+            Follow Charles Jasema
           </h2>
-          <p className="text-gray-700 dark:text-text-secondary text-lg mb-8">
-            Subscribe to get the latest articles, tutorials, and insights delivered to your inbox.
+          <p className="text-gray-700 dark:text-text-secondary mb-8">
+            Stay connected across all platforms for the latest updates, music, and tech insights.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:border-primary-gold focus:outline-none"
-            />
-            <Button variant="primary" size="lg">
-              Subscribe
-            </Button>
-          </div>
+          <SocialFollow variant="grid" showLabels={true} showUsernames={true} />
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="max-w-4xl mx-auto">
+          <SocialProof variant="grid" animated={true} />
         </div>
       </section>
     </div>

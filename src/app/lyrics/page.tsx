@@ -2,18 +2,42 @@
 
 import { useState, useEffect } from 'react';
 import { FaMusic, FaYoutube, FaSearch, FaExternalLinkAlt, FaFilePdf, FaFileAlt } from 'react-icons/fa';
-import { Button, Card } from '@/components/ui';
-import { lyricsConfig } from '@/config/lyrics';
+import { Button, Card, LoadingSkeleton, ErrorMessage } from '@/components/ui';
 import { clsx } from 'clsx';
 import { trackDownload, trackSearch } from '@/lib/analytics';
 import { generateLyricsPDF, downloadLyricsTXT } from '@/lib/pdf-generator';
+import { getLyrics, type Lyrics } from '@/lib/sanity.queries';
+import toast from 'react-hot-toast';
 
 export default function LyricsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSong, setSelectedSong] = useState<string | null>(null);
+  const [lyrics, setLyrics] = useState<Lyrics[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch lyrics from Sanity
+  useEffect(() => {
+    async function fetchLyrics() {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getLyrics();
+        setLyrics(data);
+      } catch (error) {
+        console.error('Error fetching lyrics:', error);
+        setError('Failed to load lyrics. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLyrics();
+  }, []);
 
   // Add structured data for SEO
   useEffect(() => {
+    if (lyrics.length === 0) return;
+
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'MusicPlaylist',
@@ -24,7 +48,7 @@ export default function LyricsPage() {
         name: 'Charles Jasema',
         url: 'https://charlesjasema.com',
       },
-      track: lyricsConfig.lyrics.map((song) => ({
+      track: lyrics.map((song) => ({
         '@type': 'MusicRecording',
         name: song.songTitle,
         byArtist: {
@@ -52,10 +76,10 @@ export default function LyricsPage() {
     return () => {
       document.head.removeChild(script);
     };
-  }, []);
+  }, [lyrics]);
 
   // Filter lyrics based on search
-  const filteredLyrics = lyricsConfig.lyrics.filter((song) =>
+  const filteredLyrics = lyrics.filter((song) =>
     song.songTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
     song.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
     song.album.toLowerCase().includes(searchQuery.toLowerCase())
@@ -63,8 +87,83 @@ export default function LyricsPage() {
 
   // Get selected song details
   const selectedSongData = selectedSong
-    ? lyricsConfig.lyrics.find((song) => song.id === selectedSong)
+    ? lyrics.find((song) => song._id === selectedSong)
     : null;
+
+  // Retry function
+  const retryFetch = () => {
+    setError(null);
+    setLoading(true);
+    getLyrics()
+      .then(data => {
+        setLyrics(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Failed to load lyrics. Please try again.');
+        setLoading(false);
+      });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 pb-20">
+        {/* Hero Section */}
+        <section className="px-4 sm:px-6 lg:px-8 mb-12 bg-gradient-to-br from-accent-red/5 via-primary-gold/5 to-accent-red/5 py-16">
+          <div className="max-w-7xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-red/10 rounded-full mb-6">
+              <FaMusic className="text-4xl text-accent-red" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
+              <span className="text-gray-900 dark:text-white">Song Lyrics</span>
+            </h1>
+            <p className="text-2xl text-accent-red font-semibold mb-6">
+              Worship Through Words
+            </p>
+          </div>
+        </section>
+
+        {/* Loading State */}
+        <section className="px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <LoadingSkeleton variant="card" count={6} />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen pt-24 pb-20">
+        {/* Hero Section */}
+        <section className="px-4 sm:px-6 lg:px-8 mb-12 bg-gradient-to-br from-accent-red/5 via-primary-gold/5 to-accent-red/5 py-16">
+          <div className="max-w-7xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-accent-red/10 rounded-full mb-6">
+              <FaMusic className="text-4xl text-accent-red" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
+              <span className="text-gray-900 dark:text-white">Song Lyrics</span>
+            </h1>
+          </div>
+        </section>
+
+        {/* Error State */}
+        <section className="px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <ErrorMessage
+              variant="card"
+              title="Couldn't load lyrics"
+              message={error}
+              onRetry={retryFetch}
+            />
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -75,13 +174,13 @@ export default function LyricsPage() {
             <FaMusic className="text-4xl text-accent-red" />
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
-            <span className="text-gray-900 dark:text-white">{lyricsConfig.page.title}</span>
+            <span className="text-gray-900 dark:text-white">Song Lyrics</span>
           </h1>
           <p className="text-2xl text-accent-red font-semibold mb-6">
-            {lyricsConfig.page.subtitle}
+            Worship Through Words
           </p>
           <p className="text-lg text-gray-700 dark:text-text-secondary max-w-3xl mx-auto">
-            {lyricsConfig.page.description}
+            Read, download, and sing along with complete lyrics from all Charles Jasema worship songs.
           </p>
         </div>
       </section>
@@ -98,7 +197,12 @@ export default function LyricsPage() {
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 if (e.target.value) {
-                  trackSearch(e.target.value);
+                  const results = lyrics.filter((song) =>
+                    song.songTitle.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                    song.artist.toLowerCase().includes(e.target.value.toLowerCase()) ||
+                    song.album.toLowerCase().includes(e.target.value.toLowerCase())
+                  );
+                  trackSearch(e.target.value, 'lyrics_page', results.length);
                 }
               }}
               className="w-full pl-12 pr-4 py-4 rounded-lg border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:border-accent-red focus:outline-none transition-colors"
@@ -113,15 +217,15 @@ export default function LyricsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredLyrics.map((song) => (
               <Card
-                key={song.id}
+                key={song._id}
                 variant="elevated"
                 padding="lg"
                 className={clsx(
                   'cursor-pointer hover:shadow-2xl transition-all duration-300',
-                  selectedSong === song.id && 'ring-2 ring-accent-red',
+                  selectedSong === song._id && 'ring-2 ring-accent-red',
                   song.featured && 'border-2 border-accent-red/20'
                 )}
-                onClick={() => setSelectedSong(song.id)}
+                onClick={() => setSelectedSong(song._id)}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -136,11 +240,6 @@ export default function LyricsPage() {
                     </p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {(song as any).isNew && (
-                      <span className="px-2 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded animate-pulse">
-                        NEW
-                      </span>
-                    )}
                     {song.featured && (
                       <span className="px-2 py-1 bg-accent-red text-white text-xs font-bold rounded">
                         FEATURED
@@ -150,7 +249,7 @@ export default function LyricsPage() {
                 </div>
 
                 <p className="text-sm text-gray-700 dark:text-text-secondary mb-4">
-                  {song.notes}
+                  {song.notes || 'Worship song by Charles Jasema'}
                 </p>
 
                 <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-text-tertiary">
@@ -166,7 +265,7 @@ export default function LyricsPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedSong(song.id);
+                      setSelectedSong(song._id);
                     }}
                     className="text-accent-red hover:text-accent-red/80 text-sm font-semibold inline-flex items-center"
                   >
@@ -222,28 +321,37 @@ export default function LyricsPage() {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3 mt-4">
-                <a
-                  href={selectedSongData.youtubeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-accent-red text-white rounded-lg hover:bg-accent-red/90 transition-colors text-sm"
-                >
-                  <FaYoutube />
-                  <span>Watch on YouTube</span>
-                </a>
-                <a
-                  href={selectedSongData.mdundoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-gold text-background-dark rounded-lg hover:bg-primary-gold/90 transition-colors text-sm"
-                >
-                  <FaMusic />
-                  <span>Listen on Mdundo</span>
-                </a>
+                {selectedSongData.youtubeUrl && (
+                  <a
+                    href={selectedSongData.youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-accent-red text-white rounded-lg hover:bg-accent-red/90 transition-colors text-sm"
+                  >
+                    <FaYoutube />
+                    <span>Watch on YouTube</span>
+                  </a>
+                )}
+                {selectedSongData.mdundoUrl && (
+                  <a
+                    href={selectedSongData.mdundoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary-gold text-background-dark rounded-lg hover:bg-primary-gold/90 transition-colors text-sm"
+                  >
+                    <FaMusic />
+                    <span>Listen on Mdundo</span>
+                  </a>
+                )}
                 <button
                   onClick={() => {
-                    generateLyricsPDF(selectedSongData as any);
-                    trackDownload(selectedSongData.songTitle, 'pdf');
+                    try {
+                      generateLyricsPDF(selectedSongData as any);
+                      trackDownload(selectedSongData.songTitle, 'pdf', 'lyrics_modal');
+                      toast.success('✅ PDF downloaded successfully!');
+                    } catch (error) {
+                      toast.error('❌ Failed to download PDF. Please try again.');
+                    }
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-tech-teal text-white rounded-lg hover:bg-tech-teal/90 transition-colors text-sm"
                 >
@@ -252,8 +360,13 @@ export default function LyricsPage() {
                 </button>
                 <button
                   onClick={() => {
-                    downloadLyricsTXT(selectedSongData as any);
-                    trackDownload(selectedSongData.songTitle, 'txt');
+                    try {
+                      downloadLyricsTXT(selectedSongData as any);
+                      trackDownload(selectedSongData.songTitle, 'txt', 'lyrics_modal');
+                      toast.success('✅ TXT file downloaded successfully!');
+                    } catch (error) {
+                      toast.error('❌ Failed to download TXT. Please try again.');
+                    }
                   }}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm"
                 >
@@ -300,19 +413,22 @@ export default function LyricsPage() {
       <section className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-accent-red/10 via-primary-gold/10 to-tech-teal/10 rounded-2xl p-12">
           <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-            {lyricsConfig.cta.title}
+            Listen to the Music
           </h2>
           <p className="text-gray-700 dark:text-text-secondary text-lg mb-8">
-            {lyricsConfig.cta.description}
+            Stream all songs on your favorite platforms
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {lyricsConfig.cta.buttons.map((button, index) => (
-              <a key={index} href={button.link} target="_blank" rel="noopener noreferrer">
-                <Button variant={button.variant} size="lg" className="w-full sm:w-auto">
-                  {button.text}
-                </Button>
-              </a>
-            ))}
+            <a href="https://www.youtube.com/@CharlesJasemaMusic" target="_blank" rel="noopener noreferrer">
+              <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                YouTube
+              </Button>
+            </a>
+            <a href="https://mdundo.com/a/148492" target="_blank" rel="noopener noreferrer">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                Mdundo
+              </Button>
+            </a>
           </div>
         </div>
       </section>
