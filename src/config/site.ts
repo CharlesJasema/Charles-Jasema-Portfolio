@@ -17,8 +17,8 @@ export const siteConfig = {
   fullName: 'Charles Jada Sebit Emmanuel',
   musicName: 'Charles Jasema Music',
   jasemaMeaning: 'JA from JADA, SE from SEBIT, & MA from EMMANUEL',
-  title: 'Software Engineer, Designer & Gospel Artist',
-  description: 'Premium portfolio showcasing software engineering, graphics design, IT support, videography, and gospel music ministry.',
+  title: 'Software Engineer | Full-Stack Developer | IT Support Specialist | Graphics Designer',
+  description: 'Purpose-driven professional with over 4 years of experience in IT support, digital skills training, graphics design, and full-stack software development. Skilled in building scalable web applications, delivering ICT training, and creating strong visual brand identities.',
   
   // Personal Details
   personal: {

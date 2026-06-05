@@ -6,33 +6,57 @@
  */
 
 export const imagesConfig = {
-  // Logos
+  // Logos & Branding
   logos: {
     musicLogo: '/images/CJ Music Logo.jpeg',
     codeDesignLogo: '/images/Code & Design Logo.jpeg',
     codeDesignBanner: '/images/Code & Design Banner.jpeg',
-    jasemaWorshipTeam: '/images/jasema-worship-team-logo.png',
+    professionalLogo: '/images/charles-jasema-code-design-logo.jpg',
+    musicBrandLogo: '/images/charles-jasema-music-logo.jpg',
   },
 
-  // Profile Images
+  // Professional Photos
   profile: {
-    professional: '/images/professional image.JPG',
-    ministry: '/images/Ministry Image 1.jpg',
+    // Primary professional headshot - formal tuxedo
+    professional: '/images/charles-jasema-professional-headshot.jpg',
+    // Music ministry - keyboard performance
+    ministry: '/images/charles-jasema-music-ministry.jpg',
+    // Business professional - grey suit
+    business: '/images/charles-jasema-business-professional.jpg',
+    // Creative/artistic - colorful lighting
+    creative: '/images/charles-jasema-creative-portrait.jpg',
+    // Casual professional - yellow shirt
+    casual: '/images/charles-jasema-casual-professional.jpg',
+    // Full body professional - grey suit full
+    fullBody: '/images/charles-jasema-full-body-professional.jpg',
   },
 
   // Project Screenshots
   projects: {
-    kglScreenshot: '/images/KGL Screenshot.jpg',
+    karibuGroceries: '/images/karibu-groceries-screenshot.jpg',
+    portfolioWebsite: '/images/portfolio-website-screenshot.jpg',
+    camConnectApp: '/images/cam-connect-app-screenshot.jpg',
   },
 
-  // Banners
+  // Banners & Headers
   banners: {
     codeDesignBanner: '/images/Code & Design Banner.jpeg',
+    professionalHeader: '/images/charles-jasema-professional-header.jpg',
+  },
+
+  // Music Ministry Photos
+  music: {
+    liveWorship: '/images/charles-jasema-live-worship-performance.jpg',
+    youthMinistry: '/images/charles-jasema-youth-ministry.jpg',
+    graduationCeremony: '/images/charles-jasema-graduation-ceremony.jpg',
+    communityOutreach: '/images/charles-jasema-community-outreach.jpg',
+    churchService: '/images/charles-jasema-church-service.jpg',
   },
 
   // Placeholder for future images
   placeholders: {
     default: '/placeholder',
+    project: '/images/project-placeholder.jpg',
   },
 } as const;
 

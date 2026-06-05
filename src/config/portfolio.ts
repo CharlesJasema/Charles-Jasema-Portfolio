@@ -15,11 +15,66 @@
 
 export const portfolioProjects = [
   {
-    id: 'portfolio-system',
+    id: 'karibu-groceries',
+    title: 'Karibu Groceries Co. Ltd - E-commerce & Inventory System',
+    category: 'software' as const,
+    description: 'Scalable inventory and sales management system with role-based access control, built for improved business efficiency and user experience.',
+    image: '/images/karibu-groceries-screenshot.jpg',
+    tags: ['React', 'Node.js', 'PostgreSQL', 'Docker', 'CI/CD', 'E-commerce', 'Inventory Management'],
+    link: 'https://demo-karibu-groceries.vercel.app',
+    github: 'https://github.com/CharlesJasema/Karibu-Groceries-Ltd-Uganda.git',
+    featured: true,
+    order: 1,
+    challenges: [
+      'Building scalable inventory management for multiple product categories',
+      'Implementing role-based access control for different user types',
+      'Creating responsive UI for improved business efficiency',
+      'Integrating real-time inventory updates and notifications'
+    ],
+    solutions: [
+      'Designed robust PostgreSQL database schema with proper relationships',
+      'Implemented JWT-based authentication with role-based permissions',
+      'Built responsive React frontend with Material-UI components',
+      'Used Docker for consistent development and deployment environments'
+    ],
+    detailedTechStack: [
+      {
+        category: 'frontend',
+        technologies: ['React 18', 'Material-UI', 'Redux Toolkit', 'TypeScript']
+      },
+      {
+        category: 'backend',
+        technologies: ['Node.js', 'Express.js', 'JWT Authentication', 'Bcrypt']
+      },
+      {
+        category: 'database',
+        technologies: ['PostgreSQL', 'Sequelize ORM', 'Database Migrations']
+      },
+      {
+        category: 'devops',
+        technologies: ['Docker', 'CI/CD Pipeline', 'GitHub Actions', 'Environment Config']
+      }
+    ],
+    duration: '3 months',
+    teamSize: 1,
+    myRole: 'Full-Stack Developer & System Architect',
+    keyFeatures: [
+      'Comprehensive inventory management with low-stock alerts',
+      'Role-based access control (Admin, Manager, Staff)',
+      'Real-time sales reporting and analytics dashboard',
+      'Product categorization with search and filtering',
+      'Responsive design for mobile and desktop use',
+      'Automated backup and data recovery system',
+      'Multi-location inventory tracking',
+      'Integration with point-of-sale systems'
+    ]
+  },
+  {
+    id: 'charles-jasema-portfolio',
     title: 'Charles Jasema Portfolio & Digital Platform',
     category: 'software' as const,
     description: 'Comprehensive digital platform featuring portfolio showcase, music ministry platform, blog system, and business website with advanced CMS integration, analytics, and performance optimization.',
-    image: '/images/Code & Design Banner.jpeg',
+    image: '/images/portfolio-website-screenshot.jpg',
     tags: ['Next.js 14', 'TypeScript', 'Sanity CMS', 'Tailwind CSS', 'Vercel', 'Google Analytics', 'PWA', 'SEO'],
     link: 'https://charlesjasema.com',
     github: 'https://github.com/charlesjasema/portfolio',
@@ -65,10 +120,10 @@ export const portfolioProjects = [
     teamSize: 1,
     myRole: 'Full-Stack Developer & Designer',
     testimonial: {
-      text: 'This portfolio system perfectly captures Charles\'s diverse talents and provides an excellent platform for showcasing his work across multiple disciplines.',
-      author: 'Development Team',
-      role: 'Technical Review',
-      company: 'Charles Jasema Digital'
+      text: 'This portfolio system perfectly showcases my diverse skills across software development, music ministry, and digital design. It serves as both a professional platform and a creative outlet, demonstrating my ability to build comprehensive digital solutions.',
+      author: 'Charles Jasema',
+      role: 'Developer & Designer',
+      company: 'Personal Portfolio Project'
     },
     keyFeatures: [
       'Multi-content CMS with Sanity integration for music, projects, and blog',
@@ -85,127 +140,125 @@ export const portfolioProjects = [
     lessonsLearned: 'Building this comprehensive platform taught me the importance of balancing feature richness with performance, the value of proper content architecture planning, and how to create scalable systems that can grow with business needs.'
   },
   {
-    id: '1',
-    title: 'E-Commerce Platform',
+    id: 'cam-connect-app',
+    title: 'CAM CONNECT - Hospitality Services Platform',
     category: 'software' as const,
-    description: 'Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.',
-    image: '/placeholder',
-    tags: ['Next.js', 'TypeScript', 'Stripe', 'PostgreSQL'],
-    link: '#', // Update with actual project link
-    github: '#', // Update with actual GitHub link
-    featured: true,
-    order: 2,
-  },
-  {
-    id: '2',
-    title: 'Task Management App',
-    category: 'software' as const,
-    description: 'Collaborative task management application with real-time updates and team collaboration features.',
-    image: '/placeholder',
-    tags: ['React', 'Node.js', 'Socket.io', 'MongoDB'],
-    link: '#',
-    github: '#',
+    description: 'Mobile application for premium hospitality services including accommodation booking, conference facilities, and loyalty rewards system.',
+    image: '/images/cam-connect-app-screenshot.jpg',
+    tags: ['React Native', 'Mobile Development', 'Hospitality', 'Booking System', 'Loyalty Program', 'UI/UX Design'],
+    link: 'https://cam-connect-app.com',
+    github: 'https://github.com/charlesjasema/cam-connect',
     featured: true,
     order: 3,
+    challenges: [
+      'Creating intuitive mobile booking experience',
+      'Implementing loyalty points and rewards system', 
+      'Designing for premium hospitality market',
+      'Managing real-time booking availability'
+    ],
+    solutions: [
+      'Built native mobile app with React Native',
+      'Integrated comprehensive loyalty program with points tracking',
+      'Designed premium UI with focus on user experience',
+      'Implemented real-time availability checking and booking confirmation'
+    ],
+    detailedTechStack: [
+      {
+        category: 'mobile',
+        technologies: ['React Native', 'Mobile Development', 'Cross-platform']
+      },
+      {
+        category: 'backend',
+        technologies: ['Node.js', 'Real-time APIs', 'Booking System']
+      },
+      {
+        category: 'features',
+        technologies: ['Loyalty Program', 'Rewards System', 'Payment Integration']
+      }
+    ],
+    duration: '4 months',
+    teamSize: 2,
+    myRole: 'Lead Mobile Developer & UI/UX Designer',
+    testimonial: {
+      text: 'As a multi-service business handling restaurant operations, accommodation, construction, and youth skill training programs, we needed a highly versatile digital solution. The application built for us delivered exactly that. It has significantly improved our internal coordination, allowing us to serve the people of Koboko District more effectively. The positive impact on our service delivery is clear.',
+      author: 'Aloro Peter Satimon',
+      role: 'Manager',
+      company: 'Cam Connect Ltd'
+    },
+    keyFeatures: [
+      'User account management and profiles',
+      'Premium hospitality service bookings',
+      'Loyalty points and rewards tracking',
+      'Conference and accommodation reservations',
+      'Real-time availability and pricing',
+      'Push notifications for bookings and offers',
+      'Secure payment processing',
+      'Customer service and support integration'
+    ]
   },
   {
-    id: '3',
-    title: 'Brand Identity Design',
-    category: 'design' as const,
-    description: 'Complete brand identity including logo, color palette, typography, and marketing materials.',
-    image: '/placeholder',
-    tags: ['Adobe Illustrator', 'Photoshop', 'Branding'],
-    link: '#',
+    id: 'church-management-system',
+    title: 'Church Management & Live Streaming Platform',
+    category: 'software' as const,
+    description: 'Complete church management system with member registration, event management, donation tracking, and integrated live streaming capabilities for worship services.',
+    image: '/images/church-management-preview.jpg',
+    tags: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Stripe', 'WebRTC', 'Express.js'],
+    link: 'https://demo-church-system.vercel.app',
+    github: 'https://github.com/charlesjasema/church-management',
     featured: true,
-    order: 4,
-  },
-  {
-    id: '4',
-    title: 'Mobile App UI/UX',
-    category: 'design' as const,
-    description: 'Modern mobile app interface design with intuitive user experience and beautiful animations.',
-    image: '/placeholder',
-    tags: ['Figma', 'UI/UX', 'Mobile Design'],
-    link: '#',
-    featured: false,
-    order: 5,
-  },
-  {
-    id: '5',
-    title: 'Corporate Video Production',
-    category: 'videography' as const,
-    description: 'Professional corporate video showcasing company culture and values with cinematic quality.',
-    image: '/placeholder',
-    tags: ['Premiere Pro', 'After Effects', 'Color Grading'],
-    link: '#',
-    featured: true,
-    order: 6,
-  },
-  {
-    id: '6',
-    title: 'Music Video Production',
-    category: 'videography' as const,
-    description: 'Creative music video with storytelling, visual effects, and professional editing.',
-    image: '/placeholder',
-    tags: ['Final Cut Pro', 'Motion Graphics', 'Cinematography'],
-    link: '#',
-    featured: false,
-    order: 7,
-  },
-  {
-    id: '7',
-    title: 'Worship Album - "Hope Rising"',
-    category: 'music' as const,
-    description: 'Original worship album featuring 10 songs of hope, faith, and inspiration.',
-    image: '/placeholder',
-    tags: ['Songwriting', 'Production', 'Worship'],
-    link: '#',
-    featured: true,
-    order: 8,
-  },
-  {
-    id: '8',
-    title: 'Single - "Grace Abounds"',
-    category: 'music' as const,
-    description: 'Powerful worship single about God\'s amazing grace and unconditional love.',
-    image: '/placeholder',
-    tags: ['Gospel', 'Worship', 'Original'],
-    link: '#',
-    featured: false,
-    order: 9,
-  },
-  {
-    id: '10',
-    title: 'Restaurant Branding',
-    category: 'design' as const,
-    description: 'Complete restaurant branding including menu design, signage, and promotional materials.',
-    image: '/placeholder',
-    tags: ['Branding', 'Print Design', 'Adobe Suite'],
-    link: '#',
-    featured: false,
-    order: 10,
-  },
-  {
-    id: '11',
-    title: 'Event Highlight Reel',
-    category: 'videography' as const,
-    description: 'Dynamic event highlight video capturing the energy and excitement of a live event.',
-    image: '/placeholder',
-    tags: ['Video Editing', 'Color Grading', 'Sound Design'],
-    link: '#',
-    featured: false,
-    order: 11,
-  },
-  {
-    id: '12',
-    title: 'Live Worship Session',
-    category: 'music' as const,
-    description: 'Live worship recording featuring original songs and powerful worship moments.',
-    image: '/placeholder',
-    tags: ['Live Performance', 'Worship', 'Recording'],
-    link: '#',
-    featured: false,
-    order: 12,
+    order: 2,
+    challenges: [
+      'Real-time member engagement during live services',
+      'Secure donation processing with multiple payment methods',
+      'Scalable live streaming for 500+ concurrent viewers',
+      'Member data privacy and GDPR compliance',
+      'Mobile-first design for diverse congregation demographics'
+    ],
+    solutions: [
+      'Implemented WebRTC for high-quality live streaming with chat',
+      'Integrated Stripe and mobile money APIs for secure donations',
+      'Used Socket.io for real-time prayer requests and announcements',
+      'Built comprehensive admin dashboard with role-based access',
+      'Created responsive PWA for offline access to sermons and content'
+    ],
+    detailedTechStack: [
+      {
+        category: 'frontend',
+        technologies: ['React 18', 'TypeScript', 'Material-UI', 'PWA', 'WebRTC']
+      },
+      {
+        category: 'backend',
+        technologies: ['Node.js', 'Express.js', 'Socket.io', 'JWT Auth', 'Multer']
+      },
+      {
+        category: 'database',
+        technologies: ['MongoDB', 'Mongoose', 'Redis Cache', 'GridFS']
+      },
+      {
+        category: 'devops',
+        technologies: ['Docker', 'AWS EC2', 'CloudFront CDN', 'PM2']
+      }
+    ],
+    duration: '4 months',
+    teamSize: 2,
+    myRole: 'Lead Full-Stack Developer',
+    testimonial: {
+      text: 'Charles delivered an exceptional church management system that transformed how we connect with our congregation. The live streaming feature kept us connected during challenging times.',
+      author: 'Pastor John Mawa',
+      role: 'Senior Pastor',
+      company: 'Victory Christian Center'
+    },
+    keyFeatures: [
+      'Member registration and profile management',
+      'Live streaming with real-time chat and prayer requests',
+      'Secure online donation system with receipt generation',
+      'Event management and RSVP tracking',
+      'Sermon library with search and categorization',
+      'Mobile app for iOS and Android',
+      'Admin dashboard with comprehensive analytics',
+      'Email and SMS notification system'
+    ],
+    lessonsLearned: 'This project taught me the importance of understanding user needs in faith-based communities and how technology can strengthen spiritual connections while maintaining the personal touch that makes church community special.'
   },
 ];
 
