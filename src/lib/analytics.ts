@@ -1,570 +1,581 @@
 /**
- * Google Analytics 4 Integration with Enhanced Tracking
+ * Analytics Integration Module
  * 
- * Setup Instructions:
- * 1. Go to https://analytics.google.com
- * 2. Create account and property for Charles Jasema Portfolio
- * 3. Get your Measurement ID (G-XXXXXXXXXX)
- * 4. Add it to .env.local as NEXT_PUBLIC_GA_MEASUREMENT_ID
- * 5. Configure Enhanced Ecommerce for booking tracking
- * 6. Set up conversion goals in GA4 dashboard
+ * Provides comprehensive analytics tracking including:
+ * - Google Analytics 4 (GA4)
+ * - Custom event tracking
+ * - Performance monitoring
+ * - User behavior analytics
+ * - Privacy-compliant tracking
  */
 
-// Google Analytics Measurement ID
-export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
+// Analytics configuration
+interface AnalyticsConfig {
+  gaId?: string;
+  debug?: boolean;
+  anonymizeIp?: boolean;
+  cookieConsent?: boolean;
+}
 
-// Check if GA is enabled
-export const isGAEnabled = !!GA_MEASUREMENT_ID && typeof window !== 'undefined';
-
-// Enhanced page view tracking with custom parameters
-export const pageview = (url: string, title?: string) => {
-  if (!isGAEnabled || !window.gtag) return;
-  
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    page_path: url,
-    page_title: title,
-    custom_map: {
-      custom_parameter_1: 'page_category'
-    }
-  });
-};
-
-// Enhanced event tracking with GA4 recommended events
-type GTagEvent = {
+// Event tracking interface
+interface AnalyticsEvent {
   action: string;
-  category?: string;
+  category: string;
   label?: string;
   value?: number;
-  custom_parameters?: Record<string, any>;
-};
+  customParameters?: Record<string, any>;
+}
 
-export const event = ({ action, category, label, value, custom_parameters }: GTagEvent) => {
-  if (!isGAEnabled || !window.gtag) return;
-  
-  const eventParams: Record<string, any> = {
-    event_category: category,
-    event_label: label,
-    value: value,
-    ...custom_parameters
-  };
+// User properties interface
+interface UserProperties {
+  userId?: string;
+  userType?: 'visitor' | 'returning' | 'subscriber';
+  preferredTheme?: 'light' | 'dark' | 'system';
+  deviceType?: 'mobile' | 'tablet' | 'desktop';
+  connectionType?: string;
+}
 
-  // Remove undefined values
-  Object.keys(eventParams).forEach(key => {
-    if (eventParams[key] === undefined) {
-      delete eventParams[key];
+class AnalyticsManager {
+  private config: AnalyticsConfig;
+  private isInitialized = false;
+  private eventQueue: AnalyticsEvent[] = [];
+
+  constructor(config: AnalyticsConfig) {
+    this.config = config;
+  }
+
+  // Initialize analytics
+  async initialize(): Promise<void> {
+    if (this.isInitialized || typeof window === 'undefined') {
+      return;
     }
-  });
-  
-  window.gtag('event', action, eventParams);
-};
 
-// =============================================================================
-// CORE TRACKING FUNCTIONS
-// =============================================================================
+    try {
+      // Check for cookie consent if required
+      if (this.config.cookieConsent && !this.hasCookieConsent()) {
+        console.log('Analytics: Waiting for cookie consent');
+        return;
+      }
 
-// Page Views with Enhanced Data
-export const trackPageView = (pageName: string, pageCategory: string) => {
-  event({
-    action: 'page_view',
-    category: 'Navigation',
-    label: pageName,
-    custom_parameters: {
-      page_category: pageCategory,
-      timestamp: new Date().toISOString()
+      // Initialize Google Analytics 4
+      if (this.config.gaId) {
+        await this.initializeGA4();
+      }
+
+      // Process queued events
+      this.processEventQueue();
+      
+      this.isInitialized = true;
+      
+      if (this.config.debug) {
+        console.log('Analytics initialized successfully');
+      }
+    } catch (error) {
+      console.error('Analytics initialization failed:', error);
     }
-  });
+  }
+
+  // Initialize Google Analytics 4
+  private async initializeGA4(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        // Load gtag script
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${this.config.gaId}`;
+        
+        script.onload = () => {
+          // Initialize gtag
+          (window as any).dataLayer = (window as any).dataLayer || [];
+          (window as any).gtag = function() {
+            (window as any).dataLayer.push(arguments);
+          };
+
+          const gtag = (window as any).gtag;
+          
+          gtag('js', new Date());
+          gtag('config', this.config.gaId, {
+            anonymize_ip: this.config.anonymizeIp,
+            debug_mode: this.config.debug,
+            send_page_view: false, // We'll handle page views manually
+          });
+
+          resolve();
+        };
+
+        script.onerror = () => {
+          reject(new Error('Failed to load Google Analytics script'));
+        };
+
+        document.head.appendChild(script);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  // Track page view
+  trackPageView(path?: string, title?: string): void {
+    const pageData = {
+      page_path: path || (typeof window !== 'undefined' ? window.location.pathname : ''),
+      page_title: title || (typeof document !== 'undefined' ? document.title : ''),
+      page_location: typeof window !== 'undefined' ? window.location.href : '',
+    };
+
+    if (this.isInitialized && (window as any).gtag) {
+      (window as any).gtag('event', 'page_view', pageData);
+    }
+
+    if (this.config.debug) {
+      console.log('Analytics: Page view tracked', pageData);
+    }
+  }
+
+  // Track custom event
+  trackEvent(event: AnalyticsEvent): void {
+    if (!this.isInitialized) {
+      // Queue event for later processing
+      this.eventQueue.push(event);
+      return;
+    }
+
+    const eventData = {
+      event_category: event.category,
+      event_label: event.label,
+      value: event.value,
+      ...event.customParameters,
+    };
+
+    if ((window as any).gtag) {
+      (window as any).gtag('event', event.action, eventData);
+    }
+
+    if (this.config.debug) {
+      console.log('Analytics: Event tracked', event.action, eventData);
+    }
+  }
+
+  // Set user properties
+  setUserProperties(properties: UserProperties): void {
+    if (!this.isInitialized || !(window as any).gtag) {
+      return;
+    }
+
+    (window as any).gtag('config', this.config.gaId, {
+      user_properties: properties,
+    });
+
+    if (this.config.debug) {
+      console.log('Analytics: User properties set', properties);
+    }
+  }
+
+  // Track conversion
+  trackConversion(conversionId: string, value?: number, currency: string = 'USD'): void {
+    const conversionData: any = {
+      send_to: conversionId,
+    };
+
+    if (value !== undefined) {
+      conversionData.value = value;
+      conversionData.currency = currency;
+    }
+
+    if (this.isInitialized && (window as any).gtag) {
+      (window as any).gtag('event', 'conversion', conversionData);
+    }
+
+    if (this.config.debug) {
+      console.log('Analytics: Conversion tracked', conversionData);
+    }
+  }
+
+  // Process queued events
+  private processEventQueue(): void {
+    while (this.eventQueue.length > 0) {
+      const event = this.eventQueue.shift();
+      if (event) {
+        this.trackEvent(event);
+      }
+    }
+  }
+
+  // Check cookie consent
+  private hasCookieConsent(): boolean {
+    if (typeof localStorage === 'undefined') {
+      return false;
+    }
+    
+    return localStorage.getItem('cookie_consent') === 'accepted';
+  }
+
+  // Enable analytics after consent
+  enableWithConsent(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('cookie_consent', 'accepted');
+    }
+    
+    if (!this.isInitialized) {
+      this.initialize();
+    }
+  }
+
+  // Disable analytics
+  disable(): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('cookie_consent', 'rejected');
+    }
+
+    // Disable GA4 tracking
+    if ((window as any).gtag) {
+      (window as any).gtag('consent', 'update', {
+        analytics_storage: 'denied',
+      });
+    }
+
+    this.isInitialized = false;
+  }
+}
+
+// Create analytics instance
+const analyticsConfig: AnalyticsConfig = {
+  gaId: process.env.NEXT_PUBLIC_GA_ID,
+  debug: process.env.NODE_ENV === 'development',
+  anonymizeIp: true,
+  cookieConsent: true,
 };
 
-// CTA Interactions (Call-to-Action tracking)
-export const trackCTAClick = (ctaName: string, ctaLocation: string, ctaType: 'primary' | 'secondary' | 'tertiary') => {
-  event({
+export const analytics = new AnalyticsManager(analyticsConfig);
+
+// Predefined event tracking functions
+export const trackingEvents = {
+  // Navigation events
+  pageView: (path?: string, title?: string) => {
+    analytics.trackPageView(path, title);
+  },
+
+  // User interaction events
+  buttonClick: (buttonName: string, location: string) => {
+    analytics.trackEvent({
+      action: 'click',
+      category: 'engagement',
+      label: `${buttonName}_${location}`,
+    });
+  },
+
+  linkClick: (url: string, linkText: string) => {
+    analytics.trackEvent({
+      action: 'click',
+      category: 'outbound_link',
+      label: linkText,
+      customParameters: { link_url: url },
+    });
+  },
+
+  // Content engagement
+  videoPlay: (videoTitle: string, videoId: string) => {
+    analytics.trackEvent({
+      action: 'play',
+      category: 'video',
+      label: videoTitle,
+      customParameters: { video_id: videoId },
+    });
+  },
+
+  musicPlay: (songTitle: string, artist: string) => {
+    analytics.trackEvent({
+      action: 'play',
+      category: 'music',
+      label: songTitle,
+      customParameters: { artist },
+    });
+  },
+
+  downloadCV: () => {
+    analytics.trackEvent({
+      action: 'download',
+      category: 'engagement',
+      label: 'cv_download',
+    });
+  },
+
+  // Contact and conversion events
+  contactFormSubmit: (formType: string) => {
+    analytics.trackEvent({
+      action: 'submit',
+      category: 'contact',
+      label: formType,
+    });
+  },
+
+  socialFollow: (platform: string) => {
+    analytics.trackEvent({
+      action: 'follow',
+      category: 'social',
+      label: platform,
+    });
+  },
+
+  // Portfolio events
+  projectView: (projectName: string, category: string) => {
+    analytics.trackEvent({
+      action: 'view',
+      category: 'portfolio',
+      label: projectName,
+      customParameters: { project_category: category },
+    });
+  },
+
+  // Search and filtering
+  portfolioFilter: (filterType: string, filterValue: string) => {
+    analytics.trackEvent({
+      action: 'filter',
+      category: 'portfolio',
+      label: `${filterType}_${filterValue}`,
+    });
+  },
+
+  // Performance tracking
+  performanceMetric: (metricName: string, value: number) => {
+    analytics.trackEvent({
+      action: 'performance',
+      category: 'technical',
+      label: metricName,
+      value: Math.round(value),
+    });
+  },
+
+  // Error tracking
+  errorOccurred: (errorType: string, errorMessage: string) => {
+    analytics.trackEvent({
+      action: 'error',
+      category: 'technical',
+      label: errorType,
+      customParameters: { error_message: errorMessage },
+    });
+  },
+};
+
+// Export individual tracking functions for useAnalytics hook
+export const trackCTAClick = (ctaName: string, location: string, type: 'primary' | 'secondary' | 'tertiary' = 'primary') => {
+  analytics.trackEvent({
     action: 'cta_click',
-    category: 'CTA',
-    label: ctaName,
-    custom_parameters: {
-      cta_location: ctaLocation,
-      cta_type: ctaType,
-      page_url: window.location.href
-    }
+    category: 'engagement',
+    label: `${ctaName}_${location}_${type}`,
+    customParameters: { cta_name: ctaName, location, type },
   });
 };
 
-// Social Media Interactions
 export const trackSocialShare = (platform: string, contentType: string, contentTitle: string) => {
-  event({
+  analytics.trackEvent({
     action: 'share',
-    category: 'Social',
-    label: `${platform} - ${contentType}`,
-    custom_parameters: {
-      content_type: contentType,
-      content_title: contentTitle,
-      social_platform: platform
-    }
+    category: 'social',
+    label: `${platform}_${contentType}`,
+    customParameters: { platform, content_type: contentType, content_title: contentTitle },
   });
 };
 
 export const trackSocialFollow = (platform: string, location: string) => {
-  event({
-    action: 'social_follow',
-    category: 'Social',
-    label: platform,
-    custom_parameters: {
-      follow_location: location,
-      social_platform: platform
-    }
+  analytics.trackEvent({
+    action: 'follow',
+    category: 'social',
+    label: `${platform}_${location}`,
+    customParameters: { platform, location },
   });
 };
 
-// Download Tracking
-export const trackDownload = (fileName: string, fileType: string, downloadLocation: string) => {
-  event({
-    action: 'file_download',
-    category: 'Downloads',
-    label: fileName,
-    custom_parameters: {
-      file_type: fileType,
-      file_name: fileName,
-      download_location: downloadLocation,
-      file_size: 'unknown' // Can be enhanced with actual file size
-    }
+export const trackDownload = (fileName: string, fileType: string, location: string) => {
+  analytics.trackEvent({
+    action: 'download',
+    category: 'engagement',
+    label: `${fileName}_${fileType}`,
+    customParameters: { file_name: fileName, file_type: fileType, location },
   });
 };
 
-// Form Submissions
-export const trackFormSubmission = (formName: string, formLocation: string, success: boolean) => {
-  event({
+export const trackFormSubmission = (formName: string, location: string, success: boolean) => {
+  analytics.trackEvent({
     action: success ? 'form_submit_success' : 'form_submit_error',
-    category: 'Forms',
-    label: formName,
-    custom_parameters: {
-      form_location: formLocation,
-      form_name: formName,
-      submission_status: success ? 'success' : 'error'
-    }
+    category: 'engagement',
+    label: `${formName}_${location}`,
+    customParameters: { form_name: formName, location, success },
   });
 };
 
-// Music Interactions
 export const trackMusicPlay = (songTitle: string, artist: string, platform: string, duration?: number) => {
-  event({
+  analytics.trackEvent({
     action: 'music_play',
-    category: 'Music',
-    label: songTitle,
-    custom_parameters: {
-      song_title: songTitle,
-      artist: artist,
-      music_platform: platform,
-      play_duration: duration
-    }
+    category: 'music',
+    label: `${songTitle}_${artist}`,
+    customParameters: { song_title: songTitle, artist, platform, duration },
   });
 };
 
 export const trackMusicPause = (songTitle: string, playTime: number) => {
-  event({
+  analytics.trackEvent({
     action: 'music_pause',
-    category: 'Music',
+    category: 'music',
     label: songTitle,
-    value: Math.round(playTime),
-    custom_parameters: {
-      song_title: songTitle,
-      play_time_seconds: playTime
-    }
+    customParameters: { song_title: songTitle, play_time: playTime },
   });
 };
 
 export const trackMusicComplete = (songTitle: string, totalDuration: number) => {
-  event({
+  analytics.trackEvent({
     action: 'music_complete',
-    category: 'Music',
+    category: 'music',
     label: songTitle,
-    value: Math.round(totalDuration),
-    custom_parameters: {
-      song_title: songTitle,
-      total_duration: totalDuration,
-      completion_rate: 100
-    }
+    customParameters: { song_title: songTitle, total_duration: totalDuration },
   });
 };
 
-// Portfolio Engagement
-export const trackPortfolioView = (projectTitle: string, projectCategory: string, viewDuration?: number) => {
-  event({
+export const trackPortfolioView = (projectTitle: string, category: string, duration?: number) => {
+  analytics.trackEvent({
     action: 'portfolio_view',
-    category: 'Portfolio',
-    label: projectTitle,
-    value: viewDuration,
-    custom_parameters: {
-      project_title: projectTitle,
-      project_category: projectCategory,
-      view_duration: viewDuration
-    }
+    category: 'portfolio',
+    label: `${projectTitle}_${category}`,
+    customParameters: { project_title: projectTitle, project_category: category, duration },
   });
 };
 
 export const trackPortfolioInteraction = (projectTitle: string, interactionType: string) => {
-  event({
+  analytics.trackEvent({
     action: 'portfolio_interaction',
-    category: 'Portfolio',
-    label: `${projectTitle} - ${interactionType}`,
-    custom_parameters: {
-      project_title: projectTitle,
-      interaction_type: interactionType
-    }
+    category: 'portfolio',
+    label: `${projectTitle}_${interactionType}`,
+    customParameters: { project_title: projectTitle, interaction_type: interactionType },
   });
 };
 
-// =============================================================================
-// ENHANCED ECOMMERCE TRACKING (for booking/hiring)
-// =============================================================================
-
-// Begin Checkout (Booking Process)
-export const trackBeginCheckout = (serviceType: string, serviceValue: number, currency: string = 'USD') => {
-  if (!isGAEnabled || !window.gtag) return;
-  
-  window.gtag('event', 'begin_checkout', {
-    currency: currency,
-    value: serviceValue,
-    items: [{
-      item_id: `service_${serviceType.toLowerCase().replace(/\s+/g, '_')}`,
-      item_name: serviceType,
-      item_category: 'Professional Services',
-      item_variant: 'Booking',
-      quantity: 1,
-      price: serviceValue
-    }]
-  });
-};
-
-// Purchase (Booking Confirmation)
-export const trackPurchase = (
-  transactionId: string, 
-  serviceType: string, 
-  serviceValue: number, 
-  currency: string = 'USD'
-) => {
-  if (!isGAEnabled || !window.gtag) return;
-  
-  window.gtag('event', 'purchase', {
-    transaction_id: transactionId,
-    currency: currency,
-    value: serviceValue,
-    items: [{
-      item_id: `service_${serviceType.toLowerCase().replace(/\s+/g, '_')}`,
-      item_name: serviceType,
-      item_category: 'Professional Services',
-      item_variant: 'Booking',
-      quantity: 1,
-      price: serviceValue
-    }]
-  });
-};
-
-// Add to Cart (Service Interest)
-export const trackAddToCart = (serviceType: string, serviceValue: number, currency: string = 'USD') => {
-  if (!isGAEnabled || !window.gtag) return;
-  
-  window.gtag('event', 'add_to_cart', {
-    currency: currency,
-    value: serviceValue,
-    items: [{
-      item_id: `service_${serviceType.toLowerCase().replace(/\s+/g, '_')}`,
-      item_name: serviceType,
-      item_category: 'Professional Services',
-      quantity: 1,
-      price: serviceValue
-    }]
-  });
-};
-
-// =============================================================================
-// CONVERSION GOALS TRACKING
-// =============================================================================
-
-// Lead Generation (Contact Form)
-export const trackLead = (leadSource: string, leadType: string) => {
-  event({
+export const trackLead = (source: string, type: string) => {
+  analytics.trackEvent({
     action: 'generate_lead',
-    category: 'Conversions',
-    label: leadType,
-    custom_parameters: {
-      lead_source: leadSource,
-      lead_type: leadType,
-      conversion_type: 'contact'
-    }
+    category: 'conversion',
+    label: `${source}_${type}`,
+    customParameters: { source, lead_type: type },
   });
 };
 
-// Booking Inquiry
-export const trackBookingInquiry = (serviceType: string, inquiryMethod: string) => {
-  event({
+export const trackBookingInquiry = (serviceType: string, method: string) => {
+  analytics.trackEvent({
     action: 'booking_inquiry',
-    category: 'Conversions',
-    label: serviceType,
-    custom_parameters: {
-      service_type: serviceType,
-      inquiry_method: inquiryMethod,
-      conversion_type: 'booking'
-    }
+    category: 'conversion',
+    label: `${serviceType}_${method}`,
+    customParameters: { service_type: serviceType, method },
   });
 };
 
-// Hiring Inquiry
-export const trackHiringInquiry = (projectType: string, inquiryMethod: string, estimatedBudget?: string) => {
-  event({
+export const trackHiringInquiry = (projectType: string, method: string, budget?: string) => {
+  analytics.trackEvent({
     action: 'hiring_inquiry',
-    category: 'Conversions',
-    label: projectType,
-    custom_parameters: {
-      project_type: projectType,
-      inquiry_method: inquiryMethod,
-      estimated_budget: estimatedBudget,
-      conversion_type: 'hiring'
-    }
+    category: 'conversion',
+    label: `${projectType}_${method}`,
+    customParameters: { project_type: projectType, method, budget },
   });
 };
 
-// Newsletter Signup
 export const trackNewsletterSignup = (location: string, source: string) => {
-  event({
+  analytics.trackEvent({
     action: 'newsletter_signup',
-    category: 'Conversions',
-    label: location,
-    custom_parameters: {
-      signup_location: location,
-      signup_source: source,
-      conversion_type: 'newsletter'
-    }
+    category: 'conversion',
+    label: `${location}_${source}`,
+    customParameters: { location, source },
   });
 };
 
-// =============================================================================
-// PERFORMANCE METRICS TRACKING
-// =============================================================================
-
-// Core Web Vitals
-export const trackWebVital = (name: string, value: number, id: string) => {
-  event({
-    action: 'web_vital',
-    category: 'Performance',
-    label: name,
-    value: Math.round(value),
-    custom_parameters: {
-      metric_name: name,
-      metric_value: value,
-      metric_id: id
-    }
+export const trackBeginCheckout = (serviceType: string, value: number, currency: string = 'USD') => {
+  analytics.trackEvent({
+    action: 'begin_checkout',
+    category: 'ecommerce',
+    label: serviceType,
+    value,
+    customParameters: { service_type: serviceType, currency },
   });
 };
 
-// Page Load Performance
-export const trackPageLoadTime = (loadTime: number, pageType: string) => {
-  event({
-    action: 'page_load_time',
-    category: 'Performance',
-    label: pageType,
-    value: Math.round(loadTime),
-    custom_parameters: {
-      load_time_ms: loadTime,
-      page_type: pageType
-    }
+export const trackPurchase = (transactionId: string, serviceType: string, value: number, currency: string = 'USD') => {
+  analytics.trackEvent({
+    action: 'purchase',
+    category: 'ecommerce',
+    label: serviceType,
+    value,
+    customParameters: { transaction_id: transactionId, service_type: serviceType, currency },
   });
 };
 
-// Error Tracking
-export const trackError = (errorType: string, errorMessage: string, errorLocation: string) => {
-  event({
-    action: 'error_occurred',
-    category: 'Errors',
-    label: errorType,
-    custom_parameters: {
-      error_type: errorType,
-      error_message: errorMessage,
-      error_location: errorLocation,
-      user_agent: navigator.userAgent
-    }
+export const trackAddToCart = (serviceType: string, value: number, currency: string = 'USD') => {
+  analytics.trackEvent({
+    action: 'add_to_cart',
+    category: 'ecommerce',
+    label: serviceType,
+    value,
+    customParameters: { service_type: serviceType, currency },
   });
 };
 
-// =============================================================================
-// USER ENGAGEMENT TRACKING
-// =============================================================================
-
-// Scroll Depth
-export const trackScrollDepth = (percentage: number, pageType: string) => {
-  event({
-    action: 'scroll_depth',
-    category: 'Engagement',
-    label: `${percentage}%`,
-    value: percentage,
-    custom_parameters: {
-      scroll_percentage: percentage,
-      page_type: pageType
-    }
-  });
-};
-
-// Time on Page
-export const trackTimeOnPage = (timeSpent: number, pageType: string) => {
-  event({
-    action: 'time_on_page',
-    category: 'Engagement',
-    label: pageType,
-    value: Math.round(timeSpent),
-    custom_parameters: {
-      time_spent_seconds: timeSpent,
-      page_type: pageType
-    }
-  });
-};
-
-// Search Functionality
-export const trackSearch = (searchQuery: string, searchLocation: string, resultsCount: number) => {
-  event({
+export const trackSearch = (query: string, location: string, resultsCount: number) => {
+  analytics.trackEvent({
     action: 'search',
-    category: 'Search',
-    label: searchQuery,
-    value: resultsCount,
-    custom_parameters: {
-      search_term: searchQuery,
-      search_location: searchLocation,
-      results_count: resultsCount
-    }
+    category: 'engagement',
+    label: `${query}_${location}`,
+    customParameters: { search_query: query, location, results_count: resultsCount },
   });
 };
 
-// =============================================================================
-// LEGACY FUNCTIONS (maintained for backward compatibility)
-// =============================================================================
-
-export const trackContact = (method: string) => {
-  trackLead(method, 'contact_form');
-};
-
-export const trackBooking = (serviceType: string) => {
-  trackBookingInquiry(serviceType, 'booking_form');
-};
-
-export const trackDonation = (amount: number, method: string) => {
-  event({
+export const trackDonation = (amount: number, method: string, currency: string = 'USD') => {
+  analytics.trackEvent({
     action: 'donation',
-    category: 'Monetization',
-    label: method,
+    category: 'conversion',
+    label: `${method}_${currency}`,
     value: amount,
-    custom_parameters: {
-      donation_amount: amount,
-      donation_method: method
-    }
+    customParameters: { amount, method, currency },
   });
 };
 
-// =============================================================================
-// UTILITY FUNCTIONS
-// =============================================================================
+export const trackError = (type: string, message: string, location: string) => {
+  analytics.trackEvent({
+    action: 'error',
+    category: 'technical',
+    label: `${type}_${location}`,
+    customParameters: { error_type: type, error_message: message, location },
+  });
+};
 
-// Initialize enhanced tracking
+export const isGAEnabled = !!process.env.NEXT_PUBLIC_GA_ID;
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID;
+
+// Initialize analytics function for external use
 export const initializeAnalytics = () => {
-  if (!isGAEnabled) {
-    console.log('Google Analytics is not configured. Add NEXT_PUBLIC_GA_MEASUREMENT_ID to your environment variables.');
-    return;
+  if (typeof window !== 'undefined') {
+    analytics.initialize();
   }
-
-  // Track initial page load
-  trackPageView(document.title, getPageCategory());
-  
-  // Set up scroll depth tracking
-  setupScrollTracking();
-  
-  // Set up time on page tracking
-  setupTimeTracking();
-  
-  // Set up error tracking
-  setupErrorTracking();
 };
 
-// Get page category based on URL
-const getPageCategory = (): string => {
-  const path = window.location.pathname;
-  if (path === '/') return 'Home';
-  if (path.startsWith('/about')) return 'About';
-  if (path.startsWith('/music')) return 'Music';
-  if (path.startsWith('/portfolio')) return 'Portfolio';
-  if (path.startsWith('/blog')) return 'Blog';
-  if (path.startsWith('/contact')) return 'Contact';
-  if (path.startsWith('/booking')) return 'Booking';
-  return 'Other';
-};
-
-// Set up scroll depth tracking
-const setupScrollTracking = () => {
-  let maxScroll = 0;
-  const milestones = [25, 50, 75, 90, 100];
-  const tracked = new Set<number>();
-
-  const handleScroll = () => {
-    const scrollPercent = Math.round(
-      (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
-    );
-    
-    maxScroll = Math.max(maxScroll, scrollPercent);
-    
-    milestones.forEach(milestone => {
-      if (maxScroll >= milestone && !tracked.has(milestone)) {
-        tracked.add(milestone);
-        trackScrollDepth(milestone, getPageCategory());
-      }
-    });
+// React hook for analytics
+export const useAnalytics = () => {
+  const trackEvent = (event: AnalyticsEvent) => {
+    analytics.trackEvent(event);
   };
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-};
-
-// Set up time on page tracking
-const setupTimeTracking = () => {
-  const startTime = Date.now();
-  
-  const trackTime = () => {
-    const timeSpent = (Date.now() - startTime) / 1000;
-    trackTimeOnPage(timeSpent, getPageCategory());
+  const trackPageView = (path?: string, title?: string) => {
+    analytics.trackPageView(path, title);
   };
 
-  // Track time when user leaves page
-  window.addEventListener('beforeunload', trackTime);
-  
-  // Track time at intervals for long sessions
-  setInterval(() => {
-    const timeSpent = (Date.now() - startTime) / 1000;
-    if (timeSpent > 30 && timeSpent % 30 === 0) { // Every 30 seconds after first 30 seconds
-      trackTimeOnPage(timeSpent, getPageCategory());
-    }
-  }, 1000);
+  const setUserProperties = (properties: UserProperties) => {
+    analytics.setUserProperties(properties);
+  };
+
+  return {
+    trackEvent,
+    trackPageView,
+    setUserProperties,
+    ...trackingEvents,
+  };
 };
 
-// Set up error tracking
-const setupErrorTracking = () => {
-  window.addEventListener('error', (event) => {
-    trackError(
-      'JavaScript Error',
-      event.message,
-      `${event.filename}:${event.lineno}:${event.colno}`
-    );
-  });
-
-  window.addEventListener('unhandledrejection', (event) => {
-    trackError(
-      'Unhandled Promise Rejection',
-      event.reason?.toString() || 'Unknown error',
-      window.location.href
-    );
-  });
-};
-
-// Declare gtag for TypeScript
-declare global {
-  interface Window {
-    gtag: (
-      command: string,
-      targetId: string,
-      config?: Record<string, any>
-    ) => void;
-  }
+// Initialize analytics on import (client-side only)
+if (typeof window !== 'undefined') {
+  analytics.initialize();
 }
+
+export default analytics;

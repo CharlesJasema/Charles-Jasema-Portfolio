@@ -2,7 +2,7 @@
 
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { clsx } from 'clsx';
-import { createAccessibleButtonProps } from '@/lib/accessibility';
+import { createAccessibleButtonProps } from '@/lib/button-utils';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost';

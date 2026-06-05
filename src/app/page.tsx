@@ -1,166 +1,17 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button, Card } from '@/components/ui';
-import { HomePageCTAs } from '@/components/cta';
-import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight, FaDownload } from 'react-icons/fa';
+import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
-import { imagesConfig } from '@/config/images';
-import { getProjects } from '@/lib/sanity.queries';
-import { urlForImage } from '@/lib/sanity.image';
-import { generateMetadata as generateSEOMetadata, generateKeywords, generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
 
-export const revalidate = 60; // Revalidate every 60 seconds
-
-export const metadata = generateSEOMetadata({
-  title: `${siteConfig.name} - Software Engineer, Gospel Artist & Worship Leader`,
-  description: 'Welcome to the official website of Charles Jasema - a passionate software engineer, creative designer, and gospel music artist. Discover innovative web applications, inspiring gospel music, professional design work, and faith-driven technology solutions. Specializing in React, Next.js, TypeScript, and modern web development.',
-  keywords: generateKeywords([
-    'Charles Jasema',
-    'Software Engineer',
-    'Gospel Artist',
-    'Worship Leader',
-    'Full Stack Developer',
-    'Web Developer',
-    'React Developer',
-    'Next.js Developer',
-    'TypeScript Developer',
-    'JavaScript Developer',
-    'Frontend Developer',
-    'Backend Developer',
-    'Graphics Designer',
-    'UI/UX Designer',
-    'Web Designer',
-    'Brand Designer',
-    'Logo Designer',
-    'Videographer',
-    'Video Producer',
-    'Video Editor',
-    'Music Producer',
-    'Audio Engineer',
-    'Gospel Music',
-    'Worship Music',
-    'Christian Music',
-    'Contemporary Gospel',
-    'African Gospel Music',
-    'Uganda Gospel Artist',
-    'South Sudan Gospel Music',
-    'Faith-based Technology',
-    'Christian Developer',
-    'Ministry Through Technology',
-    'Church Technology',
-    'Nonprofit Technology',
-    'Purpose-driven Development',
-    'Ethical Programming',
-    'Professional Portfolio',
-    'Creative Portfolio',
-    'Music Portfolio',
-    'Software Portfolio',
-    'Design Portfolio',
-    'Freelance Developer',
-    'Remote Developer',
-    'Tech Entrepreneur',
-    'Digital Solutions',
-    'Custom Development',
-    'Web Applications',
-    'Mobile Applications',
-    'E-commerce Development',
-    'CMS Development',
-    'API Development',
-    'Database Design',
-    'Cloud Solutions',
-    'Performance Optimization',
-    'SEO Optimization',
-    'Accessibility Compliance',
-    'Responsive Design',
-    'Modern Web Technologies',
-    'Progressive Web Apps',
-    'Single Page Applications',
-    'Server-side Rendering',
-    'Static Site Generation',
-    'Jamstack Development',
-    'Headless CMS',
-    'Sanity CMS',
-    'Content Management',
-    'Digital Marketing',
-    'Brand Identity',
-    'Visual Identity',
-    'Corporate Design',
-    'Marketing Materials',
-    'Print Design',
-    'Digital Design',
-    'Motion Graphics',
-    'Animation',
-    'Video Production',
-    'Live Streaming',
-    'Event Coverage',
-    'Documentary Production',
-    'Music Videos',
-    'Lyrical Videos',
-    'Audio Production',
-    'Studio Recording',
-    'Live Performance',
-    'Worship Leading',
-    'Song Writing',
-    'Music Composition',
-    'Music Arrangement',
-    'Gospel Streaming',
-    'Music Distribution',
-    'Digital Music',
-    'Spotify Artist',
-    'Apple Music Artist',
-    'YouTube Creator',
-    'Content Creator',
-    'Digital Creator',
-    'Creative Professional',
-    'Multi-disciplinary Artist',
-    'Technology and Faith',
-    'Innovation',
-    'Excellence',
-    'Quality',
-    'Professional Services',
-    'Consultation',
-    'Collaboration',
-    'Partnership',
-  ]),
-  url: '/',
-  type: 'website',
-  image: '/images/professional image.JPG',
-});
-
-export default async function HomePage() {
-  // Fetch featured content from Sanity
-  const [featuredProjects] = await Promise.all([
-    getProjects().then(projects => projects.filter(p => p.featured).slice(0, 3)),
-  ]).catch(() => [[]]); // Fallback to empty arrays on error
-
-  // Generate structured data
-  const personSchema = generatePersonSchema();
-  const websiteSchema = generateWebsiteSchema();
-
+export default function HomePage() {
   return (
-    <>
-      {/* Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteSchema),
-        }}
-      />
-      
-      <div className="min-h-screen">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-slate-200 to-slate-100 dark:from-background-dark dark:via-slate-900 dark:to-background-dark opacity-50" />
         
         <div className="relative max-w-7xl mx-auto text-center">
-          {/* Animated Introduction */}
-          <div className="space-y-6 animate-fadeIn">
+          <div className="space-y-6">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold">
               <span className="text-gray-900 dark:text-white">Hi, I'm </span>
               <span className="text-primary-gold">{siteConfig.name}</span>
@@ -175,7 +26,6 @@ export default async function HomePage() {
               Building software that matters and creating music that inspires.
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
               <Link href="/portfolio">
                 <Button variant="primary" size="lg" className="w-full sm:w-auto">
@@ -188,23 +38,12 @@ export default async function HomePage() {
                   Get In Touch
                 </Button>
               </Link>
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                <FaDownload className="mr-2" />
-                Download CV
-              </Button>
-            </div>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-primary-gold rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-primary-gold rounded-full mt-2 animate-pulse" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Introduction */}
+      {/* What I Do Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-100 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -217,7 +56,6 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Software Development */}
             <Card variant="glass" padding="lg" className="text-center hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 bg-primary-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaCode className="text-primary-gold text-3xl" />
@@ -230,7 +68,6 @@ export default async function HomePage() {
               </p>
             </Card>
 
-            {/* Design */}
             <Card variant="glass" padding="lg" className="text-center hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 bg-tech-teal/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaPalette className="text-tech-teal text-3xl" />
@@ -243,7 +80,6 @@ export default async function HomePage() {
               </p>
             </Card>
 
-            {/* Music Ministry */}
             <Card variant="glass" padding="lg" className="text-center hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 bg-accent-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaMusic className="text-accent-red text-3xl" />
@@ -256,7 +92,6 @@ export default async function HomePage() {
               </p>
             </Card>
 
-            {/* Videography */}
             <Card variant="glass" padding="lg" className="text-center hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 bg-primary-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaVideo className="text-primary-gold text-3xl" />
@@ -272,202 +107,29 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Work */}
+      {/* Call to Action */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Featured Work
-            </h2>
-            <p className="text-gray-700 dark:text-text-secondary text-lg max-w-2xl mx-auto">
-              A showcase of my recent projects across different domains
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.length > 0 ? (
-              featuredProjects.map((project) => {
-                const categoryColors = {
-                  software: { bg: 'from-primary-gold/20 to-tech-teal/20', text: 'text-primary-gold', icon: FaCode },
-                  design: { bg: 'from-tech-teal/20 to-primary-gold/20', text: 'text-tech-teal', icon: FaPalette },
-                  videography: { bg: 'from-primary-gold/20 to-accent-red/20', text: 'text-primary-gold', icon: FaVideo },
-                  music: { bg: 'from-accent-red/20 to-primary-gold/20', text: 'text-accent-red', icon: FaMusic },
-                };
-                const colors = categoryColors[project.category as keyof typeof categoryColors] || categoryColors.software;
-                const IconComponent = colors.icon;
-
-                return (
-                  <Card key={project._id} variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-                    {project.images && project.images.length > 0 ? (
-                      <div className="aspect-video relative">
-                        <Image
-                          src={urlForImage(project.images[0]).width(600).height(400).url()}
-                          alt={project.images[0].alt || project.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      </div>
-                    ) : (
-                      <div className={`aspect-video bg-gradient-to-br ${colors.bg} flex items-center justify-center`}>
-                        <IconComponent className={`text-6xl ${colors.text} group-hover:scale-110 transition-transform duration-300`} />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <span className={`text-xs ${colors.text} font-semibold uppercase tracking-wide`}>
-                        {project.category}
-                      </span>
-                      <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                        {project.title}
-                      </h3>
-                      <p className="text-gray-700 dark:text-text-secondary text-sm mb-4 line-clamp-2">
-                        {project.description}
-                      </p>
-                      <Link href="/portfolio" className={`${colors.text} hover:opacity-80 text-sm font-semibold inline-flex items-center`}>
-                        View Project
-                        <FaArrowRight className="ml-2" />
-                      </Link>
-                    </div>
-                  </Card>
-                );
-              })
-            ) : (
-              // Fallback static content if no featured projects
-              <>
-                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center">
-                    <FaCode className="text-6xl text-primary-gold group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <div className="p-6">
-                    <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
-                      Software Development
-                    </span>
-                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                      E-Commerce Platform
-                    </h3>
-                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                      Full-stack web application with payment integration and real-time inventory management
-                    </p>
-                    <Link href="/portfolio" className="text-primary-gold hover:text-primary-gold/80 text-sm font-semibold inline-flex items-center">
-                      View Project
-                      <FaArrowRight className="ml-2" />
-                    </Link>
-                  </div>
-                </Card>
-
-                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-tech-teal/20 to-primary-gold/20 flex items-center justify-center">
-                    <FaPalette className="text-6xl text-tech-teal group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <div className="p-6">
-                    <span className="text-xs text-tech-teal font-semibold uppercase tracking-wide">
-                      Graphics Design
-                    </span>
-                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                      Brand Identity Design
-                    </h3>
-                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                      Complete brand identity including logo, color palette, and marketing materials
-                    </p>
-                    <Link href="/portfolio" className="text-tech-teal hover:text-tech-teal/80 text-sm font-semibold inline-flex items-center">
-                      View Project
-                      <FaArrowRight className="ml-2" />
-                    </Link>
-                  </div>
-                </Card>
-
-                <Card variant="elevated" padding="none" className="overflow-hidden group cursor-pointer">
-                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center">
-                    <FaMusic className="text-6xl text-accent-red group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <div className="p-6">
-                    <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
-                      Gospel Music
-                    </span>
-                    <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-2 mb-3">
-                      Latest Worship Album
-                    </h3>
-                    <p className="text-gray-700 dark:text-text-secondary text-sm mb-4">
-                      Collection of original worship songs inspiring faith and hope
-                    </p>
-                    <Link href="/music" className="text-accent-red hover:text-accent-red/80 text-sm font-semibold inline-flex items-center">
-                      Listen Now
-                      <FaArrowRight className="ml-2" />
-                    </Link>
-                  </div>
-                </Card>
-              </>
-            )}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link href="/portfolio">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+            Ready to Work Together?
+          </h2>
+          <p className="text-gray-700 dark:text-text-secondary text-lg max-w-2xl mx-auto mb-8">
+            Whether you need a performer for your event or a developer for your project, Charles is here to help bring your vision to life.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact">
               <Button variant="primary" size="lg">
-                View All Projects
-                <FaArrowRight className="ml-2" />
+                Get In Touch
+              </Button>
+            </Link>
+            <Link href="/portfolio">
+              <Button variant="secondary" size="lg">
+                View Portfolio
               </Button>
             </Link>
           </div>
         </div>
       </section>
-
-      {/* Music Ministry Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-accent-red/5 via-primary-gold/5 to-accent-red/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Music Logo */}
-            <div className="relative">
-              <div className="aspect-square max-w-md mx-auto relative rounded-lg overflow-hidden shadow-2xl shadow-accent-red/20">
-                <Image
-                  src={imagesConfig.logos.musicLogo}
-                  alt="Charles Jasema Music Logo"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent-red/10 rounded-full blur-2xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary-gold/10 rounded-full blur-2xl"></div>
-            </div>
-
-            {/* Music Ministry Info */}
-            <div className="text-center lg:text-left">
-              <h2 className="text-4xl sm:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-6">
-                <span className="text-accent-red">Music</span> Ministry
-              </h2>
-              <p className="text-xl text-gray-700 dark:text-text-secondary mb-6">
-                Spreading Hope Through Worship Since 2015
-              </p>
-              <p className="text-gray-600 dark:text-text-tertiary mb-8 leading-relaxed">
-                With 12 singles released and 9+ years of ministry, I create worship music that inspires faith and brings glory to God. 
-                My songs have touched hearts across Uganda and South Sudan, leading many to Christ.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/music">
-                  <Button variant="primary" size="lg" className="w-full sm:w-auto bg-accent-red hover:bg-accent-red/90">
-                    <FaMusic className="mr-2" />
-                    Listen to My Music
-                  </Button>
-                </Link>
-                <Link href="/booking">
-                  <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                    Book for Event
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <HomePageCTAs />
-        </div>
-      </section>
     </div>
-    </>
   );
 }

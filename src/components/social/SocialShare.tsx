@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { showToast } from '@/lib/toast';
-import { createAccessibleButtonProps } from '@/lib/accessibility';
+import { createAccessibleButtonProps } from '@/lib/button-utils';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface SocialShareProps {

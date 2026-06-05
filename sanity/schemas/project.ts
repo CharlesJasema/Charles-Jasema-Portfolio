@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { enhancedImageField } from '../lib/assetConfig'
 
 export default defineType({
   name: 'project',
@@ -37,8 +38,7 @@ export default defineType({
       title: 'Project Images',
       type: 'array',
       of: [{
-        type: 'image',
-        options: { hotspot: true },
+        ...enhancedImageField,
         fields: [
           {
             name: 'alt',

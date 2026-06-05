@@ -28,7 +28,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   // Compression
@@ -40,21 +39,36 @@ const nextConfig = {
 
   // Security Headers
   headers: async () => {
+    const isDev = process.env.NODE_ENV === 'development';
+    
     return [
       {
         source: '/:path*',
         headers: [
-          // Content Security Policy
+          // Content Security Policy - Very permissive for development
           {
             key: 'Content-Security-Policy',
-            value: [
+            value: isDev ? [
+              "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: data:",
+              "style-src 'self' 'unsafe-inline' https: http: data:",
+              "font-src 'self' 'unsafe-inline' https: http: data:",
+              "img-src 'self' 'unsafe-inline' data: blob: https: http:",
+              "media-src 'self' 'unsafe-inline' https: http: data:",
+              "connect-src 'self' 'unsafe-inline' https: http: ws: wss: data:",
+              "frame-src 'self' 'unsafe-inline' https: http:",
+              "object-src 'self' 'unsafe-inline' data:",
+              "base-uri 'self'",
+              "form-action 'self' https: http:",
+              "frame-ancestors 'self' https: http:"
+            ].join('; ') : [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://embed.tawk.to https://va.tawk.to",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com",
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://googletagmanager.com https://ssl.google-analytics.com https://embed.tawk.to https://va.tawk.to https://core.sanity.io",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://core.sanity.io",
+              "font-src 'self' https://fonts.gstatic.com https://core.sanity.io",
               "img-src 'self' data: blob: https: http:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://vitals.vercel-analytics.com https://cdn.sanity.io https://api.sanity.io wss://embed.tawk.to",
+              "connect-src 'self' https://www.google-analytics.com https://ssl.google-analytics.com https://googletagmanager.com https://vitals.vercel-analytics.com https://cdn.sanity.io https://api.sanity.io https://6omuzt9o.api.sanity.io https://6omuzt9o.apicdn.sanity.io https://core.sanity.io wss://embed.tawk.to",
               "frame-src 'self' https://www.youtube.com https://youtu.be https://embed.tawk.to",
               "object-src 'none'",
               "base-uri 'self'",
@@ -63,21 +77,21 @@ const nextConfig = {
               "upgrade-insecure-requests"
             ].join('; '),
           },
-          // Prevent MIME type sniffing
-          {
+          // Prevent MIME type sniffing (disabled for dev)
+          ...(isDev ? [] : [{
             key: 'X-Content-Type-Options',
             value: 'nosniff',
-          },
-          // Prevent clickjacking
-          {
+          }]),
+          // Prevent clickjacking (disabled for dev)
+          ...(isDev ? [] : [{
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN',
-          },
-          // XSS Protection
-          {
+          }]),
+          // XSS Protection (disabled for dev)
+          ...(isDev ? [] : [{
             key: 'X-XSS-Protection',
             value: '1; mode=block',
-          },
+          }]),
           // Referrer Policy
           {
             key: 'Referrer-Policy',
@@ -257,10 +271,8 @@ const nextConfig = {
     optimizePackageImports: [
       'react-icons',
       'react-hot-toast',
-      'clsx',
-      'lucide-react'
+      'clsx'
     ],
-    // Removed optimizeCss: true to fix critters dependency issue
     scrollRestoration: true,
   },
 

@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { enhancedImageField, enhancedVideoField, FILE_SIZE_LIMITS } from '../lib/assetConfig'
 
 export default defineType({
   name: 'musicVideo',
@@ -35,11 +36,8 @@ export default defineType({
     defineField({
       name: 'videoFile',
       title: '🎬 Upload Video File (Optional)',
-      type: 'file',
-      description: 'Upload MP4 file for preview (max 500MB). Keep using YouTube for full videos and better reach.',
-      options: {
-        accept: 'video/*'
-      }
+      ...enhancedVideoField,
+      description: `Upload MP4 file for preview (max ${Math.round(FILE_SIZE_LIMITS.video / (1024 * 1024))}MB). Keep using YouTube for full videos and better reach.`
     }),
     defineField({
       name: 'releaseDate',
@@ -69,10 +67,7 @@ export default defineType({
     defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
-      type: 'image',
-      options: {
-        hotspot: true
-      }
+      ...enhancedImageField
     }),
     defineField({
       name: 'featured',

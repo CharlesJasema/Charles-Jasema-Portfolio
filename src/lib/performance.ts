@@ -1,280 +1,351 @@
 /**
- * Performance Optimization Utilities
- * Core Web Vitals and loading performance optimizations
+ * Performance Monitoring and Optimization Utilities
+ * 
+ * This module provides comprehensive performance monitoring,
+ * Core Web Vitals tracking, and optimization utilities.
  */
 
-// Image optimization configurations
-export const imageOptimization = {
-  // Above-the-fold images (hero sections, etc.)
-  priority: {
-    priority: true,
-    placeholder: 'blur' as const,
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-    quality: 90,
-  },
+// Performance metrics interface
+export interface PerformanceMetrics {
+  // Core Web Vitals
+  lcp?: number; // Largest Contentful Paint
+  fid?: number; // First Input Delay
+  cls?: number; // Cumulative Layout Shift
+  fcp?: number; // First Contentful Paint
+  ttfb?: number; // Time to First Byte
   
-  // Regular images
-  standard: {
-    placeholder: 'blur' as const,
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-    quality: 85,
-    loading: 'lazy' as const,
-  },
+  // Custom metrics
+  pageLoadTime?: number;
+  domContentLoaded?: number;
+  resourceLoadTime?: number;
   
-  // Thumbnail images
-  thumbnail: {
-    sizes: '(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 200px',
-    quality: 80,
-    loading: 'lazy' as const,
-  },
+  // User context
+  userAgent?: string;
+  connectionType?: string;
+  deviceMemory?: number;
   
-  // Profile/avatar images
-  profile: {
-    sizes: '(max-width: 768px) 200px, 300px',
-    quality: 90,
-    loading: 'lazy' as const,
-  },
-};
-
-// Lazy loading configuration
-export const lazyLoadConfig = {
-  threshold: 0.1,
-  rootMargin: '50px',
-  triggerOnce: true,
-};
-
-// Intersection Observer for lazy loading
-export function createIntersectionObserver(
-  callback: IntersectionObserverCallback,
-  options: IntersectionObserverInit = lazyLoadConfig
-): IntersectionObserver | null {
-  if (typeof window === 'undefined') return null;
-  
-  return new IntersectionObserver(callback, options);
+  // Page context
+  url?: string;
+  referrer?: string;
+  timestamp?: number;
 }
 
-// Preload critical resources
-export function preloadCriticalResources() {
-  if (typeof window === 'undefined') return;
-  
-  // Preload critical fonts
-  const fontPreloads = [
-    '/fonts/inter-var.woff2',
-    '/fonts/montserrat-var.woff2',
-  ];
-  
-  fontPreloads.forEach(font => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = font;
-    link.as = 'font';
-    link.type = 'font/woff2';
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  });
-}
+// Performance observer for Core Web Vitals
+class PerformanceMonitor {
+  private metrics: PerformanceMetrics = {};
+  private observers: PerformanceObserver[] = [];
 
-// Optimize bundle loading
-export function optimizeBundleLoading() {
-  if (typeof window === 'undefined') return;
-  
-  // Prefetch next page resources on hover
-  const links = document.querySelectorAll('a[href^="/"]');
-  
-  links.forEach(link => {
-    link.addEventListener('mouseenter', () => {
-      const href = link.getAttribute('href');
-      if (href && !document.querySelector(`link[rel="prefetch"][href="${href}"]`)) {
-        const prefetchLink = document.createElement('link');
-        prefetchLink.rel = 'prefetch';
-        prefetchLink.href = href;
-        document.head.appendChild(prefetchLink);
-      }
-    }, { once: true });
-  });
-}
-
-// Core Web Vitals measurement
-export function measureCoreWebVitals() {
-  if (typeof window === 'undefined') return;
-  
-  // Largest Contentful Paint (LCP)
-  const observer = new PerformanceObserver((list) => {
-    const entries = list.getEntries();
-    const lastEntry = entries[entries.length - 1];
-    
-    console.log('LCP:', lastEntry.startTime);
-    
-    // Send to analytics if needed
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', {
-        name: 'LCP',
-        value: Math.round(lastEntry.startTime),
-        event_category: 'performance',
-      });
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.initializeObservers();
+      this.collectBasicMetrics();
     }
-  });
-  
-  observer.observe({ entryTypes: ['largest-contentful-paint'] });
-  
-  // First Input Delay (FID)
-  const fidObserver = new PerformanceObserver((list) => {
-    const entries = list.getEntries();
-    entries.forEach((entry) => {
-      const fidEntry = entry as any; // Cast to access processingStart
-      console.log('FID:', fidEntry.processingStart - fidEntry.startTime);
-      
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'web_vitals', {
-          name: 'FID',
-          value: Math.round(fidEntry.processingStart - fidEntry.startTime),
-          event_category: 'performance',
+  }
+
+  private initializeObservers() {
+    // Largest Contentful Paint (LCP)
+    if ('PerformanceObserver' in window) {
+      try {
+        const lcpObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const lastEntry = entries[entries.length - 1] as any;
+          this.metrics.lcp = lastEntry.startTime;
+          this.reportMetric('LCP', lastEntry.startTime);
         });
+        lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+        this.observers.push(lcpObserver);
+      } catch (e) {
+        console.warn('LCP observer not supported');
       }
-    });
-  });
-  
-  fidObserver.observe({ entryTypes: ['first-input'] });
-  
-  // Cumulative Layout Shift (CLS)
-  let clsValue = 0;
-  const clsObserver = new PerformanceObserver((list) => {
-    const entries = list.getEntries();
-    entries.forEach((entry: any) => {
-      if (!entry.hadRecentInput) {
-        clsValue += entry.value;
+
+      // First Input Delay (FID)
+      try {
+        const fidObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry: any) => {
+            this.metrics.fid = entry.processingStart - entry.startTime;
+            this.reportMetric('FID', this.metrics.fid);
+          });
+        });
+        fidObserver.observe({ entryTypes: ['first-input'] });
+        this.observers.push(fidObserver);
+      } catch (e) {
+        console.warn('FID observer not supported');
       }
-    });
-    
-    console.log('CLS:', clsValue);
-    
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', {
-        name: 'CLS',
-        value: Math.round(clsValue * 1000),
-        event_category: 'performance',
-      });
+
+      // Cumulative Layout Shift (CLS)
+      try {
+        let clsValue = 0;
+        const clsObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry: any) => {
+            if (!entry.hadRecentInput) {
+              clsValue += entry.value;
+              this.metrics.cls = clsValue;
+            }
+          });
+          this.reportMetric('CLS', clsValue);
+        });
+        clsObserver.observe({ entryTypes: ['layout-shift'] });
+        this.observers.push(clsObserver);
+      } catch (e) {
+        console.warn('CLS observer not supported');
+      }
+
+      // Navigation timing
+      try {
+        const navigationObserver = new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          entries.forEach((entry: any) => {
+            this.metrics.fcp = entry.firstContentfulPaint;
+            this.metrics.domContentLoaded = entry.domContentLoadedEventEnd - entry.domContentLoadedEventStart;
+            this.metrics.pageLoadTime = entry.loadEventEnd - entry.loadEventStart;
+          });
+        });
+        navigationObserver.observe({ entryTypes: ['navigation'] });
+        this.observers.push(navigationObserver);
+      } catch (e) {
+        console.warn('Navigation observer not supported');
+      }
     }
-  });
-  
-  clsObserver.observe({ entryTypes: ['layout-shift'] });
-}
+  }
 
-// Service Worker registration for caching
-export function registerServiceWorker() {
-  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
-  
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
-      })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
+  private collectBasicMetrics() {
+    // Collect basic performance metrics
+    if (typeof window !== 'undefined' && window.performance) {
+      const navigation = performance.getEntriesByType('navigation')[0] as any;
+      if (navigation) {
+        this.metrics.ttfb = navigation.responseStart - navigation.requestStart;
+        this.metrics.domContentLoaded = navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart;
+        this.metrics.pageLoadTime = navigation.loadEventEnd - navigation.loadEventStart;
+      }
 
-// Resource hints for better loading
-export function addResourceHints() {
-  if (typeof window === 'undefined') return;
-  
-  // DNS prefetch for external domains
-  const domains = [
-    'cdn.sanity.io',
-    'fonts.googleapis.com',
-    'fonts.gstatic.com',
-  ];
-  
-  domains.forEach(domain => {
-    const link = document.createElement('link');
-    link.rel = 'dns-prefetch';
-    link.href = `//${domain}`;
-    document.head.appendChild(link);
-  });
-  
-  // Preconnect to critical domains
-  const criticalDomains = [
-    'cdn.sanity.io',
-    'fonts.gstatic.com',
-  ];
-  
-  criticalDomains.forEach(domain => {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = `https://${domain}`;
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  });
-}
-
-// Initialize all performance optimizations
-export function initializePerformanceOptimizations() {
-  if (typeof window === 'undefined') return;
-  
-  // Run on page load
-  window.addEventListener('load', () => {
-    preloadCriticalResources();
-    optimizeBundleLoading();
-    measureCoreWebVitals();
-    addResourceHints();
-    
-    // Register service worker in production
-    if (process.env.NODE_ENV === 'production') {
-      registerServiceWorker();
+      // Collect user context
+      this.metrics.userAgent = navigator.userAgent;
+      this.metrics.connectionType = (navigator as any).connection?.effectiveType || 'unknown';
+      this.metrics.deviceMemory = (navigator as any).deviceMemory || 0;
+      this.metrics.url = window.location.href;
+      this.metrics.referrer = document.referrer;
+      this.metrics.timestamp = Date.now();
     }
-  });
+  }
+
+  private reportMetric(name: string, value: number) {
+    // Report to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Performance Metric - ${name}:`, value);
+    }
+
+    // Here you could send to analytics service
+    // Example: analytics.track('performance_metric', { name, value, ...this.metrics });
+  }
+
+  public getMetrics(): PerformanceMetrics {
+    return { ...this.metrics };
+  }
+
+  public disconnect() {
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
+  }
 }
 
-// Track web vitals to analytics
-export const trackWebVital = (name: string, value: number, id: string) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'web_vital', {
-      name: name,
-      value: Math.round(value),
-      metric_id: id,
-      event_category: 'performance'
-    });
+// Singleton instance
+let performanceMonitor: PerformanceMonitor | null = null;
+
+export const initializePerformanceMonitoring = (): PerformanceMonitor => {
+  if (!performanceMonitor && typeof window !== 'undefined') {
+    performanceMonitor = new PerformanceMonitor();
+  }
+  return performanceMonitor!;
+};
+
+export const getPerformanceMetrics = (): PerformanceMetrics => {
+  return performanceMonitor?.getMetrics() || {};
+};
+
+// Performance optimization utilities
+export const performanceUtils = {
+  // Lazy load images with intersection observer
+  lazyLoadImage: (img: HTMLImageElement, src: string) => {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            img.src = src;
+            img.classList.remove('lazy');
+            observer.unobserve(img);
+          }
+        });
+      });
+      observer.observe(img);
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      img.src = src;
+    }
+  },
+
+  // Preload critical resources
+  preloadResource: (href: string, as: string = 'script') => {
+    if (typeof document !== 'undefined') {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = href;
+      link.as = as;
+      document.head.appendChild(link);
+    }
+  },
+
+  // Measure function execution time
+  measureFunction: <T extends (...args: any[]) => any>(
+    fn: T,
+    name: string
+  ): T => {
+    return ((...args: Parameters<T>) => {
+      const start = performance.now();
+      const result = fn(...args);
+      const end = performance.now();
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Function ${name} took ${end - start} milliseconds`);
+      }
+      
+      return result;
+    }) as T;
+  },
+
+  // Debounce function for performance
+  debounce: <T extends (...args: any[]) => any>(
+    func: T,
+    wait: number
+  ): T => {
+    let timeout: NodeJS.Timeout;
+    return ((...args: Parameters<T>) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    }) as T;
+  },
+
+  // Throttle function for performance
+  throttle: <T extends (...args: any[]) => any>(
+    func: T,
+    limit: number
+  ): T => {
+    let inThrottle: boolean;
+    return ((...args: Parameters<T>) => {
+      if (!inThrottle) {
+        func(...args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    }) as T;
+  },
+
+  // Check if user prefers reduced motion
+  prefersReducedMotion: (): boolean => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  },
+
+  // Get connection quality
+  getConnectionQuality: (): 'slow' | 'fast' | 'unknown' => {
+    if (typeof navigator !== 'undefined' && (navigator as any).connection) {
+      const connection = (navigator as any).connection;
+      const effectiveType = connection.effectiveType;
+      
+      if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+        return 'slow';
+      } else if (effectiveType === '3g' || effectiveType === '4g') {
+        return 'fast';
+      }
+    }
+    return 'unknown';
+  },
+
+  // Memory usage monitoring
+  getMemoryUsage: (): { used: number; total: number } | null => {
+    if (typeof performance !== 'undefined' && (performance as any).memory) {
+      const memory = (performance as any).memory;
+      return {
+        used: memory.usedJSHeapSize,
+        total: memory.totalJSHeapSize
+      };
+    }
+    return null;
   }
 };
 
-// Track page load time
-export const trackPageLoadTime = (loadTime: number, pageType: string) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'page_load_time', {
-      value: Math.round(loadTime),
-      page_type: pageType,
-      event_category: 'performance'
+// Performance budget checker
+interface PerformanceThresholds {
+  lcp: { good: number; poor: number };
+  fid: { good: number; poor: number };
+  cls: { good: number; poor: number };
+  fcp: { good: number; poor: number };
+  ttfb: { good: number; poor: number };
+}
+
+interface PerformanceBudgetChecker {
+  thresholds: PerformanceThresholds;
+  checkMetric: (metric: keyof PerformanceThresholds, value: number) => 'good' | 'needs-improvement' | 'poor';
+  generateReport: (metrics: PerformanceMetrics) => Record<string, any>;
+}
+
+export const performanceBudget: PerformanceBudgetChecker = {
+  // Core Web Vitals thresholds (good/needs improvement/poor)
+  thresholds: {
+    lcp: { good: 2500, poor: 4000 }, // milliseconds
+    fid: { good: 100, poor: 300 },   // milliseconds
+    cls: { good: 0.1, poor: 0.25 },  // score
+    fcp: { good: 1800, poor: 3000 }, // milliseconds
+    ttfb: { good: 800, poor: 1800 }  // milliseconds
+  },
+
+  checkMetric: (metric: keyof PerformanceThresholds, value: number): 'good' | 'needs-improvement' | 'poor' => {
+    const threshold = performanceBudget.thresholds[metric];
+    if (value <= threshold.good) return 'good';
+    if (value <= threshold.poor) return 'needs-improvement';
+    return 'poor';
+  },
+
+  generateReport: (metrics: PerformanceMetrics): Record<string, any> => {
+    const report: Record<string, any> = {};
+    
+    Object.entries(metrics).forEach(([key, value]) => {
+      if (typeof value === 'number' && key in performanceBudget.thresholds) {
+        report[key] = {
+          value,
+          status: performanceBudget.checkMetric(key as keyof PerformanceThresholds, value),
+          threshold: performanceBudget.thresholds[key as keyof PerformanceThresholds]
+        };
+      }
     });
+    
+    return report;
   }
 };
 
-// Debounce utility for performance
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
+// Export aliases for backward compatibility
+export const initializePerformanceOptimizations = initializePerformanceMonitoring;
 
-// Throttle utility for performance
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
-  limit: number
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
+export const trackWebVital = (name: string, value: number, location: string) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`Web Vital - ${name}:`, value, 'at', location);
+  }
   
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  };
-}
+  // Here you could send to analytics service
+  // Example: analytics.track('web_vital', { name, value, location });
+};
+
+export const trackPageLoadTime = (loadTime: number, pageCategory: string) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`Page Load Time:`, loadTime, 'for', pageCategory);
+  }
+  
+  // Here you could send to analytics service
+  // Example: analytics.track('page_load_time', { loadTime, pageCategory });
+};
+
+// Export default performance monitor
+export default PerformanceMonitor;

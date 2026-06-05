@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { enhancedImageField, enhancedAudioField, FILE_SIZE_LIMITS } from '../lib/assetConfig'
 
 export default defineType({
   name: 'song',
@@ -79,11 +80,8 @@ export default defineType({
     defineField({
       name: 'audioFile',
       title: '🎵 Upload Audio File (Optional)',
-      type: 'file',
-      description: 'Upload MP3 or WAV file for preview (max 50MB). Keep using Mdundo/Spotify for full streaming.',
-      options: {
-        accept: 'audio/*'
-      }
+      ...enhancedAudioField,
+      description: `Upload MP3 or WAV file for preview (max ${Math.round(FILE_SIZE_LIMITS.audio / (1024 * 1024))}MB). Keep using Mdundo/Spotify for full streaming.`
     }),
     defineField({
       name: 'songStory',
@@ -111,10 +109,7 @@ export default defineType({
     defineField({
       name: 'albumArt',
       title: 'Album Art',
-      type: 'image',
-      options: {
-        hotspot: true
-      },
+      ...enhancedImageField,
       fields: [
         {
           name: 'alt',

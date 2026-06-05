@@ -71,22 +71,46 @@ export default async function MusicPage() {
   let error = null;
 
   try {
-    [songs, videos] = await Promise.all([
-      getSongs(),
-      getVideos()
-    ]);
+    // Set a shorter timeout for Sanity requests
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Sanity request timeout')), 5000)
+    );
+    
+    [songs, videos] = await Promise.race([
+      Promise.all([getSongs(), getVideos()]),
+      timeoutPromise
+    ]) as [any[], any[]];
   } catch (err) {
     console.error('Error fetching music data from Sanity:', err);
     error = err;
     // Fallback to config data if Sanity fails
     songs = musicConfig.audioSongs.map((song, index) => ({
       _id: `fallback-song-${index}`,
-      ...song,
-      albumArt: null
+      title: song.title,
+      description: song.description,
+      duration: song.duration,
+      releaseDate: song.releaseDate,
+      album: song.album,
+      mdundoUrl: song.mdundoUrl,
+      featured: song.featured,
+      isNew: (song as any).isNew || false,
+      isCollaboration: (song as any).isCollaboration || false,
+      isFirstSong: (song as any).isFirstSong || false,
+      albumArt: null,
+      songStory: song.description,
+      recordingDetails: `Recorded in ${song.releaseDate}`,
+      collaborators: (song as any).isCollaboration ? ['Charles Jasema', 'Worship Team'] : ['Charles Jasema']
     }));
     videos = [...musicConfig.musicVideos, ...musicConfig.lyricalVideos].map((video, index) => ({
       _id: `fallback-video-${index}`,
-      ...video,
+      title: video.title,
+      description: video.description,
+      youtubeUrl: video.youtubeUrl,
+      youtubeId: video.youtubeId,
+      releaseDate: video.releaseDate,
+      views: video.views,
+      category: video.category,
+      featured: video.featured,
       thumbnail: null
     }));
   }
@@ -296,13 +320,17 @@ export default async function MusicPage() {
                   {/* Logo */}
                   <div className="relative z-10 text-center">
                     <div className="w-64 h-64 mx-auto mb-6 relative group">
-                      <Image
-                        src={imagesConfig.logos.jasemaWorshipTeam}
-                        alt="Jasema Worship Team Logo"
-                        fill
-                        className="object-contain group-hover:scale-110 transition-transform duration-500"
-                        sizes="256px"
-                      />
+                      <div className="w-full h-full bg-gradient-to-br from-primary-gold/20 to-accent-red/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                        <div className="text-center">
+                          <FaUsers className="text-6xl text-primary-gold mb-4 mx-auto" />
+                          <div className="text-2xl font-heading font-bold text-white">
+                            Jasema
+                          </div>
+                          <div className="text-lg text-primary-gold">
+                            Worship Team
+                          </div>
+                        </div>
+                      </div>
                       <div className="absolute inset-0 bg-primary-gold/20 rounded-full blur-3xl group-hover:bg-primary-gold/30 transition-colors duration-500"></div>
                     </div>
                     
@@ -432,11 +460,11 @@ export default async function MusicPage() {
                 key={video._id}
                 variant="elevated"
                 padding="none"
-                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300"
+                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
               >
-                {/* Video Thumbnail */}
-                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative overflow-hidden">
+                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer" className="h-full flex flex-col">
+                  {/* Video Thumbnail - Fixed aspect ratio */}
+                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative overflow-hidden flex-shrink-0">
                     {video.thumbnail ? (
                       <Image
                         src={urlFor(video.thumbnail).width(640).height(360).url()}
@@ -459,18 +487,22 @@ export default async function MusicPage() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
                   </div>
 
-                  {/* Video Info */}
-                  <div className="p-6">
-                    <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
-                      {video.category}
-                    </span>
-                    <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-accent-red transition-colors duration-300">
-                      {video.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-2">
-                      {video.description}
-                    </p>
-                    <div className="flex items-center justify-between">
+                  {/* Video Info - Flexible content area */}
+                  <div className="p-6 flex-grow flex flex-col">
+                    <div className="flex-grow">
+                      <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
+                        {video.category}
+                      </span>
+                      <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-accent-red transition-colors duration-300 line-clamp-2">
+                        {video.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-3">
+                        {video.description}
+                      </p>
+                    </div>
+                    
+                    {/* Footer - Always at bottom */}
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
                       <span className="text-xs text-gray-500 dark:text-text-tertiary">
                         {video.releaseDate}
                       </span>
@@ -516,10 +548,11 @@ export default async function MusicPage() {
                 key={video._id}
                 variant="elevated"
                 padding="none"
-                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300"
+                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
               >
-                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center relative overflow-hidden">
+                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer" className="h-full flex flex-col">
+                  {/* Video Thumbnail - Fixed aspect ratio */}
+                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center relative overflow-hidden flex-shrink-0">
                     {video.thumbnail ? (
                       <Image
                         src={urlFor(video.thumbnail).width(640).height(360).url()}
@@ -542,17 +575,22 @@ export default async function MusicPage() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
                   </div>
 
-                  <div className="p-6">
-                    <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
-                      {video.category}
-                    </span>
-                    <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-primary-gold transition-colors duration-300">
-                      {video.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-2">
-                      {video.description}
-                    </p>
-                    <div className="flex items-center justify-between">
+                  {/* Video Info - Flexible content area */}
+                  <div className="p-6 flex-grow flex flex-col">
+                    <div className="flex-grow">
+                      <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
+                        {video.category}
+                      </span>
+                      <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-primary-gold transition-colors duration-300 line-clamp-2">
+                        {video.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-3">
+                        {video.description}
+                      </p>
+                    </div>
+                    
+                    {/* Footer - Always at bottom */}
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
                       <span className="text-xs text-gray-500 dark:text-text-tertiary">
                         {video.releaseDate}
                       </span>

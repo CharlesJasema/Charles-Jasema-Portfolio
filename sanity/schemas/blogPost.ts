@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { enhancedImageField } from '../lib/assetConfig'
 
 export default defineType({
   name: 'blogPost',
@@ -81,8 +82,7 @@ export default defineType({
           }
         },
         {
-          type: 'image',
-          options: { hotspot: true },
+          ...enhancedImageField,
           fields: [
             {
               name: 'alt',
@@ -103,10 +103,7 @@ export default defineType({
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
-      type: 'image',
-      options: {
-        hotspot: true
-      },
+      ...enhancedImageField,
       fields: [
         {
           name: 'alt',

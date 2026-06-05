@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaEnvelope, FaWhatsapp, FaPhone, FaLinkedin, FaTwitter, FaYoutube, FaGithub, FaInstagram, FaFacebook, FaMusic, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import { Button, Card, Input, TextArea, Select } from '@/components/ui';
 import { ContactPageCTAs } from '@/components/cta';
 import { siteConfig } from '@/config/site';
 import { contactConfig } from '@/config/contact';
+import { inputValidation, csrfProtection, rateLimiting } from '@/lib/security';
+
+// Create rate limiter for contact form (5 submissions per 15 minutes)
+const contactRateLimiter = rateLimiting.createRateLimiter(5, 15 * 60 * 1000);
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -18,28 +22,149 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [csrfToken, setCsrfToken] = useState('');
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  // Generate CSRF token on component mount
+  useEffect(() => {
+    const token = csrfProtection.generateToken();
+    setCsrfToken(token);
+    // Store token in session storage for validation
+    sessionStorage.setItem('contact_csrf_token', token);
+  }, []);
+
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+    
+    // Validate required fields
+    if (!formData.name.trim()) {
+      errors.push('Name is required');
+    } else if (formData.name.length < 2 || formData.name.length > 100) {
+      errors.push('Name must be between 2 and 100 characters');
+    }
+
+    if (!formData.email.trim()) {
+      errors.push('Email is required');
+    } else if (!inputValidation.isValidEmail(formData.email)) {
+      errors.push('Please enter a valid email address');
+    }
+
+    if (!formData.subject.trim()) {
+      errors.push('Subject is required');
+    } else if (formData.subject.length < 5 || formData.subject.length > 200) {
+      errors.push('Subject must be between 5 and 200 characters');
+    }
+
+    if (!formData.message.trim()) {
+      errors.push('Message is required');
+    } else if (formData.message.length < 10 || formData.message.length > 2000) {
+      errors.push('Message must be between 10 and 2000 characters');
+    }
+
+    // Check for potential security threats
+    const formValidation = inputValidation.validateFormData(formData);
+    if (!formValidation.isValid) {
+      errors.push(...formValidation.errors);
+    }
+
+    setValidationErrors(errors);
+    return errors.length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    
+    // Clear previous errors
+    setValidationErrors([]);
     setSubmitStatus('idle');
 
-    // Simulate form submission (replace with actual API call later)
-    setTimeout(() => {
+    // Validate form
+    if (!validateForm()) {
+      setSubmitStatus('error');
+      return;
+    }
+
+    // Check rate limiting
+    const clientId = `${navigator.userAgent}_${window.location.hostname}`;
+    if (!contactRateLimiter.isAllowed(clientId)) {
+      setValidationErrors(['Too many submissions. Please wait before trying again.']);
+      setSubmitStatus('error');
+      return;
+    }
+
+    // Validate CSRF token
+    const storedToken = sessionStorage.getItem('contact_csrf_token');
+    if (!csrfProtection.validateToken(csrfToken, storedToken || '')) {
+      setValidationErrors(['Security validation failed. Please refresh the page and try again.']);
+      setSubmitStatus('error');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Sanitize form data
+      const sanitizedData = {
+        name: inputValidation.sanitizeString(formData.name, 100),
+        email: inputValidation.sanitizeString(formData.email, 254),
+        subject: inputValidation.sanitizeString(formData.subject, 200),
+        service: inputValidation.sanitizeString(formData.service, 50),
+        message: inputValidation.sanitizeString(formData.message, 2000),
+        csrfToken: csrfToken,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent.substring(0, 200), // Limit user agent length
+      };
+
+      // TODO: Replace with actual API call
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify(sanitizedData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', subject: '', service: '', message: '' });
+        
+        // Generate new CSRF token for next submission
+        const newToken = csrfProtection.generateToken();
+        setCsrfToken(newToken);
+        sessionStorage.setItem('contact_csrf_token', newToken);
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => setSubmitStatus('idle'), 5000);
+      } else {
+        const errorData = await response.json();
+        setValidationErrors([errorData.message || 'Failed to send message. Please try again.']);
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      setValidationErrors(['Network error. Please check your connection and try again.']);
+      setSubmitStatus('error');
+    } finally {
       setIsSubmitting(false);
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', subject: '', service: '', message: '' });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setSubmitStatus('idle'), 5000);
-    }, 2000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
+    // Basic input sanitization on change
+    const sanitizedValue = inputValidation.sanitizeString(value, name === 'message' ? 2000 : 254);
+    
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: sanitizedValue,
     }));
+    
+    // Clear validation errors when user starts typing
+    if (validationErrors.length > 0) {
+      setValidationErrors([]);
+    }
   };
 
   return (
@@ -135,6 +260,28 @@ export default function ContactPage() {
               </p>
             </div>
 
+            {/* Validation Errors */}
+            {validationErrors.length > 0 && (
+              <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <FaExclamationCircle className="text-red-600 dark:text-red-400 text-xl flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-red-800 dark:text-red-200 font-semibold mb-2">
+                      Please fix the following errors:
+                    </p>
+                    <ul className="text-red-700 dark:text-red-300 text-sm space-y-1">
+                      {validationErrors.map((error, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <span className="text-red-500 mt-1">•</span>
+                          <span>{error}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Success Message */}
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-3">
@@ -146,7 +293,7 @@ export default function ContactPage() {
             )}
 
             {/* Error Message */}
-            {submitStatus === 'error' && (
+            {submitStatus === 'error' && validationErrors.length === 0 && (
               <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
                 <FaExclamationCircle className="text-red-600 dark:text-red-400 text-xl flex-shrink-0 mt-0.5" />
                 <p className="text-red-800 dark:text-red-200">
@@ -156,6 +303,9 @@ export default function ContactPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* CSRF Token (hidden) */}
+              <input type="hidden" name="csrfToken" value={csrfToken} />
+              
               {/* Name and Email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -169,6 +319,8 @@ export default function ContactPage() {
                     placeholder="Your full name"
                     value={formData.name}
                     onChange={handleChange}
+                    maxLength={100}
+                    autoComplete="name"
                     required
                   />
                 </div>
@@ -183,6 +335,8 @@ export default function ContactPage() {
                     placeholder="your@email.com"
                     value={formData.email}
                     onChange={handleChange}
+                    maxLength={254}
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -200,6 +354,7 @@ export default function ContactPage() {
                   placeholder="What is this about?"
                   value={formData.subject}
                   onChange={handleChange}
+                  maxLength={200}
                   required
                 />
               </div>
@@ -236,6 +391,7 @@ export default function ContactPage() {
                   placeholder="Tell me about your project or inquiry..."
                   value={formData.message}
                   onChange={handleChange}
+                  maxLength={2000}
                   rows={6}
                   required
                 />

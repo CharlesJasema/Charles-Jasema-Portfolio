@@ -1,6 +1,6 @@
 'use client';
 
-import { createAccessibleButtonProps } from '@/lib/accessibility';
+import { createAccessibleButtonProps } from '@/lib/button-utils';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface SocialPlatform {

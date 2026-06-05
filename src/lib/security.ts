@@ -205,7 +205,7 @@ export const cspUtils = {
   createCspHeader: (nonce?: string): string => {
     const directives = [
       "default-src 'self'",
-      `script-src 'self' 'unsafe-eval' ${nonce ? `'nonce-${nonce}'` : "'unsafe-inline'"} https://www.googletagmanager.com https://www.google-analytics.com https://embed.tawk.to https://va.tawk.to`,
+      `script-src 'self' ${nonce ? `'nonce-${nonce}'` : "'unsafe-inline'"} https://www.googletagmanager.com https://www.google-analytics.com https://embed.tawk.to https://va.tawk.to`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https: http:",

@@ -3,7 +3,7 @@
 import { forwardRef, ReactNode } from 'react';
 import Link from 'next/link';
 import { clsx } from 'clsx';
-import { createAccessibleButtonProps } from '@/lib/accessibility';
+import { createAccessibleButtonProps } from '@/lib/button-utils';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
 export interface CTAProps {

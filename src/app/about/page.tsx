@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, AnimatedContainer, StaggeredContainer } from '@/components/ui';
+import { Button, AnimatedContainer } from '@/components/ui';
 import { AboutPageCTAs } from '@/components/cta';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaGraduationCap, FaBriefcase, FaAward, FaDownload, FaHeart, FaGamepad, FaCamera, FaBook } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';
@@ -163,7 +163,7 @@ export default function AboutPage() {
             </div>
           </AnimatedContainer>
 
-          <StaggeredContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Software Engineering */}
             <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-6 hover:shadow-lg hover:shadow-primary-gold/10 hover:-translate-y-1 transition-all duration-300 group">
               <div className="w-16 h-16 bg-primary-gold/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary-gold/20 transition-colors duration-300">
@@ -243,7 +243,7 @@ export default function AboutPage() {
                 <li>• Documentary Production</li>
               </ul>
             </div>
-          </StaggeredContainer>
+          </div>
         </div>
       </section>
 
@@ -261,7 +261,7 @@ export default function AboutPage() {
             </div>
           </AnimatedContainer>
 
-          <StaggeredContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Formal Education */}
             <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-16 h-16 bg-primary-gold/10 rounded-full flex items-center justify-center mb-4">
@@ -328,7 +328,7 @@ export default function AboutPage() {
                 <span className="text-xs px-2 py-1 bg-primary-gold/10 text-primary-gold rounded-full">Tech Enthusiast</span>
               </div>
             </div>
-          </StaggeredContainer>
+          </div>
         </div>
       </section>
 
@@ -352,7 +352,7 @@ export default function AboutPage() {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-gold via-tech-teal to-accent-red hidden md:block"></div>
 
             {/* Timeline Items */}
-            <StaggeredContainer className="space-y-12">
+            <div className="space-y-12">
               {/* Timeline Item 1 */}
               <div className="relative pl-0 md:pl-20 group">
                 <div className="absolute left-6 top-2 w-5 h-5 bg-primary-gold rounded-full border-4 border-white dark:border-slate-900 hidden md:block group-hover:scale-125 transition-transform duration-300"></div>
@@ -471,7 +471,7 @@ export default function AboutPage() {
                   </div>
                 </div>
               </div>
-            </StaggeredContainer>
+            </div>
           </div>
         </div>
       </section>

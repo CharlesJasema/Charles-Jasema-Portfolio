@@ -2,7 +2,7 @@
 
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { clsx } from 'clsx';
-import { createAccessibleFieldProps, generateId } from '@/lib/accessibility';
+import { ariaUtils, formUtils } from '@/lib/accessibility';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -13,26 +13,25 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, helperText, ariaLabel, className, id, ...props }, ref) => {
-    const inputId = id || generateId('input');
+    const inputId = id || ariaUtils.generateId('input');
+    const labelId = label ? `${inputId}-label` : undefined;
     const errorId = error ? `${inputId}-error` : undefined;
     const helperId = helperText ? `${inputId}-helper` : undefined;
-    const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
 
     // Generate accessible field props
-    const accessibleProps = createAccessibleFieldProps(
-      ariaLabel || label || 'Input field',
-      {
-        required: props.required,
-        invalid: !!error,
-        describedBy,
-        errorId,
-      }
+    const accessibleProps = formUtils.createFieldAttrs(
+      inputId,
+      labelId,
+      helperId,
+      errorId,
+      props.required || false
     );
 
     return (
       <div className="w-full">
         {label && (
           <label
+            id={labelId}
             htmlFor={inputId}
             className="block text-sm font-medium text-text-secondary mb-2"
           >
@@ -46,10 +45,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
-          id={inputId}
           className={clsx(
             'w-full bg-background-dark border rounded-sm px-4 py-2 text-text-primary placeholder-text-tertiary transition-all duration-300 min-h-[44px]',
             'focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent',
+            'hover:border-primary-gold hover:border-opacity-50',
             error
               ? 'border-accent-red focus:ring-accent-red'
               : 'border-primary-gold border-opacity-30 focus:border-primary-gold',
@@ -57,14 +56,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className
           )}
           {...accessibleProps}
+          {...(ariaLabel && { 'aria-label': ariaLabel })}
           {...props}
         />
         {error && (
           <p 
-            id={errorId} 
-            className="mt-1 text-sm text-accent-red error-message"
-            role="alert"
-            aria-live="polite"
+            {...formUtils.createErrorAttrs(errorId!)}
+            className="mt-1 text-sm text-accent-red"
           >
             {error}
           </p>

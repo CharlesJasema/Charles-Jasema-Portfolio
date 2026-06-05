@@ -8,7 +8,6 @@ import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { StickyContactCTA } from '@/components/cta';
 import { generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
 import { PerformanceOptimizer } from '@/components/PerformanceOptimizer';
-import { AnalyticsTestPanel } from '@/components/AnalyticsTestPanel';
 import TawkToChat from '@/components/TawkToChat';
 
 export const metadata: Metadata = {
@@ -132,7 +131,6 @@ export default function RootLayout({
           <StickyContactCTA />
           <TawkToChat />
         </Providers>
-        <AnalyticsTestPanel />
       </body>
     </html>
   );
