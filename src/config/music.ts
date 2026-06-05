@@ -16,13 +16,46 @@ export const musicConfig = {
     totalLyricalVideos: 14,
   },
 
-  // Streaming Platform Links
-  platforms: {
+  // Artist Story
+  story: {
+    title: 'Music That Transforms Lives',
+    subtitle: 'Contemporary Gospel & Worship Music',
+    description: 'Purpose-driven worship leader and songwriter creating music that inspires faith, hope, and spiritual transformation.',
+    mission: 'To create meaningful worship experiences that connect people with God and inspire spiritual growth.',
+    philosophy: 'Every song is crafted with intentionality, rooted in Scripture, and designed to minister to hearts seeking truth, hope, and transformation through worship.',
+  },
+
+  // Streaming Platform Links (Object format for direct access)
+  platformLinks: {
     mdundo: 'https://play.mdundo.com/artist/148492/Charles-Jasema',
     youtube: 'https://www.youtube.com/@CharlesJasemaMusic',
     spotify: 'https://open.spotify.com/artist/charles-jasema', // To be updated when available
-    appleMuic: '', // To be updated when available
+    appleMusic: '', // To be updated when available
   },
+
+  // Streaming Platforms (Array format for mapping in UI)
+  platforms: [
+    {
+      name: 'YouTube',
+      icon: 'youtube',
+      link: 'https://www.youtube.com/@CharlesJasemaMusic',
+    },
+    {
+      name: 'Mdundo',
+      icon: 'music',
+      link: 'https://play.mdundo.com/artist/148492/Charles-Jasema',
+    },
+    {
+      name: 'Spotify',
+      icon: 'spotify',
+      link: 'https://open.spotify.com/artist/charles-jasema',
+    },
+    {
+      name: 'Apple Music',
+      icon: 'apple',
+      link: '#', // To be updated when available
+    },
+  ],
 
   // Featured Songs Collection
   songs: [
@@ -251,15 +284,61 @@ export const musicConfig = {
   // Artist Statement
   artistMessage: "Music has always been my way of connecting hearts to God's love and truth. Each song I write comes from personal encounters with God's Word and real-life experiences of His faithfulness. My prayer is that through these songs, listeners will find hope, encouragement, and a deeper relationship with Jesus Christ. Whether in times of joy or difficulty, may these melodies remind us that God is always present, always loving, and always faithful.",
 
-  // Ministry Stats
-  stats: {
+  // Ministry Stats (Object format for direct access)
+  statsData: {
     songsReleased: 14,
     videosProduced: 2,
     lyricalVideos: 14,
     yearsInMinistry: 10,
     platformsAvailable: 3,
     averageMonthlyListeners: '2.5K+' // To be updated with actual stats
-  }
+  },
+
+  // Ministry Stats (Array format for mapping in UI)
+  stats: [
+    {
+      value: '14',
+      label: 'Songs Released',
+    },
+    {
+      value: '2',
+      label: 'Music Videos',
+    },
+    {
+      value: '14',
+      label: 'Lyrical Videos',
+    },
+    {
+      value: '10+',
+      label: 'Years in Ministry',
+    },
+    {
+      value: '3',
+      label: 'Platforms',
+    },
+    {
+      value: '2.5K+',
+      label: 'Monthly Listeners',
+    },
+  ],
+
+  // Musical Instruments
+  instruments: [
+    'Vocals (Lead & Harmonies)',
+    'Acoustic Guitar',
+    'Keyboard & Piano',
+    'Percussion & Drums',
+  ],
+
+  // Musical Influences
+  influences: [
+    'Kirk Franklin',
+    'Hillsong Worship',
+    'Chris Tomlin',
+    'Travis Greene',
+    'Sinach',
+    'Don Moen',
+  ]
 } as const;
 
 export type MusicConfig = typeof musicConfig;

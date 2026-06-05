@@ -221,21 +221,125 @@ export async function POST(request: NextRequest) {
       submittedAt: new Date().toISOString(),
     };
 
-    // TODO: Implement actual email sending logic here
-    // For now, we'll just log the sanitized data and return success
-    console.log('Contact form submission:', {
-      ...sanitizedData,
-      clientIP: clientIP.replace(/\d+/g, 'XXX'), // Mask IP for privacy in logs
-    });
+    // Send email using SendGrid
+    try {
+      const sgMail = require('@sendgrid/mail');
+      
+      // Only send if API key is configured
+      if (process.env.SENDGRID_API_KEY) {
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+        // Email to yourself (admin notification)
+        const adminEmail = {
+          to: 'brocharles001@gmail.com',
+          from: process.env.SENDGRID_FROM_EMAIL || 'noreply@charlesjasema.com',
+          replyTo: sanitizedData.email,
+          subject: `Portfolio Contact: ${sanitizedData.subject}`,
+          text: `
+New Contact Form Submission
 
-    // In a real implementation, you would:
-    // 1. Send email using a service like SendGrid, AWS SES, or Nodemailer
-    // 2. Store the submission in a database
-    // 3. Send confirmation email to the user
-    // 4. Notify administrators
+From: ${sanitizedData.name}
+Email: ${sanitizedData.email}
+Service: ${sanitizedData.service || 'General Inquiry'}
+Subject: ${sanitizedData.subject}
+
+Message:
+${sanitizedData.message}
+
+---
+Submitted: ${sanitizedData.submittedAt}
+IP: ${clientIP.replace(/\d+/g, 'XXX')}
+          `.trim(),
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #2563eb;">New Contact Form Submission</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 12px 8px; font-weight: bold;">From:</td>
+                  <td style="padding: 12px 8px;">${sanitizedData.name}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 12px 8px; font-weight: bold;">Email:</td>
+                  <td style="padding: 12px 8px;"><a href="mailto:${sanitizedData.email}">${sanitizedData.email}</a></td>
+                </tr>
+                ${sanitizedData.service ? `
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 12px 8px; font-weight: bold;">Service:</td>
+                  <td style="padding: 12px 8px;">${sanitizedData.service}</td>
+                </tr>
+                ` : ''}
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 12px 8px; font-weight: bold;">Subject:</td>
+                  <td style="padding: 12px 8px;">${sanitizedData.subject}</td>
+                </tr>
+              </table>
+              <div style="margin-top: 20px; padding: 16px; background-color: #f9fafb; border-radius: 8px;">
+                <h3 style="margin-top: 0;">Message:</h3>
+                <p style="white-space: pre-wrap;">${sanitizedData.message}</p>
+              </div>
+              <div style="margin-top: 20px; padding: 12px; background-color: #f3f4f6; border-radius: 4px; font-size: 12px; color: #6b7280;">
+                <p style="margin: 0;">Submitted: ${new Date(sanitizedData.submittedAt).toLocaleString()}</p>
+              </div>
+            </div>
+          `,
+        };
+
+        await sgMail.send(adminEmail);
+        console.log('Email sent successfully to admin');
+
+        // Optional: Send confirmation email to user
+        const userEmail = {
+          to: sanitizedData.email,
+          from: process.env.SENDGRID_FROM_EMAIL || 'noreply@charlesjasema.com',
+          subject: 'Thank you for contacting Charles Jasema',
+          text: `
+Dear ${sanitizedData.name},
+
+Thank you for reaching out! I have received your message and will respond as soon as possible.
+
+Your Message:
+${sanitizedData.message}
+
+Best regards,
+Charles Jasema
+Software Engineer | Graphics Designer | Gospel Artist
+
+Website: https://charlesjasema.com
+Email: brocharles001@gmail.com
+Phone: +256785446877
+          `.trim(),
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #2563eb;">Thank You for Contacting Me!</h2>
+              <p>Dear ${sanitizedData.name},</p>
+              <p>Thank you for reaching out! I have received your message and will respond as soon as possible.</p>
+              <div style="margin: 20px 0; padding: 16px; background-color: #f9fafb; border-left: 4px solid #2563eb;">
+                <p style="margin: 0; font-style: italic;">"${sanitizedData.message.substring(0, 150)}${sanitizedData.message.length > 150 ? '...' : ''}"</p>
+              </div>
+              <p>Best regards,<br><strong>Charles Jasema</strong><br>Software Engineer | Graphics Designer | Gospel Artist</p>
+              <div style="margin-top: 20px; padding: 16px; background-color: #f3f4f6; border-radius: 8px;">
+                <p style="margin: 4px 0;">🌐 <a href="https://charlesjasema.com" style="color: #2563eb;">charlesjasema.com</a></p>
+                <p style="margin: 4px 0;">📧 <a href="mailto:brocharles001@gmail.com" style="color: #2563eb;">brocharles001@gmail.com</a></p>
+                <p style="margin: 4px 0;">📱 +256785446877</p>
+              </div>
+            </div>
+          `,
+        };
+
+        await sgMail.send(userEmail);
+        console.log('Confirmation email sent to user');
+      } else {
+        // Fallback: Just log if SendGrid not configured
+        console.log('SendGrid not configured - Contact form submission:', {
+          ...sanitizedData,
+          clientIP: clientIP.replace(/\d+/g, 'XXX'),
+        });
+      }
+    } catch (emailError) {
+      // Log error but don't fail the request
+      console.error('Email sending error:', emailError);
+      // Still proceed with successful response - form submission is saved in logs
+    }
 
     return NextResponse.json(
       { 

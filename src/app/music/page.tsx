@@ -84,35 +84,38 @@ export default async function MusicPage() {
     console.error('Error fetching music data from Sanity:', err);
     error = err;
     // Fallback to config data if Sanity fails
-    songs = musicConfig.audioSongs.map((song, index) => ({
+    songs = musicConfig.songs.map((song, index) => ({
       _id: `fallback-song-${index}`,
       title: song.title,
       description: song.description,
       duration: song.duration,
-      releaseDate: song.releaseDate,
-      album: song.album,
-      mdundoUrl: song.mdundoUrl,
-      featured: song.featured,
+      releaseDate: song.releaseYear?.toString() || '2025',
+      album: (song as any).album || 'Singles',
+      mdundoUrl: song.links?.mdundo || '',
+      featured: (song as any).featured || false,
       isNew: (song as any).isNew || false,
       isCollaboration: (song as any).isCollaboration || false,
       isFirstSong: (song as any).isFirstSong || false,
       albumArt: null,
       songStory: song.description,
-      recordingDetails: `Recorded in ${song.releaseDate}`,
+      recordingDetails: `Recorded in ${song.releaseYear}`,
       collaborators: (song as any).isCollaboration ? ['Charles Jasema', 'Worship Team'] : ['Charles Jasema']
     }));
-    videos = [...musicConfig.musicVideos, ...musicConfig.lyricalVideos].map((video, index) => ({
-      _id: `fallback-video-${index}`,
-      title: video.title,
-      description: video.description,
-      youtubeUrl: video.youtubeUrl,
-      youtubeId: video.youtubeId,
-      releaseDate: video.releaseDate,
-      views: video.views,
-      category: video.category,
-      featured: video.featured,
-      thumbnail: null
-    }));
+    // Create videos from song links if available
+    videos = musicConfig.songs
+      .filter(song => song.links?.youtube)
+      .map((song, index) => ({
+        _id: `fallback-video-${index}`,
+        title: song.title,
+        description: song.description,
+        youtubeUrl: song.links.youtube || '',
+        youtubeId: song.links.youtube?.split('/').pop() || '',
+        releaseDate: song.releaseYear?.toString() || '2025',
+        views: 0,
+        category: 'Music Video',
+        featured: (song as any).featured || false,
+        thumbnail: null
+      }));
   }
 
   // Separate videos by category
@@ -125,7 +128,7 @@ export default async function MusicPage() {
     '@type': 'MusicGroup',
     name: 'Charles Jasema',
     genre: ['Contemporary Gospel', 'Worship', 'Christian Music'],
-    description: musicConfig.story.description,
+    description: musicConfig.artist.description,
     foundingDate: '2015',
     foundingLocation: {
       '@type': 'Place',
