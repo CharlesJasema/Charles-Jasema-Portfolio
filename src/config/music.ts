@@ -171,6 +171,71 @@ export const musicConfig = {
       },
       featured: true,
       order: 5
+    },
+    {
+      id: 'nyadru-love',
+      title: 'Nyadru – Love',
+      genre: 'Contemporary Gospel',
+      releaseYear: 2021,
+      duration: '4:15', // To be updated with actual duration
+      description: 'An uplifting contemporary gospel song that celebrates love as the greatest virtue and the foundation of peaceful relationships, unity, and harmonious living. "Nyadru" means "Love" and serves as a universal language that transcends differences.',
+      themes: [
+        'God\'s unfailing love',
+        'Loving one another',
+        'Unity and harmony',
+        'Peaceful coexistence',
+        'Compassion and kindness',
+        'Christian living',
+        'Joy through love',
+        'Love in action'
+      ],
+      keyScripture: 'John 13:34-35',
+      scriptureText: 'A new command I give you: Love one another. As I have loved you, so you must love one another. By this everyone will know that you are my disciples, if you love one another.',
+      links: {
+        youtube: '', // To be provided
+        mdundo: 'https://play.mdundo.com/artist/148492/Charles-Jasema#autoplay-2013440'
+      },
+      lyrics: {
+        intro: 'It\'s all about Love that I\'m talking about now. Yeah, Charles Jasema.',
+        verse1: 'As long as you want to live, you must know one language Nyadru – Love… The language of peace, the language of unity, harmony is… ..Nyadru – Love…',
+        chorus: 'I know, your Unfailing Love can\'t be compared I know oh, your Unfailing Love can\'t be compared Oh… !!! Oh… !!!',
+        verse2: 'Remember how Christ emphasized Love in the Bible That we should love one another, like the way we love ourselves. That\'s right, I know that… But we\'re not putting it into action, yeah!',
+        outro: 'More Joy comes when there\'s Love Coz it\'s the most great thing above all When love becomes your priority, In your life, it\'s amazing thing…'
+      },
+      featured: true,
+      order: 6
+    },
+    {
+      id: 'where-will-you-be',
+      title: 'Where Will You Be?',
+      genre: 'Contemporary Gospel',
+      releaseYear: 2025,
+      duration: '4:28', // To be updated with actual duration
+      description: 'A thought-provoking contemporary gospel song that challenges listeners to reflect on one of life\'s most important questions: Where will you spend eternity? A powerful call to self-examination, repentance, and readiness for the day when every person will stand before God.',
+      themes: [
+        'Eternal destiny',
+        'Salvation through Jesus Christ',
+        'Repentance and self-examination',
+        'Readiness for eternity',
+        'God\'s grace and mercy',
+        'Christian accountability',
+        'Living with purpose',
+        'The reality of Heaven and Hell'
+      ],
+      keyScripture: 'Hebrews 9:27',
+      scriptureText: 'Just as people are destined to die once, and after that to face judgment.',
+      links: {
+        youtube: 'https://youtu.be/h92v-RDVJds',
+        mdundo: 'https://play.mdundo.com/artist/148492/Charles-Jasema#autoplay-4870400'
+      },
+      lyrics: {
+        chorus: 'Today, today (Tell me) Today, (Where will you be) Today, (If you die) Reflect, reflect (On your life) Reflect, (Before it\'s too late) Reflect, (The choice is yours)',
+        verse1: 'Where will you go? (Today) If your time has come! (Today) Will you stand before? (The LORD) Or face eternal gloom? Have you lived for Him, in all that you do?',
+        verse2: 'Have you showed Love and Grace to those in need? Have you followed His path, in Word and in Deed? Don\'t wait until tomorrow, for the time may run out!',
+        bridge: 'Don\'t let the world, distract you oh, From the truth that\'s clear, seek His face. His arms are open wide, Waiting to receive you; But the choice is yours, To make…'
+      },
+      featured: true,
+      order: 7
     }
   ],
 
