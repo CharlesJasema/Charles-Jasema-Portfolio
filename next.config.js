@@ -19,31 +19,29 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Image Optimization
+  // Image Optimization - Enhanced Security
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
         hostname: 'cdn.sanity.io',
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'youtu.be',
-      },
-      {
-        protocol: 'https',
-        hostname: 'youtube.com',
-      },
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
-    dangerouslyAllowSVG: true,
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    dangerouslyAllowSVG: false, // Enhanced security - no SVG
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    contentDispositionType: 'attachment',
   },
 
   // Compression
@@ -61,36 +59,38 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
-          // Content Security Policy - Very permissive for development
+          // Content Security Policy - Enhanced Security
           {
             key: 'Content-Security-Policy',
             value: isDev ? [
-              "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: ws: wss:",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: data:",
-              "style-src 'self' 'unsafe-inline' https: http: data:",
-              "font-src 'self' 'unsafe-inline' https: http: data:",
-              "img-src 'self' 'unsafe-inline' data: blob: https: http:",
-              "media-src 'self' 'unsafe-inline' https: http: data:",
-              "connect-src 'self' 'unsafe-inline' https: http: ws: wss: data:",
-              "frame-src 'self' 'unsafe-inline' https: http:",
-              "object-src 'self' 'unsafe-inline' data:",
-              "base-uri 'self'",
-              "form-action 'self' https: http:",
-              "frame-ancestors 'self' https: http:"
-            ].join('; ') : [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://googletagmanager.com https://ssl.google-analytics.com https://embed.tawk.to https://va.tawk.to https://core.sanity.io",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://core.sanity.io",
-              "font-src 'self' https://fonts.gstatic.com https://core.sanity.io",
+              "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https: http:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://ssl.google-analytics.com https://googletagmanager.com https://vitals.vercel-analytics.com https://cdn.sanity.io https://api.sanity.io https://6omuzt9o.api.sanity.io https://6omuzt9o.apicdn.sanity.io https://core.sanity.io wss://embed.tawk.to",
-              "frame-src 'self' https://www.youtube.com https://youtu.be https://embed.tawk.to",
+              "connect-src 'self' https://www.google-analytics.com https://vitals.vercel-analytics.com https://cdn.sanity.io https://api.sanity.io",
+              "frame-src 'self' https://www.youtube.com https://youtu.be",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
-              "frame-ancestors 'self'",
+              "frame-ancestors 'none'",
               "upgrade-insecure-requests"
+            ].join('; ') : [
+              "default-src 'self'",
+              "script-src 'self' 'nonce-{NONCE}' https://www.googletagmanager.com https://www.google-analytics.com https://googletagmanager.com",
+              "style-src 'self' 'nonce-{NONCE}' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: https://cdn.sanity.io https://res.cloudinary.com",
+              "media-src 'self' https:",
+              "connect-src 'self' https://www.google-analytics.com https://vitals.vercel-analytics.com https://cdn.sanity.io https://api.sanity.io",
+              "frame-src 'none'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+              "block-all-mixed-content"
             ].join('; '),
           },
           // Prevent MIME type sniffing (disabled for dev)

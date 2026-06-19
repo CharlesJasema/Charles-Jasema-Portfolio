@@ -1,75 +1,103 @@
 {
-  "name": "Charles Jasema - Software Engineer, Designer & Gospel Artist",
-  "short_name": "Charles Jasema",
-  "description": "Professional portfolio showcasing software engineering, design work, and gospel music ministry by Charles Jasema",
+  "name": "Charles Jasema Portfolio",
+  "short_name": "CJ Portfolio",
+  "description": "Professional portfolio of Charles Jasema - Software Engineer, Music Minister, and Digital Innovator",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#d4af37",
+  "background_color": "#1a1a1a",
+  "theme_color": "#2563eb",
   "orientation": "portrait-primary",
-  "categories": ["portfolio", "music", "technology", "design"],
+  "scope": "/",
   "lang": "en-US",
-  "icons": [
-    {
-      "src": "/images/CJ Music Logo.jpeg",
-      "sizes": "192x192",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/images/CJ Music Logo.jpeg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ],
+  "categories": ["business", "portfolio", "professional"],
   "screenshots": [
     {
-      "src": "/images/Code & Design Banner.jpeg",
+      "src": "/images/portfolio-screenshot-wide.jpg",
       "sizes": "1280x720",
       "type": "image/jpeg",
       "form_factor": "wide"
+    },
+    {
+      "src": "/images/portfolio-screenshot-narrow.jpg", 
+      "sizes": "640x1136",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
     }
   ],
   "shortcuts": [
     {
-      "name": "Music",
-      "short_name": "Music",
-      "description": "Listen to Charles Jasema's gospel music",
-      "url": "/music",
-      "icons": [
-        {
-          "src": "/images/CJ Music Logo.jpeg",
-          "sizes": "192x192",
-          "type": "image/jpeg"
-        }
-      ]
+      "name": "Portfolio",
+      "url": "/portfolio",
+      "description": "View my professional projects"
     },
     {
-      "name": "Portfolio",
-      "short_name": "Portfolio",
-      "description": "View Charles Jasema's software and design projects",
-      "url": "/portfolio",
-      "icons": [
-        {
-          "src": "/images/Code & Design Logo.jpeg",
-          "sizes": "192x192",
-          "type": "image/jpeg"
-        }
-      ]
+      "name": "Music",
+      "url": "/music", 
+      "description": "Explore my music ministry"
     },
     {
       "name": "Contact",
-      "short_name": "Contact",
-      "description": "Get in touch with Charles Jasema",
       "url": "/contact",
-      "icons": [
-        {
-          "src": "/images/professional image.JPG",
-          "sizes": "192x192",
-          "type": "image/jpeg"
-        }
-      ]
+      "description": "Get in touch with me"
     }
-  ]
+  ],
+  "share_target": {
+    "action": "/contact",
+    "method": "GET",
+    "params": {
+      "title": "subject",
+      "text": "message",
+      "url": "referrer"
+    }
+  }
 }
