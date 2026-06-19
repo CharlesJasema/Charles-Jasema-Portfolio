@@ -80,6 +80,78 @@ export interface Lyrics {
   featured: boolean
 }
 
+export interface PersonalInfo {
+  _id: string
+  name: string
+  title: string
+  bio: string[]
+  shortBio: string
+  location: string
+  email: string
+  phone?: string
+  professionalPhoto: { url: string; alt?: string }
+  socialLinks?: {
+    github?: string
+    linkedin?: string
+    twitter?: string
+    instagram?: string
+    youtube?: string
+    facebook?: string
+  }
+  cvDownloadUrl?: string
+  yearsOfExperience?: number
+  availability?: string
+}
+
+export interface Education {
+  _id: string
+  institution: string
+  degree: string
+  field?: string
+  startDate: string
+  endDate?: string
+  location?: string
+  description?: string
+  achievements?: string[]
+  skills?: string[]
+  logo?: { url: string; alt?: string }
+  order: number
+  featured: boolean
+}
+
+export interface WorkExperience {
+  _id: string
+  position: string
+  company: string
+  employmentType: string
+  startDate: string
+  endDate?: string
+  isCurrent: boolean
+  location?: string
+  description: string
+  responsibilities?: string[]
+  achievements?: string[]
+  technologies?: string[]
+  companyLogo?: { url: string; alt?: string }
+  category: string
+  order: number
+  featured: boolean
+}
+
+export interface Skill {
+  _id: string
+  name: string
+  category: string
+  subcategory?: string
+  proficiencyLevel?: string
+  yearsOfExperience?: number
+  description?: string
+  relatedTools?: string[]
+  icon?: string
+  order: number
+  featured: boolean
+}
+
 /**
  * Fetch all songs with ISR revalidation (60 seconds)
  */
@@ -144,7 +216,7 @@ export async function getProjects(category?: string): Promise<Project[]> {
       description,
       "images": images[]{
         "url": asset->url,
-        "alt": alt
+        "alt": coalesce(alt, "Project screenshot")
       },
       tags,
       githubUrl,
@@ -283,7 +355,7 @@ export async function getFeaturedContent() {
         description,
         "images": images[]{
           "url": asset->url,
-          "alt": alt
+          "alt": coalesce(alt, "Project screenshot")
         },
         tags,
         githubUrl,
@@ -316,4 +388,138 @@ export async function getFeaturedContent() {
   ])
 
   return { songs, projects, blogPosts }
+}
+
+/**
+ * Fetch personal information
+ */
+export async function getPersonalInfo(): Promise<PersonalInfo | null> {
+  return client.fetch(
+    groq`*[_type == "personalInfo"][0] {
+      _id,
+      name,
+      title,
+      bio,
+      shortBio,
+      location,
+      email,
+      phone,
+      "professionalPhoto": {
+        "url": professionalPhoto.asset->url,
+        "alt": professionalPhoto.alt
+      },
+      socialLinks,
+      cvDownloadUrl,
+      yearsOfExperience,
+      availability
+    }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ['personal-info'] }
+    }
+  )
+}
+
+/**
+ * Fetch all education entries
+ */
+export async function getEducation(): Promise<Education[]> {
+  return client.fetch(
+    groq`*[_type == "education"] | order(order asc, startDate desc) {
+      _id,
+      institution,
+      degree,
+      field,
+      startDate,
+      endDate,
+      location,
+      description,
+      achievements,
+      skills,
+      "logo": logo.asset->url,
+      order,
+      featured
+    }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ['education'] }
+    }
+  )
+}
+
+/**
+ * Fetch all work experience entries
+ */
+export async function getWorkExperience(): Promise<WorkExperience[]> {
+  return client.fetch(
+    groq`*[_type == "workExperience"] | order(order asc, startDate desc) {
+      _id,
+      position,
+      company,
+      employmentType,
+      startDate,
+      endDate,
+      isCurrent,
+      location,
+      description,
+      responsibilities,
+      achievements,
+      technologies,
+      "companyLogo": companyLogo.asset->url,
+      category,
+      order,
+      featured
+    }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ['work-experience'] }
+    }
+  )
+}
+
+/**
+ * Fetch all skills grouped by category
+ */
+export async function getSkills(): Promise<Skill[]> {
+  return client.fetch(
+    groq`*[_type == "skill"] | order(category asc, order asc) {
+      _id,
+      name,
+      category,
+      subcategory,
+      proficiencyLevel,
+      yearsOfExperience,
+      description,
+      relatedTools,
+      icon,
+      order,
+      featured
+    }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ['skills'] }
+    }
+  )
+}
+
+/**
+ * Fetch featured skills for homepage
+ */
+export async function getFeaturedSkills(): Promise<Skill[]> {
+  return client.fetch(
+    groq`*[_type == "skill" && featured == true] | order(order asc) {
+      _id,
+      name,
+      category,
+      subcategory,
+      proficiencyLevel,
+      relatedTools,
+      icon,
+      order
+    }`,
+    {},
+    {
+      next: { revalidate: 3600, tags: ['skills'] }
+    }
+  )
 }

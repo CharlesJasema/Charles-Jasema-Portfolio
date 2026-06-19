@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { enhancedImageField, enhancedAudioField, FILE_SIZE_LIMITS } from '../lib/assetConfig'
+import { DurationInput } from '../components/DurationInput'
 
 export default defineType({
   name: 'song',
@@ -24,6 +25,9 @@ export default defineType({
       title: 'Duration',
       type: 'string',
       description: 'Format: MM:SS (e.g., 4:30)',
+      components: {
+        input: DurationInput,
+      },
       validation: Rule => Rule.required().regex(/^\d{1,2}:\d{2}$/, {
         name: 'duration',
         invert: false

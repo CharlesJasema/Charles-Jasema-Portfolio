@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaYoutube, FaEnvelope, FaFacebook, FaMusic } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
 import { NewsletterForm } from './NewsletterForm';
-import { SocialProofCompact } from './social';
 import { FooterCTAs } from './cta';
 import { siteConfig } from '@/config/site';
 
@@ -240,11 +239,6 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="border-t border-gold/10 my-8"></div>
-
-        {/* Social Proof */}
-        <div className="text-center mb-8">
-          <SocialProofCompact />
-        </div>
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">

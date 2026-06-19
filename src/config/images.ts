@@ -1,4 +1,17 @@
 /**
+ * CONFIGURATION FILE - LEGACY DATA
+ * 
+ * PURPOSE: This file serves as emergency fallback when Sanity CMS is unavailable
+ * 
+ * IMPORTANT:
+ * - All dynamic content should come from Sanity CMS
+ * - This file exists only as a safety net for degraded service scenarios
+ * - Static image paths can remain here for reference
+ * 
+ * TO UPDATE CONTENT: Use Sanity Studio at /studio
+ * 
+ * ---
+ * 
  * Images Configuration
  * 
  * ⚠️ ADMIN: Edit this file to update image paths across the website

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaCalendar, FaClock, FaTag, FaArrowRight, FaSearch } from 'react-icons/fa';
 import { Card, Button } from '@/components/ui';
-import { SocialShare, SocialFollow, SocialProof } from '@/components/social';
+import { SocialShare, SocialFollow } from '@/components/social';
 import { BlogPageCTAs } from '@/components/cta';
 import { blogConfig, BlogCategory } from '@/config/blog';
 import { clsx } from 'clsx';
@@ -309,13 +309,6 @@ export default function BlogClient({ articles, error }: BlogClientProps) {
             Stay connected across all platforms for the latest updates, music, and tech insights.
           </p>
           <SocialFollow variant="grid" showLabels={true} showUsernames={true} />
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="max-w-4xl mx-auto">
-          <SocialProof variant="grid" animated={true} />
         </div>
       </section>
     </div>

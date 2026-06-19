@@ -3,15 +3,68 @@ import Image from 'next/image';
 import { FaPlay, FaMusic, FaYoutube, FaExternalLinkAlt, FaDrum, FaGuitar, FaMicrophone, FaHeart, FaRecordVinyl, FaVideo, FaUsers } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
 import { Button, Card, AnimatedContainer, StaggeredContainer } from '@/components/ui';
-import { SocialShare, SocialFollow, SocialProof } from '@/components/social';
+import { SocialShare, SocialFollow } from '@/components/social';
 import { MusicPageCTAs } from '@/components/cta';
 import { siteConfig } from '@/config/site';
-import { musicConfig } from '@/config/music';
-import { imagesConfig } from '@/config/images';
 import { getSongs, getVideos } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.image';
 import { MusicClient } from './MusicClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
+
+// Hardcoded marketing content (rarely changes)
+const ARTIST_STORY = {
+  title: 'Music That Transforms Lives',
+  subtitle: 'Contemporary Gospel & Worship Music',
+  description: 'Purpose-driven worship leader and songwriter creating music that inspires faith, hope, and spiritual transformation.',
+  mission: 'To create meaningful worship experiences that connect people with God and inspire spiritual growth.',
+  philosophy: 'Every song is crafted with intentionality, rooted in Scripture, and designed to minister to hearts seeking truth, hope, and transformation through worship.',
+};
+
+const MINISTRY_STATS = [
+  { value: '14', label: 'Songs Released' },
+  { value: '2', label: 'Music Videos' },
+  { value: '14', label: 'Lyrical Videos' },
+  { value: '10+', label: 'Years in Ministry' },
+];
+
+const INSTRUMENTS = [
+  'Vocals (Lead & Harmonies)',
+  'Acoustic Guitar',
+  'Keyboard & Piano',
+  'Percussion & Drums',
+];
+
+const INFLUENCES = [
+  'Kirk Franklin',
+  'Hillsong Worship',
+  'Chris Tomlin',
+  'Travis Greene',
+  'Sinach',
+  'Don Moen',
+];
+
+const STREAMING_PLATFORMS = [
+  {
+    name: 'YouTube',
+    icon: 'youtube',
+    link: 'https://www.youtube.com/@CharlesJasemaMusic',
+  },
+  {
+    name: 'Mdundo',
+    icon: 'music',
+    link: 'https://play.mdundo.com/artist/148492/Charles-Jasema',
+  },
+  {
+    name: 'Spotify',
+    icon: 'spotify',
+    link: 'https://open.spotify.com/artist/charles-jasema',
+  },
+  {
+    name: 'Apple Music',
+    icon: 'apple',
+    link: '#',
+  },
+];
 
 // Enable ISR with 60-second revalidation
 export const revalidate = 60;
@@ -65,58 +118,9 @@ export const metadata = generateSEOMetadata({
 });
 
 export default async function MusicPage() {
-  // Fetch data from Sanity with error handling
-  let songs = [];
-  let videos = [];
-  let error = null;
-
-  try {
-    // Set a shorter timeout for Sanity requests
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Sanity request timeout')), 5000)
-    );
-    
-    [songs, videos] = await Promise.race([
-      Promise.all([getSongs(), getVideos()]),
-      timeoutPromise
-    ]) as [any[], any[]];
-  } catch (err) {
-    console.error('Error fetching music data from Sanity:', err);
-    error = err;
-    // Fallback to config data if Sanity fails
-    songs = musicConfig.songs.map((song, index) => ({
-      _id: `fallback-song-${index}`,
-      title: song.title,
-      description: song.description,
-      duration: song.duration,
-      releaseDate: song.releaseYear?.toString() || '2025',
-      album: (song as any).album || 'Singles',
-      mdundoUrl: song.links?.mdundo || '',
-      featured: (song as any).featured || false,
-      isNew: (song as any).isNew || false,
-      isCollaboration: (song as any).isCollaboration || false,
-      isFirstSong: (song as any).isFirstSong || false,
-      albumArt: null,
-      songStory: song.description,
-      recordingDetails: `Recorded in ${song.releaseYear}`,
-      collaborators: (song as any).isCollaboration ? ['Charles Jasema', 'Worship Team'] : ['Charles Jasema']
-    }));
-    // Create videos from song links if available
-    videos = musicConfig.songs
-      .filter(song => song.links?.youtube)
-      .map((song, index) => ({
-        _id: `fallback-video-${index}`,
-        title: song.title,
-        description: song.description,
-        youtubeUrl: song.links.youtube || '',
-        youtubeId: song.links.youtube?.split('/').pop() || '',
-        releaseDate: song.releaseYear?.toString() || '2025',
-        views: 0,
-        category: 'Music Video',
-        featured: (song as any).featured || false,
-        thumbnail: null
-      }));
-  }
+  // Fetch data from Sanity
+  const songs = await getSongs();
+  const videos = await getVideos();
 
   // Separate videos by category
   const musicVideos = videos.filter(v => v.category === 'Music Video');
@@ -128,7 +132,7 @@ export default async function MusicPage() {
     '@type': 'MusicGroup',
     name: 'Charles Jasema',
     genre: ['Contemporary Gospel', 'Worship', 'Christian Music'],
-    description: musicConfig.artist.description,
+    description: ARTIST_STORY.description,
     foundingDate: '2015',
     foundingLocation: {
       '@type': 'Place',
@@ -177,15 +181,6 @@ export default async function MusicPage() {
       />
       
       <div className="min-h-screen pt-24 pb-20">
-      {(error as any) && (
-        <div className="px-4 sm:px-6 lg:px-8 mb-8">
-          <div className="max-w-7xl mx-auto bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-400 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200 px-4 py-3 rounded">
-            <p className="text-sm">
-              <strong>Note:</strong> Displaying cached content. Some information may not be up to date.
-            </p>
-          </div>
-        </div>
-      )}
       {/* Hero Section */}
       <section className="px-4 sm:px-6 lg:px-8 mb-20">
         <div className="max-w-7xl mx-auto">
@@ -195,7 +190,7 @@ export default async function MusicPage() {
               <div className="relative">
                 <div className="aspect-square max-w-md mx-auto relative rounded-lg overflow-hidden shadow-2xl shadow-accent-red/20 hover:shadow-accent-red/30 transition-shadow duration-500">
                   <Image
-                    src={imagesConfig.profile.ministry}
+                    src="/images/charles-jasema-music-ministry.jpg"
                     alt={`${siteConfig.name} - Music Ministry`}
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-700"
@@ -213,22 +208,22 @@ export default async function MusicPage() {
             <AnimatedContainer>
               <div className="text-center lg:text-left">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold mb-6">
-                  <span className="text-gray-900 dark:text-white">{musicConfig.story.title}</span>
+                  <span className="text-gray-900 dark:text-white">{ARTIST_STORY.title}</span>
                 </h1>
                 <p className="text-2xl text-accent-red font-semibold mb-6">
-                  {musicConfig.story.subtitle}
+                  {ARTIST_STORY.subtitle}
                 </p>
                 <p className="text-lg text-gray-700 dark:text-text-secondary mb-6 leading-relaxed">
-                  {musicConfig.story.description}
+                  {ARTIST_STORY.description}
                 </p>
                 <div className="bg-gradient-to-r from-accent-red/10 to-primary-gold/10 rounded-lg p-6 mb-6 hover:from-accent-red/15 hover:to-primary-gold/15 transition-colors duration-300">
                   <p className="text-gray-800 dark:text-text-primary font-semibold">
-                    <span className="text-accent-red">Mission:</span> {musicConfig.story.mission}
+                    <span className="text-accent-red">Mission:</span> {ARTIST_STORY.mission}
                   </p>
                 </div>
                 <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-4 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-300">
                   <p className="text-sm text-gray-700 dark:text-text-secondary italic">
-                    "{musicConfig.story.philosophy}"
+                    "{ARTIST_STORY.philosophy}"
                   </p>
                 </div>
               </div>
@@ -241,7 +236,7 @@ export default async function MusicPage() {
       <section className="px-4 sm:px-6 lg:px-8 mb-20">
         <div className="max-w-7xl mx-auto">
           <StaggeredContainer className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {musicConfig.stats.map((stat, index) => (
+            {MINISTRY_STATS.map((stat, index) => (
               <Card
                 key={index}
                 variant="elevated"
@@ -274,7 +269,7 @@ export default async function MusicPage() {
               <div className="bg-white dark:bg-slate-800 rounded-lg p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <h3 className="text-xl font-heading font-bold text-accent-red mb-4">Instruments</h3>
                 <div className="space-y-3">
-                  {musicConfig.instruments.map((instrument, index) => (
+                  {INSTRUMENTS.map((instrument, index) => (
                     <div key={index} className="flex items-center gap-3 text-gray-700 dark:text-text-secondary hover:text-accent-red dark:hover:text-accent-red transition-colors duration-200">
                       {instrument.includes('Drum') && <FaDrum className="text-accent-red" />}
                       {instrument.includes('Guitar') && <FaGuitar className="text-accent-red" />}
@@ -292,7 +287,7 @@ export default async function MusicPage() {
               <div className="bg-white dark:bg-slate-800 rounded-lg p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <h3 className="text-xl font-heading font-bold text-accent-red mb-4">Musical Influences</h3>
                 <div className="space-y-3">
-                  {musicConfig.influences.map((influence, index) => (
+                  {INFLUENCES.map((influence, index) => (
                     <div key={index} className="flex items-center gap-3 text-gray-700 dark:text-text-secondary hover:text-primary-gold dark:hover:text-primary-gold transition-colors duration-200">
                       <FaMusic className="text-primary-gold" />
                       <span>{influence}</span>
@@ -650,7 +645,7 @@ export default async function MusicPage() {
           </AnimatedContainer>
 
           <StaggeredContainer className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {musicConfig.platforms.map((platform) => (
+            {STREAMING_PLATFORMS.map((platform) => (
               <a
                 key={platform.name}
                 href={platform.link}
@@ -681,7 +676,7 @@ export default async function MusicPage() {
       </section>
 
       {/* Social Follow Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="px-4 sm:px-6 lg:px-8 mt-20 mb-20">
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedContainer>
             <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">
@@ -692,13 +687,6 @@ export default async function MusicPage() {
             </p>
             <SocialFollow variant="grid" showLabels={true} showUsernames={true} />
           </AnimatedContainer>
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mt-16 mb-20">
-        <div className="max-w-4xl mx-auto">
-          <SocialProof variant="grid" animated={true} />
         </div>
       </section>
       </div>

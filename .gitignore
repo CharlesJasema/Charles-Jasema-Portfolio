@@ -16,6 +16,7 @@ dist/
 .env.test.local
 .env.production.local
 .env.sanity
+# Note: .env.production.template is safe to commit (contains no real secrets)
 
 # Sanity secrets and configuration (CRITICAL - NEVER COMMIT THESE)
 sanity.cli.json

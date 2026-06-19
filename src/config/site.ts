@@ -40,7 +40,7 @@ export const siteConfig = {
 
   // Professional Social Media Links
   professional: {
-    linkedin: 'https://www.linkedin.com/in/charles-jasema-0a7b24210',
+    linkedin: 'https://www.linkedin.com/in/charles-jada-sebit-emmanuel-0a7b24210',
     twitter: 'https://x.com/Charlesjasema',
     youtube: 'https://www.youtube.com/@CharlesJasema_Code_Design',
     github: 'https://github.com/charlesjasema',

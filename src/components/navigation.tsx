@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { ThemeToggle } from './ThemeToggle';
-import { imagesConfig } from '@/config/images';
 
 interface NavItem {
   label: string;
@@ -86,7 +85,7 @@ export function Navigation(): JSX.Element {
           >
             <div className="relative w-10 h-10 rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-110">
               <Image
-                src={imagesConfig.logos.codeDesignLogo}
+                src="/images/Code & Design Logo.jpeg"
                 alt="Charles Jasema Logo"
                 fill
                 className="object-cover"

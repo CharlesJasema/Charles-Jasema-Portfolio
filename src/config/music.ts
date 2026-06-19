@@ -1,4 +1,17 @@
 /**
+ * CONFIGURATION FILE - LEGACY DATA
+ * 
+ * PURPOSE: This file serves as emergency fallback when Sanity CMS is unavailable
+ * 
+ * IMPORTANT:
+ * - All dynamic content (songs, videos, lyrics) should come from Sanity CMS
+ * - This file exists only as a safety net for degraded service scenarios
+ * - UI constants (categories, labels, icons) can remain here
+ * 
+ * TO UPDATE CONTENT: Use Sanity Studio at /studio
+ * 
+ * ---
+ * 
  * Music Portfolio Configuration
  * 
  * ⚠️ ADMIN: Edit this file to update your music catalog

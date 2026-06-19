@@ -1,7 +1,9 @@
 import { AnimatedContainer } from '@/components/ui';
-import { SocialFollow, SocialProof } from '@/components/social';
+import { SocialFollow } from '@/components/social';
 import { PortfolioPageCTAs } from '@/components/cta';
 import { getProjects } from '@/lib/sanity.queries';
+// INTENTIONAL: Emergency fallback data when Sanity CMS is unavailable
+// This ensures portfolio page always displays content for visitors
 import { portfolioProjects } from '@/config/portfolio';
 import PortfolioClient from './PortfolioClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
@@ -145,7 +147,7 @@ export default async function PortfolioPage() {
       </section>
 
       {/* Social Follow Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="px-4 sm:px-6 lg:px-8 mt-20 mb-20">
         <div className="max-w-4xl mx-auto text-center">
           <AnimatedContainer>
             <h2 className="text-2xl font-heading font-bold text-gray-900 dark:text-white mb-4">
@@ -156,13 +158,6 @@ export default async function PortfolioPage() {
             </p>
             <SocialFollow variant="grid" showLabels={true} showUsernames={true} />
           </AnimatedContainer>
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mt-16 mb-20">
-        <div className="max-w-4xl mx-auto">
-          <SocialProof variant="grid" animated={true} />
         </div>
       </section>
     </div>
