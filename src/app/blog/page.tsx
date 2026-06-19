@@ -4,6 +4,8 @@ import BlogClient from './BlogClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
 import { siteConfig } from '@/config/site';
 
+// Force dynamic rendering to prevent build-time API calls
+export const dynamic = 'force-dynamic';
 // Enable ISR with 60-second revalidation
 export const revalidate = 60;
 

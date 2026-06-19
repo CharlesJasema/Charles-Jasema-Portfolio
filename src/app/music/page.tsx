@@ -11,6 +11,9 @@ import { urlFor } from '@/lib/sanity.image';
 import { MusicClient } from './MusicClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
 
+// Force dynamic rendering to prevent build-time API calls
+export const dynamic = 'force-dynamic';
+
 // Hardcoded marketing content (rarely changes)
 const ARTIST_STORY = {
   title: 'Music That Transforms Lives',

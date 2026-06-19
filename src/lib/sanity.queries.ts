@@ -30,6 +30,23 @@ export interface MusicVideo {
   thumbnail?: string
 }
 
+// Check if we're in build time or if Sanity is not configured
+const isBuildTime = process.env.NODE_ENV === 'production' && !process.env.VERCEL
+const hasValidSanityConfig = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && 
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== '' && 
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== 'dummy-project-id'
+
+// Mock function for build time
+const mockQuery = async (): Promise<any[]> => {
+  console.log('Sanity CMS not configured or build time, returning empty data')
+  return []
+}
+
+const mockSingleQuery = async (): Promise<any> => {
+  console.log('Sanity CMS not configured or build time, returning null')
+  return null
+}
+
 export interface Project {
   _id: string
   title: string
@@ -156,6 +173,10 @@ export interface Skill {
  * Fetch all songs with ISR revalidation (60 seconds)
  */
 export async function getSongs(): Promise<Song[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "song"] | order(releaseDate desc) {
       _id,
@@ -182,6 +203,10 @@ export async function getSongs(): Promise<Song[]> {
  * Fetch all music videos and lyrical videos
  */
 export async function getVideos(): Promise<MusicVideo[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "musicVideo"] | order(releaseDate desc) {
       _id,
@@ -206,6 +231,10 @@ export async function getVideos(): Promise<MusicVideo[]> {
  * Fetch all portfolio projects with optional category filtering
  */
 export async function getProjects(category?: string): Promise<Project[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   const filter = category ? `*[_type == "project" && category == $category]` : `*[_type == "project"]`
   
   return client.fetch(
@@ -235,6 +264,10 @@ export async function getProjects(category?: string): Promise<Project[]> {
  * Fetch all blog posts with pagination support
  */
 export async function getBlogPosts(limit?: number, offset: number = 0): Promise<BlogPost[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   const limitClause = limit ? `[${offset}...${offset + limit}]` : ''
   
   return client.fetch(
@@ -271,6 +304,10 @@ export async function getBlogPosts(limit?: number, offset: number = 0): Promise<
  * Fetch a single blog post by slug
  */
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  if (!hasValidSanityConfig) {
+    return null
+  }
+  
   return client.fetch(
     groq`*[_type == "blogPost" && slug.current == $slug][0] {
       _id,
@@ -298,13 +335,17 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     {
       next: { revalidate: 60, tags: ['blog'] }
     }
-  )
+  ) as Promise<BlogPost | null>
 }
 
 /**
  * Fetch all song lyrics
  */
 export async function getLyrics(): Promise<Lyrics[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "lyrics"] | order(releaseYear desc) {
       _id,
@@ -330,6 +371,14 @@ export async function getLyrics(): Promise<Lyrics[]> {
  * Fetch featured content for home page
  */
 export async function getFeaturedContent() {
+  if (!hasValidSanityConfig) {
+    return {
+      songs: [],
+      projects: [],
+      blogPosts: []
+    }
+  }
+  
   const [songs, projects, blogPosts] = await Promise.all([
     client.fetch(
       groq`*[_type == "song" && featured == true] | order(releaseDate desc) [0...3] {
@@ -394,6 +443,10 @@ export async function getFeaturedContent() {
  * Fetch personal information
  */
 export async function getPersonalInfo(): Promise<PersonalInfo | null> {
+  if (!hasValidSanityConfig) {
+    return null
+  }
+  
   return client.fetch(
     groq`*[_type == "personalInfo"][0] {
       _id,
@@ -417,13 +470,17 @@ export async function getPersonalInfo(): Promise<PersonalInfo | null> {
     {
       next: { revalidate: 3600, tags: ['personal-info'] }
     }
-  )
+  ) as Promise<PersonalInfo | null>
 }
 
 /**
  * Fetch all education entries
  */
 export async function getEducation(): Promise<Education[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "education"] | order(order asc, startDate desc) {
       _id,
@@ -451,6 +508,10 @@ export async function getEducation(): Promise<Education[]> {
  * Fetch all work experience entries
  */
 export async function getWorkExperience(): Promise<WorkExperience[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "workExperience"] | order(order asc, startDate desc) {
       _id,
@@ -481,6 +542,10 @@ export async function getWorkExperience(): Promise<WorkExperience[]> {
  * Fetch all skills grouped by category
  */
 export async function getSkills(): Promise<Skill[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "skill"] | order(category asc, order asc) {
       _id,
@@ -506,6 +571,10 @@ export async function getSkills(): Promise<Skill[]> {
  * Fetch featured skills for homepage
  */
 export async function getFeaturedSkills(): Promise<Skill[]> {
+  if (!hasValidSanityConfig) {
+    return mockQuery()
+  }
+  
   return client.fetch(
     groq`*[_type == "skill" && featured == true] | order(order asc) {
       _id,

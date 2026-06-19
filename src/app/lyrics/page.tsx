@@ -4,6 +4,8 @@ import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib
 import { siteConfig } from '@/config/site';
 import { LyricsClient } from './LyricsClient';
 
+// Force dynamic rendering to prevent build-time API calls
+export const dynamic = 'force-dynamic';
 // Enable ISR with 60-second revalidation
 export const revalidate = 60;
 

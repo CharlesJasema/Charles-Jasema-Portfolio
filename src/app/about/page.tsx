@@ -7,6 +7,9 @@ import { siteConfig } from '@/config/site';
 import { generateMetadata as generateSEOMetadata, generateKeywords, generatePersonSchema, generateBreadcrumbSchema } from '@/lib/seo';
 import { getPersonalInfo, getEducation, getWorkExperience, getSkills } from '@/lib/sanity.queries';
 
+// Force dynamic rendering to prevent build-time API calls
+export const dynamic = 'force-dynamic';
+
 export const metadata = generateSEOMetadata({
   title: `About ${siteConfig.name} - Software Engineer, Designer & Gospel Artist`,
   description: 'Discover the comprehensive journey of Charles Jasema - a passionate software engineer, creative designer, and gospel music artist. Explore my technical expertise in full-stack development, creative skills in design and videography, music ministry achievements, educational background, and the faith-driven mission behind all my work.',
