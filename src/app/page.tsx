@@ -1,7 +1,9 @@
 // @ts-nocheck
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button, Card } from '@/components/ui';
+import { EnhancedButton, Card, useBrandContext, BrandTransition } from '@/components/ui';
+import { EnhancedPortfolioShowcase } from '@/components/portfolio';
+import { EnhancedMusicShowcase } from '@/components/music';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaArrowRight, FaImage } from 'react-icons/fa';
 import { getPersonalInfo, getFeaturedContent, getFeaturedSkills } from '@/lib/sanity.queries';
 
@@ -61,15 +63,14 @@ export default function HomePage() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
               <Link href="/portfolio">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                <EnhancedButton variant="primary" size="lg" className="w-full sm:w-auto" icon={<FaArrowRight />} iconPosition="right">
                   View My Work
-                  <FaArrowRight className="ml-2" />
-                </Button>
+                </EnhancedButton>
               </Link>
               <Link href="/contact">
-                <Button variant="ghost" size="lg" className="w-full sm:w-auto">
+                <EnhancedButton variant="ghost" size="lg" className="w-full sm:w-auto">
                   Get In Touch
-                </Button>
+                </EnhancedButton>
               </Link>
             </div>
           </div>
@@ -180,61 +181,31 @@ export default function HomePage() {
       {projects.length > 0 && (
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                Featured Projects
-              </h2>
-              <Link href="/portfolio" className="text-primary-gold hover:text-primary-gold/80 font-semibold">
-                View All →
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.slice(0, 3).map((project: any) => (
-                <Link key={project._id} href="/portfolio">
-                  <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full">
-                    {project.images?.[0]?.url ? (
-                      <div className="relative w-full h-48">
-                        <Image
-                          src={project.images[0].url}
-                          alt={project.images[0].alt || project.title}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-full h-48 bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                        <FaImage className="text-slate-400 text-4xl" />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <span className="text-xs px-3 py-1 bg-primary-gold/10 text-primary-gold rounded-full">
-                        {project.category}
-                      </span>
-                      <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white mt-3 mb-2">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-text-tertiary mb-4">
-                        {project.description.substring(0, 150)}{project.description.length > 150 && '...'}
-                      </p>
-                      {project.tags && project.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.slice(0, 4).map((tag: any, index: any) => (
-                            <span
-                              key={index}
-                              className="text-xs px-2 py-1 bg-tech-teal/10 text-tech-teal rounded"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+            <EnhancedPortfolioShowcase
+              projects={projects.map(project => ({
+                _id: project._id || `project-${Math.random()}`,
+                title: project.title,
+                description: project.description,
+                category: project.category as 'software' | 'design' | 'videography' | 'music',
+                technologies: project.technologies,
+                tags: project.tags,
+                images: project.images,
+                links: project.links,
+                featured: project.featured,
+                brandContext: project.category === 'music' ? 'ministry' : 'professional',
+                year: new Date().getFullYear()
+              }))}
+              categories={[
+                { id: 'all', label: 'All Projects', icon: () => null },
+                { id: 'software', label: 'Software', icon: () => null },
+                { id: 'design', label: 'Design', icon: () => null },
+                { id: 'videography', label: 'Videography', icon: () => null },
+                { id: 'music', label: 'Music', icon: () => null },
+              ]}
+              maxProjects={6}
+              showFilters={false}
+              layout="grid"
+            />
           </div>
         </section>
       )}
@@ -243,54 +214,26 @@ export default function HomePage() {
       {songs.length > 0 && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-100 dark:bg-slate-900">
           <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                Latest Songs
-              </h2>
-              <Link href="/music" className="text-primary-gold hover:text-primary-gold/80 font-semibold">
-                View All →
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {songs.slice(0, 3).map((song: any) => (
-                <Link key={song._id} href="/music">
-                  <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 h-full">
-                    <div className="relative">
-                      {song.albumArt ? (
-                        <div className="relative w-full aspect-square">
-                          <Image
-                            src={song.albumArt}
-                            alt={`${song.title} album art`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-full aspect-square bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                          <FaMusic className="text-slate-400 text-4xl" />
-                        </div>
-                      )}
-                      {song.isNew && (
-                        <span className="absolute top-2 right-2 px-3 py-1 bg-accent-red text-white text-xs rounded-full">
-                          New Release
-                        </span>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-1">
-                        {song.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-text-tertiary mb-1">{song.album}</p>
-                      <p className="text-xs text-gray-500 dark:text-text-tertiary">
-                        {new Date(song.releaseDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+            <EnhancedMusicShowcase
+              songs={songs.map(song => ({
+                _id: song._id || `song-${Math.random()}`,
+                title: song.title,
+                description: song.description || '',
+                albumArt: song.albumArt,
+                youtubeUrl: song.youtubeUrl,
+                mdundoUrl: song.mdundoUrl,
+                spotifyUrl: song.spotifyUrl,
+                releaseDate: song.releaseDate,
+                duration: song.duration,
+                featured: song.featured,
+                isNew: song.isNew,
+                category: 'worship' as const
+              }))}
+              videos={[]}
+              maxItems={4}
+              showCategories={false}
+              layout="grid"
+            />
           </div>
         </section>
       )}
@@ -362,14 +305,14 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
-              <Button variant="primary" size="lg">
+              <EnhancedButton variant="primary" size="lg">
                 Get In Touch
-              </Button>
+              </EnhancedButton>
             </Link>
             <Link href="/portfolio">
-              <Button variant="secondary" size="lg">
+              <EnhancedButton variant="secondary" size="lg">
                 View Portfolio
-              </Button>
+              </EnhancedButton>
             </Link>
           </div>
         </div>
