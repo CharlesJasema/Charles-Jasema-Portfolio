@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaCalendar, FaClock, FaTag, FaArrowRight, FaSearch } from 'react-icons/fa';
-import { Card, Button } from '@/components/ui';
+import { Card, EnhancedButton } from '@/components/ui';
 import { SocialShare, SocialFollow } from '@/components/social';
 import { BlogPageCTAs } from '@/components/cta';
 import { blogConfig, BlogCategory } from '@/config/blog';

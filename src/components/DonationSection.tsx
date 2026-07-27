@@ -1,7 +1,7 @@
 'use client';
 
 import { FaHeart, FaPaypal, FaMobileAlt } from 'react-icons/fa';
-import { Button, Card } from '@/components/ui';
+import { EnhancedButton, Card } from '@/components/ui';
 import { trackDonation } from '@/lib/analytics';
 
 /**

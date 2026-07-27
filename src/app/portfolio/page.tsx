@@ -2,12 +2,12 @@ import { AnimatedContainer } from '@/components/ui';
 import { SocialFollow } from '@/components/social';
 import { PortfolioPageCTAs } from '@/components/cta';
 import { getProjects } from '@/lib/sanity.queries';
+import { EnhancedPortfolioShowcase } from '@/components/portfolio';
 // INTENTIONAL: Emergency fallback data when Sanity CMS is unavailable
-// This ensures portfolio page always displays content for visitors
 import { portfolioProjects } from '@/config/portfolio';
-import PortfolioClient from './PortfolioClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
 import { siteConfig } from '@/config/site';
+import { FaCode, FaPalette, FaVideo, FaMusic } from 'react-icons/fa';
 
 // Enable ISR with 60-second revalidation
 export const revalidate = 60;
@@ -74,13 +74,13 @@ export const metadata = generateSEOMetadata({
   image: '/images/Code & Design Banner.jpeg',
 });
 
-// Category configuration with icon names (not components)
+// Enhanced category configuration with proper React components
 const categories = [
-  { id: 'all', label: 'All Projects', icon: null },
-  { id: 'software', label: 'Software', icon: 'FaCode' },
-  { id: 'design', label: 'Design', icon: 'FaPalette' },
-  { id: 'videography', label: 'Videography', icon: 'FaVideo' },
-  { id: 'music', label: 'Music', icon: 'FaMusic' },
+  { id: 'all', label: 'All Projects', icon: FaCode },
+  { id: 'software', label: 'Software', icon: FaCode },
+  { id: 'design', label: 'Design', icon: FaPalette },
+  { id: 'videography', label: 'Videography', icon: FaVideo },
+  { id: 'music', label: 'Music', icon: FaMusic },
 ] as const;
 
 export default async function PortfolioPage() {
@@ -136,8 +136,32 @@ export default async function PortfolioPage() {
         </div>
       </section>
 
-      {/* Client-side filtering component */}
-      <PortfolioClient projects={projects} categories={categories} />
+      {/* Enhanced Portfolio Showcase - Replaces old client-side filtering */}
+      <EnhancedPortfolioShowcase
+        projects={projects.map((project, index) => ({
+          _id: project._id || `project-${index}`,
+          title: project.title,
+          description: project.description,
+          category: project.category as 'software' | 'design' | 'videography' | 'music',
+          technologies: project.technologies,
+          tags: project.tags,
+          images: project.images,
+          links: project.links,
+          featured: project.featured,
+          brandContext: project.category === 'music' ? 'ministry' : 'professional',
+          status: 'completed' as const,
+          year: project.year || new Date().getFullYear(),
+          metrics: {
+            views: project.views,
+            likes: project.likes,
+            downloads: project.downloads,
+          }
+        }))}
+        categories={categories}
+        showFilters={true}
+        showMetrics={true}
+        layout="grid"
+      />
 
       {/* Call to Action */}
       <section className="px-4 sm:px-6 lg:px-8 mt-20">

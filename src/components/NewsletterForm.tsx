@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { Input, Button } from '@/components/ui';
+import { Input, EnhancedButton } from '@/components/ui';
 
 export function NewsletterForm() {
   const [email, setEmail] = useState('');

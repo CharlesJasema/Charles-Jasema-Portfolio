@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FaEnvelope, FaWhatsapp, FaPhone, FaLinkedin, FaTwitter, FaYoutube, FaGithub, FaInstagram, FaFacebook, FaMusic, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
-import { Button, Card, Input, TextArea, Select } from '@/components/ui';
+import { EnhancedButton, Card, Input, TextArea, Select } from '@/components/ui';
 import { ContactPageCTAs } from '@/components/cta';
 import { siteConfig } from '@/config/site';
 import { contactConfig } from '@/config/contact';

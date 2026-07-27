@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, AnimatedContainer } from '@/components/ui';
+import { EnhancedButton, AnimatedContainer } from '@/components/ui';
 import { AboutPageCTAs } from '@/components/cta';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaGraduationCap, FaBriefcase, FaDownload, FaHeart, FaBook } from 'react-icons/fa';
 import { siteConfig } from '@/config/site';

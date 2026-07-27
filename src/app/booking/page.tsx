@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FaCode, FaPalette, FaMusic, FaMicrophone, FaVideo, FaCalendar, FaCheckCircle, FaExclamationCircle, FaClock, FaCheck } from 'react-icons/fa';
-import { Button, Card, Input, TextArea, Select } from '@/components/ui';
+import { EnhancedButton, Card, Input, TextArea, Select } from '@/components/ui';
 import { bookingConfig, BookingService } from '@/config/booking';
 import { clsx } from 'clsx';
 
@@ -170,9 +170,9 @@ export default function BookingPage() {
                       ))}
                     </ul>
 
-                    <Button variant="primary" className="w-full">
+                    <EnhancedButton variant="primary" className="w-full">
                       Select Service
-                    </Button>
+                    </EnhancedButton>
                   </Card>
                 );
               })}
@@ -203,7 +203,7 @@ export default function BookingPage() {
                       </div>
                     </div>
                   </div>
-                  <Button
+                  <EnhancedButton
                     variant="ghost"
                     onClick={() => {
                       setSelectedService(null);
@@ -370,7 +370,7 @@ export default function BookingPage() {
                 </div>
 
                 {/* Submit Button */}
-                <Button
+                <EnhancedButton
                   type="submit"
                   variant="primary"
                   size="lg"

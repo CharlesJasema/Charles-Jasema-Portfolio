@@ -2,13 +2,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaPlay, FaMusic, FaYoutube, FaExternalLinkAlt, FaDrum, FaGuitar, FaMicrophone, FaHeart, FaRecordVinyl, FaVideo, FaUsers } from 'react-icons/fa';
 import { SiSpotify, SiApplemusic } from 'react-icons/si';
-import { Button, Card, AnimatedContainer, StaggeredContainer } from '@/components/ui';
+import { EnhancedButton, Card, AnimatedContainer, StaggeredContainer } from '@/components/ui';
+import { EnhancedMusicShowcase } from '@/components/music';
 import { SocialShare, SocialFollow } from '@/components/social';
 import { MusicPageCTAs } from '@/components/cta';
 import { siteConfig } from '@/config/site';
 import { getSongs, getVideos } from '@/lib/sanity.queries';
 import { urlFor } from '@/lib/sanity.image';
-import { MusicClient } from './MusicClient';
 import { generateMetadata as generateSEOMetadata, generateKeywords } from '@/lib/seo';
 
 // Force dynamic rendering to prevent build-time API calls
@@ -423,14 +423,14 @@ export default async function MusicPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Link href="/contact">
-                        <Button variant="primary" size="md" className="w-full sm:w-auto hover:scale-105 transition-transform duration-300">
+                        <EnhancedButton variant="primary" size="md" className="w-full sm:w-auto hover:scale-105 transition-transform duration-300">
                           Book the Team
-                        </Button>
+                        </EnhancedButton>
                       </Link>
                       <Link href="/music">
-                        <Button variant="secondary" size="md" className="w-full sm:w-auto hover:scale-105 transition-transform duration-300">
+                        <EnhancedButton variant="secondary" size="md" className="w-full sm:w-auto hover:scale-105 transition-transform duration-300">
                           Listen to Our Music
-                        </Button>
+                        </EnhancedButton>
                       </Link>
                     </div>
                   </div>
@@ -441,165 +441,53 @@ export default async function MusicPage() {
         </div>
       </section>
 
-      {/* Music Videos Section */}
+      {/* Enhanced Music & Video Showcase - Replaces old individual sections */}
       <section className="px-4 sm:px-6 lg:px-8 mb-20">
         <div className="max-w-7xl mx-auto">
-          <AnimatedContainer>
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-                Music Videos
-              </h2>
-              <p className="text-gray-700 dark:text-text-secondary text-lg">
-                Watch official music videos with full production and cinematic storytelling
-              </p>
-            </div>
-          </AnimatedContainer>
-
-          <StaggeredContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {musicVideos.map((video) => (
-              <Card
-                key={video._id}
-                variant="elevated"
-                padding="none"
-                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
-              >
-                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer" className="h-full flex flex-col">
-                  {/* Video Thumbnail - Fixed aspect ratio */}
-                  <div className="aspect-video bg-gradient-to-br from-accent-red/20 to-primary-gold/20 flex items-center justify-center relative overflow-hidden flex-shrink-0">
-                    {video.thumbnail ? (
-                      <Image
-                        src={urlFor(video.thumbnail).width(640).height(360).url()}
-                        alt={video.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <FaPlay className="text-6xl text-accent-red/50 group-hover:scale-110 transition-transform duration-300" />
-                    )}
-                    {video.featured && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-accent-red text-white text-xs font-bold rounded-full z-10 animate-pulse">
-                        FEATURED
-                      </div>
-                    )}
-                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded z-10">
-                      {video.views} views
-                    </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                  </div>
-
-                  {/* Video Info - Flexible content area */}
-                  <div className="p-6 flex-grow flex flex-col">
-                    <div className="flex-grow">
-                      <span className="text-xs text-accent-red font-semibold uppercase tracking-wide">
-                        {video.category}
-                      </span>
-                      <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-accent-red transition-colors duration-300 line-clamp-2">
-                        {video.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-3">
-                        {video.description}
-                      </p>
-                    </div>
-                    
-                    {/* Footer - Always at bottom */}
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <span className="text-xs text-gray-500 dark:text-text-tertiary">
-                        {video.releaseDate}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <SocialShare
-                          url={video.youtubeUrl}
-                          title={`${video.title} - Charles Jasema`}
-                          description={video.description}
-                          variant="compact"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-75"
-                        />
-                        <span className="inline-flex items-center gap-2 text-accent-red hover:text-accent-red/80 text-sm font-semibold group-hover:translate-x-1 transition-transform duration-200">
-                          Watch on YouTube
-                          <FaExternalLinkAlt className="text-xs" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </Card>
-            ))}
-          </StaggeredContainer>
+          <EnhancedMusicShowcase
+            songs={songs.map(song => ({
+              _id: song._id,
+              title: song.title,
+              description: song.description || '',
+              albumArt: song.albumArt,
+              audioUrl: song.audioUrl,
+              youtubeUrl: song.youtubeUrl,
+              mdundoUrl: song.mdundoUrl,
+              spotifyUrl: song.spotifyUrl,
+              releaseDate: song.releaseDate,
+              duration: song.duration,
+              genre: song.genre,
+              featured: song.featured,
+              isNew: song.isNew,
+              lyrics: song.lyrics,
+              tags: song.tags,
+              category: song.category as 'worship' | 'praise' | 'gospel' | 'contemporary' || 'worship',
+              metrics: {
+                views: song.views,
+                likes: song.likes,
+                downloads: song.downloads,
+                streams: song.streams
+              }
+            }))}
+            videos={[...musicVideos, ...lyricalVideos].map(video => ({
+              _id: video._id,
+              title: video.title,
+              description: video.description,
+              thumbnail: video.thumbnail ? urlFor(video.thumbnail).width(640).height(360).url() : undefined,
+              youtubeUrl: video.youtubeUrl,
+              category: video.category,
+              releaseDate: video.releaseDate,
+              views: video.views,
+              featured: video.featured,
+              duration: video.duration,
+              tags: video.tags
+            }))}
+            showCategories={true}
+            showMetrics={true}
+            layout="grid"
+          />
         </div>
-      </section>
-
-      {/* Lyrical Videos Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mb-20 bg-slate-100 dark:bg-slate-900 py-20">
-        <div className="max-w-7xl mx-auto">
-          <AnimatedContainer>
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-                Lyrical Videos
-              </h2>
-              <p className="text-gray-700 dark:text-text-secondary text-lg">
-                Worship along with lyrics on screen - perfect for personal devotion and group worship
-              </p>
-            </div>
-          </AnimatedContainer>
-
-          <StaggeredContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {lyricalVideos.map((video) => (
-              <Card
-                key={video._id}
-                variant="elevated"
-                padding="none"
-                className="overflow-hidden group cursor-pointer hover:scale-105 hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
-              >
-                <a href={video.youtubeUrl} target="_blank" rel="noopener noreferrer" className="h-full flex flex-col">
-                  {/* Video Thumbnail - Fixed aspect ratio */}
-                  <div className="aspect-video bg-gradient-to-br from-primary-gold/20 to-tech-teal/20 flex items-center justify-center relative overflow-hidden flex-shrink-0">
-                    {video.thumbnail ? (
-                      <Image
-                        src={urlFor(video.thumbnail).width(640).height(360).url()}
-                        alt={video.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                      <FaPlay className="text-6xl text-primary-gold/50 group-hover:scale-110 transition-transform duration-300" />
-                    )}
-                    {video.featured && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-primary-gold text-background-dark text-xs font-bold rounded-full z-10 animate-pulse">
-                        FEATURED
-                      </div>
-                    )}
-                    <div className="absolute bottom-4 right-4 px-2 py-1 bg-background-dark/80 text-white text-xs rounded z-10">
-                      {video.views} views
-                    </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                  </div>
-
-                  {/* Video Info - Flexible content area */}
-                  <div className="p-6 flex-grow flex flex-col">
-                    <div className="flex-grow">
-                      <span className="text-xs text-primary-gold font-semibold uppercase tracking-wide">
-                        {video.category}
-                      </span>
-                      <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-white mb-2 mt-1 group-hover:text-primary-gold transition-colors duration-300 line-clamp-2">
-                        {video.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-text-secondary mb-4 line-clamp-3">
-                        {video.description}
-                      </p>
-                    </div>
-                    
-                    {/* Footer - Always at bottom */}
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <span className="text-xs text-gray-500 dark:text-text-tertiary">
-                        {video.releaseDate}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <SocialShare
-                          url={video.youtubeUrl}
-                          title={`${video.title} - Charles Jasema`}
-                          description={video.description}
+      </section>scription={video.description}
                           variant="compact"
                           className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-75"
                         />

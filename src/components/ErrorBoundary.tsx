@@ -2,7 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { FaExclamationTriangle, FaRedo, FaHome, FaBug } from 'react-icons/fa';
-import { Button } from '@/components/ui';
+import { EnhancedButton } from '@/components/ui';
 
 interface Props {
   children: ReactNode;

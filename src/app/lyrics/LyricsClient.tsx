@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FaSearch, FaExternalLinkAlt, FaFilePdf, FaFileAlt, FaYoutube, FaMusic } from 'react-icons/fa';
-import { Button, Card } from '@/components/ui';
+import { EnhancedButton, Card } from '@/components/ui';
 import { clsx } from 'clsx';
 import { trackDownload, trackSearch } from '@/lib/analytics';
 import { generateLyricsPDF, downloadLyricsTXT } from '@/lib/pdf-generator';
@@ -276,9 +276,9 @@ export function LyricsClient({ lyrics }: LyricsClientProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://www.youtube.com/@CharlesJasemaMusic" target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" size="lg" className="w-full sm:w-auto">
+              <EnhancedButton variant="primary" size="lg" className="w-full sm:w-auto">
                 YouTube
-              </Button>
+              </EnhancedButton>
             </a>
             <a href="https://mdundo.com/a/148492" target="_blank" rel="noopener noreferrer">
               <Button variant="secondary" size="lg" className="w-full sm:w-auto">

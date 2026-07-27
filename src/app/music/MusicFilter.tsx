@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FaFilter, FaTimes } from 'react-icons/fa';
-import { Button } from '@/components/ui';
+import { EnhancedButton } from '@/components/ui';
 
 interface MusicFilterProps {
   onFilterChange: (filters: FilterState) => void;
@@ -49,7 +49,7 @@ export function MusicFilter({ onFilterChange, songCount, filteredCount }: MusicF
     <div className="mb-8">
       {/* Filter Toggle Button */}
       <div className="flex items-center justify-between mb-4">
-        <Button
+        <EnhancedButton
           variant="secondary"
           onClick={() => setIsOpen(!isOpen)}
           className="inline-flex items-center gap-2"
