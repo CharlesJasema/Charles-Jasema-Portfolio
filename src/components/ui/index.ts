@@ -1,6 +1,9 @@
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
+export { EnhancedButton, ButtonGroup, FloatingActionButton } from './EnhancedButton';
+export type { EnhancedButtonProps, ButtonGroupProps, FABProps } from './EnhancedButton';
+
 export { Card } from './Card';
 export type { CardProps } from './Card';
 
@@ -23,3 +26,9 @@ export { LoadingSkeleton, LoadingSpinner, LoadingPage } from './LoadingSkeleton'
 export { ErrorMessage, EmptyState } from './ErrorMessage';
 export { AnimatedContainer, StaggeredContainer } from './AnimatedContainer';
 export { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
+
+// Enhanced Dual Identity Design System
+export { BrandProvider, useBrandContext, withBrandContext, brandStyles, brandGradients, getBrandClasses } from './BrandContext';
+export type { BrandMode } from './BrandContext';
+
+export { DualIdentityLogo, BrandModeSwitcher, BrandTransition } from './DualIdentityLogo';

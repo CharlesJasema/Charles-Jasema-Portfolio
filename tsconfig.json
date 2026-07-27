@@ -16,7 +16,6 @@
     "strictNullChecks": false,
     "strictFunctionTypes": false,
     "noImplicitThis": false,
-    "alwaysStrict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitReturns": false,
@@ -28,12 +27,12 @@
     "jsx": "preserve",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ]
     },
+    "ignoreDeprecations": "6.0",
     "plugins": [
       {
         "name": "next"

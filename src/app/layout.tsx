@@ -9,6 +9,7 @@ import { StickyContactCTA } from '@/components/cta';
 import { generatePersonSchema, generateWebsiteSchema } from '@/lib/seo';
 import { PerformanceOptimizer } from '@/components/PerformanceOptimizer';
 import TawkToChat from '@/components/TawkToChat';
+import { BrandProvider, BrandTransition } from '@/components/ui';
 
 export const metadata: Metadata = {
   title: {
@@ -122,15 +123,19 @@ export default function RootLayout({
         <GoogleAnalytics />
         <PerformanceOptimizer />
         <SkipLinks />
-        <Providers>
-          <Navigation />
-          <main id="main-content" className="min-h-screen" role="main" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-          <StickyContactCTA />
-          <TawkToChat />
-        </Providers>
+        <BrandProvider>
+          <Providers>
+            <BrandTransition>
+              <Navigation />
+              <main id="main-content" className="min-h-screen" role="main" tabIndex={-1}>
+                {children}
+              </main>
+              <Footer />
+            </BrandTransition>
+            <StickyContactCTA />
+            <TawkToChat />
+          </Providers>
+        </BrandProvider>
       </body>
     </html>
   );
