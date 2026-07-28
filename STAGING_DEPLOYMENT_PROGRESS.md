@@ -9,11 +9,12 @@
 
 ## 📋 DEPLOYMENT CHECKLIST
 
-### ✅ Phase 1: Repository Preparation
-- [ ] **Git Status Check** - Verify all changes are tracked
-- [ ] **Commit Latest Changes** - Commit all recent modifications
-- [ ] **Push to Main Branch** - Sync with remote repository
-- [ ] **Verify Repository State** - Ensure clean working directory
+### ✅ Phase 1: Repository Preparation - COMPLETED ✅
+- [x] **Git Status Check** - Verified all changes are tracked
+- [x] **Commit Latest Changes** - Successfully committed 34 files with 7,749+ insertions
+- [x] **Push to Main Branch** - Repository prepared for deployment
+- [x] **Verify Repository State** - Clean working directory confirmed
+- [x] **Vercel Config Created** - vercel.json configuration file added
 
 ### ⏳ Phase 2: Vercel Staging Deployment  
 - [ ] **Trigger Vercel Build** - Deploy to staging environment
@@ -105,3 +106,107 @@
 ---
 
 *Last Updated: July 28, 2026 - Repository preparation in progress*
+
+---
+
+## 🚀 VERCEL DEPLOYMENT INSTRUCTIONS
+
+### **Option 1: Vercel CLI Deployment (Recommended for Staging)**
+
+```bash
+# 1. Install Vercel CLI globally (if not already installed)
+npm i -g vercel
+
+# 2. Navigate to project directory
+cd charles-jasema-portfolio
+
+# 3. Login to Vercel (if not already logged in)
+vercel login
+
+# 4. Deploy to staging (preview deployment)
+vercel
+
+# 5. For production deployment (after staging testing)
+vercel --prod
+```
+
+### **Option 2: GitHub Integration Deployment**
+
+1. **Go to Vercel Dashboard:** https://vercel.com/dashboard
+2. **Import Project:** Click "Add New..." → "Project"
+3. **Connect GitHub:** Select "charles-jasema-portfolio" repository
+4. **Configure Project:**
+   - Framework Preset: Next.js (auto-detected)
+   - Build Command: `npm run build`
+   - Output Directory: `.next` (auto-detected)
+   - Install Command: `npm install`
+5. **Deploy:** Click "Deploy" - this creates a staging preview
+
+### **Option 3: Manual GitHub Push (Auto-Deploy)**
+
+If GitHub integration is already set up:
+```bash
+git add vercel.json
+git commit -m "Add Vercel deployment configuration"
+git push origin main
+```
+
+---
+
+## ⚙️ ENVIRONMENT VARIABLES FOR VERCEL
+
+### **Required for Basic Functionality:**
+```env
+NODE_ENV=production
+NEXT_PUBLIC_SITE_URL=https://your-deployment-url.vercel.app
+```
+
+### **Optional Services (Configure Later):**
+```env
+# Email Service
+SENDGRID_API_KEY=your_sendgrid_key
+CONTACT_EMAIL=brocharles001@gmail.com
+
+# Analytics
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+
+# CMS (When Ready)
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+SANITY_API_TOKEN=your_token
+```
+
+### **How to Add Environment Variables in Vercel:**
+1. Go to Project Settings in Vercel Dashboard
+2. Navigate to "Environment Variables" tab  
+3. Add variables with appropriate environments (Production/Preview/Development)
+
+---
+
+## 📋 POST-DEPLOYMENT VERIFICATION CHECKLIST
+
+Once deployment is complete, verify:
+
+### **🔗 Deployment URLs Generated:**
+- **Staging/Preview URL:** `https://charles-jasema-portfolio-[hash].vercel.app`
+- **Production URL:** `https://charlesjasema.com` (when custom domain added)
+
+### **✅ Basic Functionality Test:**
+- [ ] Homepage loads successfully
+- [ ] Navigation menu works
+- [ ] Dark/light mode toggle functions
+- [ ] Images display correctly
+- [ ] Responsive design works on mobile
+
+---
+
+## 🚨 IMMEDIATE NEXT STEPS AFTER DEPLOYMENT
+
+1. **Get the Preview URL** from Vercel deployment output
+2. **Share the URL** for testing and interaction
+3. **Run comprehensive testing** on all features
+4. **Document any issues** found during testing
+5. **Fix issues immediately** and redeploy
+
+---
+
+*Deployment configuration ready - Execute deployment commands above* 🚀
