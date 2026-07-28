@@ -24,17 +24,18 @@ export const contactConfig = {
     {
       id: 'whatsapp',
       icon: 'whatsapp',
-      title: 'WhatsApp',
-      value: '+254 XXX XXX XXX', // Will be overridden by siteConfig
-      description: 'Chat with me on WhatsApp',
+      title: 'WhatsApp Business',
+      value: '+256 785 446 877',
+      description: 'Chat with me on WhatsApp Business',
       color: 'tech-teal',
+      link: 'https://wa.me/256785446877',
     },
     {
       id: 'phone',
       icon: 'phone',
       title: 'Phone',
-      value: '+254 XXX XXX XXX', // Will be overridden by siteConfig
-      description: 'Give me a call',
+      value: '+256 785 446 877',
+      description: 'Call me directly',
       color: 'accent-red',
     },
   ],

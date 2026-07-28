@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
 
         // Email to yourself (admin notification)
         const adminEmail = {
-          to: 'brocharles001@gmail.com',
+          to: process.env.CONTACT_EMAIL || 'brocharles001@gmail.com',
           from: process.env.SENDGRID_FROM_EMAIL || 'noreply@charlesjasema.com',
           replyTo: sanitizedData.email,
           subject: `Portfolio Contact: ${sanitizedData.subject}`,
@@ -305,7 +305,7 @@ Charles Jasema
 Software Engineer | Graphics Designer | Gospel Artist
 
 Website: https://charlesjasema.com
-Email: brocharles001@gmail.com
+Email: ${process.env.CONTACT_EMAIL || 'brocharles001@gmail.com'}
 Phone: +256785446877
           `.trim(),
           html: `
@@ -319,7 +319,7 @@ Phone: +256785446877
               <p>Best regards,<br><strong>Charles Jasema</strong><br>Software Engineer | Graphics Designer | Gospel Artist</p>
               <div style="margin-top: 20px; padding: 16px; background-color: #f3f4f6; border-radius: 8px;">
                 <p style="margin: 4px 0;">🌐 <a href="https://charlesjasema.com" style="color: #2563eb;">charlesjasema.com</a></p>
-                <p style="margin: 4px 0;">📧 <a href="mailto:brocharles001@gmail.com" style="color: #2563eb;">brocharles001@gmail.com</a></p>
+                <p style="margin: 4px 0;">📧 <a href="mailto:${process.env.CONTACT_EMAIL || 'brocharles001@gmail.com'}" style="color: #2563eb;">${process.env.CONTACT_EMAIL || 'brocharles001@gmail.com'}</a></p>
                 <p style="margin: 4px 0;">📱 +256785446877</p>
               </div>
             </div>

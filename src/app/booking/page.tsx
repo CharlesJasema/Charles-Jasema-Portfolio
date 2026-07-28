@@ -211,7 +211,7 @@ export default function BookingPage() {
                     }}
                   >
                     Change Service
-                  </Button>
+                  </EnhancedButton>
                 </div>
               </div>
 

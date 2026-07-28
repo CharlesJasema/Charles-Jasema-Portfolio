@@ -65,6 +65,32 @@ export const inputValidation = {
   },
 
   /**
+   * Validate phone number format (more comprehensive)
+   */
+  isValidPhoneNumber: (phone: string): boolean => {
+    // Remove all non-digit characters for validation
+    const cleaned = phone.replace(/\D/g, '');
+    
+    // Check basic length requirements (7-15 digits)
+    if (cleaned.length < 7 || cleaned.length > 15) {
+      return false;
+    }
+    
+    // Additional validation for common formats
+    const phonePatterns = [
+      /^\+?1?[2-9]\d{2}[2-9]\d{2}\d{4}$/, // US/Canada format
+      /^\+?44[1-9]\d{8,9}$/, // UK format
+      /^\+?256[7-9]\d{8}$/, // Uganda format (Charles' country)
+      /^\+?254[7-9]\d{8}$/, // Kenya format
+      /^\+?233[2-9]\d{8}$/, // Ghana format
+      /^\+?234[7-9]\d{9}$/, // Nigeria format
+      /^\+?\d{7,15}$/, // Generic international format
+    ];
+    
+    return phonePatterns.some(pattern => pattern.test(phone.replace(/[\s\-\(\)]/g, '')));
+  },
+
+  /**
    * Check for SQL injection patterns
    */
   containsSqlInjection: (input: string): boolean => {

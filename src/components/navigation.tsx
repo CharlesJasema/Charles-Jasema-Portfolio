@@ -19,6 +19,8 @@ const navItems: NavItem[] = [
   { label: 'Music', href: '/music' },
   { label: 'Lyrics', href: '/lyrics' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Downloads', href: '/downloads' },
+  { label: 'Chat', href: '/chat' },
   { label: 'Support', href: '/support' },
   { label: 'Contact', href: '/contact' },
   { label: 'Booking', href: '/booking' },
