@@ -487,40 +487,6 @@ export default async function MusicPage() {
             layout="grid"
           />
         </div>
-      </section>scription={video.description}
-                          variant="compact"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-75"
-                        />
-                        <span className="inline-flex items-center gap-2 text-primary-gold hover:text-primary-gold/80 text-sm font-semibold group-hover:translate-x-1 transition-transform duration-200">
-                          Watch on YouTube
-                          <FaExternalLinkAlt className="text-xs" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </Card>
-            ))}
-          </StaggeredContainer>
-        </div>
-      </section>
-
-      {/* Audio Songs Section */}
-      <section className="px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="max-w-7xl mx-auto">
-          <AnimatedContainer>
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-                Audio Songs
-              </h2>
-              <p className="text-gray-700 dark:text-text-secondary text-lg">
-                Listen to all {songs.length} singles with stories, recording details, and streaming links
-              </p>
-            </div>
-          </AnimatedContainer>
-
-          <MusicClient songs={songs} />
-        </div>
       </section>
 
       {/* Streaming Platforms */}

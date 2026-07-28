@@ -378,7 +378,7 @@ export default function BookingPage() {
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? bookingConfig.form.submitButton.loadingText : bookingConfig.form.submitButton.text}
-                </Button>
+                </EnhancedButton>
               </form>
             </Card>
           </div>

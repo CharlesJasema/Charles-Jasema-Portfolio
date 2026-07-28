@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { EnhancedButton } from '@/components/ui/EnhancedButton';
 import { EnhancedButton, AnimatedContainer } from '@/components/ui';
 import { AboutPageCTAs } from '@/components/cta';
 import { FaCode, FaPalette, FaMusic, FaVideo, FaGraduationCap, FaBriefcase, FaDownload, FaHeart, FaBook } from 'react-icons/fa';
@@ -141,9 +142,9 @@ export default async function AboutPage() {
                 
                 <div className="flex flex-wrap gap-4">
                   <Link href="/contact">
-                    <Button variant="primary" size="lg">
+                    <EnhancedButton variant="primary" size="lg">
                       Get In Touch
-                    </Button>
+                    </EnhancedButton>
                   </Link>
                   {personalInfo.cvDownloadUrl && (
                     <a 
@@ -151,10 +152,10 @@ export default async function AboutPage() {
                       download="Charles-Jasema-CV.pdf"
                       className="inline-block"
                     >
-                      <Button variant="secondary" size="lg">
+                      <EnhancedButton variant="secondary" size="lg">
                         <FaDownload className="mr-2" />
                         Download CV
-                      </Button>
+                      </EnhancedButton>
                     </a>
                   )}
                 </div>
