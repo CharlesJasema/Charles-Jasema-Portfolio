@@ -1,0 +1,103 @@
+CHARLES JADA SEBIT EMMANUEL
+
+TC #333373
+
+Software Engineer | Full-Stack Developer | IT Support Specialist | Graphics Designer
+
+PROFESSIONAL SUMMARY
+Purpose-driven professional with 4+ years of experience in project coordination, IT support, and technical solution delivery. Skilled in managing project lifecycles, preparing proposals, and engaging stakeholders. Experienced in customer training, troubleshooting, and translating complex requirements into practical solutions. Adept at delivering both technical and humanitarian projects with measurable impact.
+
+PROFESSIONAL SKILLS
+• Project Management: Agile/Scrum, Risk Management, Proposal Writing, Stakeholder Communication, MS Project, Trello, Jira.
+• Technical Support: Pre-sales demos, Customer Training, Troubleshooting Siemens solutions (PLCs, SCADA, IoT basics).
+• Documentation: Project reporting, case studies, technical manuals.
+• Technical Skills: React, Node.js, Django, PostgreSQL, Docker, Git/GitHub, CI/CD, HTML, CSS, JavaScript (ES6+), Python
+• Design & Media: Adobe Photoshop, Illustrator, CorelDRAW, Branding, Videography, Digital Content Creation
+• IT & Support: Hardware/software troubleshooting, network setup, system maintenance, digital literacy training
+• Soft Skills: Leadership, communication, teamwork, mentorship, problem-solving
+
+EDUCATION
+• Diploma in Theology — 2022 – 2026
+  Global Theological Seminary, Jinja – Uganda
+• Certificate in Software Engineering (JavaScript) — 2025 – 2026
+  Refactory Academy, Kampala – Uganda
+• Certificate in Computer Applications User — 2024
+  Purenita Vocational Skills Center, Koboko – Uganda
+• Uganda Advanced Certificate of Education (UACE) — 2019 – 2020
+  Standard High School, Zzana, Kampala – Uganda
+
+PROFESSIONAL EXPERIENCE
+Graphics Designer | Authentic Impressions Graphics Ltd, Uganda | June 2025 – Feb 2026
+• Designed high-quality branding materials including logos, posters, flyers, banners, and social media content
+• Developed consistent visual identities for clients across multiple industries
+• Translated client ideas into professional, market-ready design concepts
+• Prepared print-ready files and coordinated with printing teams for production accuracy
+• Improved brand engagement through creative and modern design solutions
+
+IT Officer & Computer Literacy Facilitator | Agape Heart International Organization | March 2022 – October 2024
+• Provided technical support for hardware, software, and network systems within the organization
+• Installed and configured operating systems, applications, and office productivity tools
+• Conducted computer literacy training sessions for youth and community members
+• Developed beginner-friendly ICT training materials and guides
+• Supported digital inclusion initiatives for refugees and host communities
+• Maintained IT equipment and ensured system uptime and reliability
+
+Project Officer | Agape Heart International Organization | April 2022 – December 2023
+• Coordinated project planning, implementation, and monitoring for community ICT initiatives.
+• Supported proposal writing and documentation for new projects.
+• Conducted regular field visits, ensuring smooth implementation and timely reporting.
+• Delivered ICT training workshops, building digital literacy among refugees and host communities.
+• Provided IT support, troubleshooting hardware/software issues, and maintaining system uptime.
+
+CORE PROJECTS
+Karibu Groceries Co. Ltd – E-commerce & Inventory System
+Tech: React, Node.js, PostgreSQL, Docker, CI/CD
+GitHub: https://github.com/CharlesJasema/Karibu-Groceries-Ltd-Uganda.git
+• Built a scalable inventory and sales management system with role-based access
+• Developed responsive UI for improved user experience and business efficiency
+
+Portfolio Website – Personal Brand Platform
+Tech: HTML, CSS, JavaScript
+GitHub: https://github.com/CharlesJasema/Charles-Jasema-Portfolio.git
+• Designed and developed a responsive personal portfolio website
+• Showcased technical and design skills for professional visibility
+
+Cam Connect Mobile App
+Tech: JavaScript, Mobile Development Tools
+GitHub: https://github.com/CharlesJasema/CAM-CONNECT-MOBILE-APP.git
+• Developed a communication and collaboration mobile application
+• Improved digital connectivity and user interaction features
+
+Project Redwood (Life skills Training for Refugees and Host Communities) at Agape Heart International Organization (AHIO) - Koboko
+• Led end-to-end development of scalable applications, including planning, execution, and monitoring.
+• Applied structured project management practices to deliver solutions on time and within scope.
+
+ACHIEVEMENTS
+• Coordinated ICT and branding projects with successful stakeholder engagement.
+• Delivered technical training workshops and solution demos.
+• Developed production-ready full-stack applications with real-world impact.
+• Strengthened organizational visibility through proposal writing and reporting.
+
+CERTIFICATIONS & TRAININGS
+• Microsoft Cloud Infrastructure (Azure Fundamentals – AZ-104 Preparation), 2026
+• ISTQB Foundation Level (in progress), 2026
+• Agile/Scrum or PMP (planned), 2026
+• Graphics Design & Printery Services, Authentic Impressions & Graphics Ltd, 2025
+• NGO Start-Up, Management & Fundraising, YILED, 2023
+
+LANGUAGES
+• English – Fluent
+• Arabic – Conversational
+• Italian – Basic
+• French – Basic
+
+INTERESTS
+Gospel music & worship leadership | Videography & storytelling | Community ICT empowerment
+
+CONTACT INFORMATION
+Email: brocharles001@gmail.com
+Phone: +256785446877
+WhatsApp: +256785446877
+Location: Kampala, Uganda
+LinkedIn: https://www.linkedin.com/in/charles-jada-sebit-emmanuel
+GitHub: https://github.com/charlesjasema

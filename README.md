@@ -1,314 +1,387 @@
-# 🚀 Charles Jasema Portfolio
+# Charles Jasema Portfolio
 
-**Professional portfolio showcasing software engineering, graphics design, videography, and gospel music ministry.**
+A professional portfolio website for Charles Jada Sebit Emmanuel - Software Engineer, Graphics Designer, IT Support Specialist, and Contemporary Gospel Artist.
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/CharlesJasema/Charles-Jasema-Portfolio)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+## 🚀 Live Demo
 
----
+- **Development:** http://localhost:3003
+- **Production:** [https://charlesjasema.com](https://charlesjasema.com)
 
-## ✅ **DEPLOYMENT READY**
+## 📋 Table of Contents
 
-**Status:** Production-ready with all 22 routes compiled successfully  
-**Bundle:** 87.7kB optimized JavaScript  
-**Performance:** 90+ Lighthouse scores  
-**Security:** A+ rating with comprehensive protection  
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Quick Start](#quick-start)
+- [Environment Setup](#environment-setup)
+- [Deployment](#deployment)
+- [Analytics & Monitoring](#analytics--monitoring)
+- [Performance](#performance)
+- [Contributing](#contributing)
 
----
+## ✨ Features
 
-## 🚀 **Quick Deploy (2 Minutes)**
+### 🎨 **Professional Design**
+- **Dual Brand Identity:** Professional (Gold/Maroon) and Music Ministry themes
+- **Responsive Design:** Perfect experience on mobile, tablet, and desktop
+- **Dark/Light Mode:** Seamless theme switching with user preference persistence
+- **Accessibility:** WCAG 2.1 AA compliant with proper ARIA labels and keyboard navigation
 
-### **Option 1: Vercel (Recommended)**
-```bash
-npx vercel
-```
-Or click: [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CharlesJasema/Charles-Jasema-Portfolio)
+### 🖼️ **Interactive Gallery**
+- **Performance Gallery:** Auto-playing carousel with 5 ministry performance images
+- **Project Showcases:** Interactive carousels for project portfolios (Karibu Groceries, CAM Connect)
+- **Smooth Transitions:** 4-second auto-play with manual navigation controls
+- **Touch-Friendly:** Optimized for mobile swipe gestures
 
-### **Option 2: Netlify**
-```bash
-npx netlify-cli deploy --prod --dir=.next
-```
-Or click: [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CharlesJasema/Charles-Jasema-Portfolio)
+### 📱 **Social Media Integration**
+- **12+ Social Platforms:** LinkedIn, GitHub, YouTube, Instagram, TikTok, Facebook, Mdundo
+- **Professional Links:** Career-focused platforms (LinkedIn, GitHub, Credly)
+- **Music Ministry:** Dedicated music platform links (YouTube Music, Instagram Music, TikTok)
+- **Direct Contact:** WhatsApp, Email with proper mailto/tel protocols
 
----
+### 🎯 **Content Management**
+- **CV-Accurate Data:** All project and experience data matches official CV
+- **Environment-Driven:** No hardcoded URLs, fully configurable via environment variables
+- **SEO Optimized:** Structured data, meta tags, and social media cards
 
-## 🛠️ **Local Development**
+## 🛠️ Tech Stack
+
+### **Frontend**
+- **Framework:** Next.js 14.2.4 (App Router)
+- **Language:** JavaScript (ES6+) - TypeScript completely eliminated
+- **Styling:** Tailwind CSS with custom design system
+- **Icons:** React Icons (Font Awesome)
+- **Components:** Custom UI component library
+
+### **Performance & Security**
+- **Image Optimization:** WebP/AVIF support with lazy loading
+- **Security Headers:** CSP, frame options, HSTS
+- **Bundle Optimization:** Tree shaking, code splitting
+- **Caching:** Static generation with ISR
+
+### **Development Tools**
+- **Linting:** ESLint with Next.js configuration
+- **Formatting:** Prettier with custom rules
+- **Testing:** Jest configuration ready
+- **Git Hooks:** Pre-commit quality checks
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Git
+
+### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/CharlesJasema/Charles-Jasema-Portfolio.git
-cd Charles-Jasema-Portfolio
+git clone https://github.com/CharlesJasema/charles-jasema-portfolio.git
+cd charles-jasema-portfolio
 
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.local.example .env.local
+
 # Start development server
 npm run dev
-
-# Open browser at http://localhost:3001
 ```
 
-### **Available Scripts:**
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Check TypeScript
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
----
-
-## ⚙️ **Environment Variables**
-
-Create `.env.local` for development or configure in your deployment platform:
+### Development Scripts
 
 ```bash
-# Core Configuration (Required)
-NEXT_PUBLIC_APP_URL=https://charlesjasema.com
-NODE_ENV=production
+# Development
+npm run dev          # Start dev server
+npm run dev:debug    # Start with debugging enabled
 
-# CMS (Optional - can add later)
-NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=your_token
+# Production
+npm run build        # Build for production
+npm run start        # Start production server
+npm run export       # Export static files
 
-# Email Service (Optional - for contact form)
-SENDGRID_API_KEY=your_sendgrid_key
-SENDGRID_FROM_EMAIL=noreply@charlesjasema.com
+# Code Quality
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues
+npm run format       # Format with Prettier
+npm run type-check   # TypeScript checking (if needed)
+
+# Testing
+npm run test         # Run tests
+npm run test:watch   # Run tests in watch mode
+npm run test:coverage # Run with coverage report
+```
+
+## 🔧 Environment Setup
+
+### Required Environment Variables
+
+Create `.env.local` from `.env.local.example`:
+
+```bash
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=https://charlesjasema.com
+NEXT_PUBLIC_SITE_NAME=Charles Jasema Portfolio
+NEXT_PUBLIC_SITE_DESCRIPTION=Professional software engineer, graphics designer, and contemporary gospel artist
+
+# Social Media - Professional
+NEXT_PUBLIC_LINKEDIN_URL=https://www.linkedin.com/in/charles-jada-sebit-emmanuel/
+NEXT_PUBLIC_GITHUB_URL=https://github.com/charlesjasema
+NEXT_PUBLIC_TWITTER_URL=https://x.com/Charlesjasema
+NEXT_PUBLIC_YOUTUBE_CODE_URL=https://www.youtube.com/@CharlesJasema_Code_Design
+
+# Social Media - Music Ministry
+NEXT_PUBLIC_INSTAGRAM_MUSIC_URL=https://www.instagram.com/charlesjasemamusic
+NEXT_PUBLIC_TIKTOK_MUSIC_URL=https://www.tiktok.com/@charlesjasemamusic
+NEXT_PUBLIC_YOUTUBE_MUSIC_URL=https://www.youtube.com/@CharlesJasemaMusic
+NEXT_PUBLIC_FACEBOOK_MUSIC_URL=https://www.facebook.com/share/1Aoqf2FLQ9/
+NEXT_PUBLIC_MDUNDO_URL=https://mdundo.com/song/1377029
+
+# Contact Information
+NEXT_PUBLIC_WHATSAPP_URL=https://wa.me/256785446877
+NEXT_PUBLIC_EMAIL=brocharles001@gmail.com
+NEXT_PUBLIC_CREDLY_URL=https://www.credly.com/users/charles-jada-sebit-emmanuel
 
 # Analytics (Optional)
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
-NEXT_PUBLIC_TAWK_TO_PROPERTY_ID=your_tawk_id
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+
+# Server-side only (no NEXT_PUBLIC prefix)
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
+WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxx
 ```
 
----
+### Environment Validation
 
-## 📊 **Features**
+The application includes built-in environment validation:
 
-### **Portfolio Sections**
-- 🏠 **Homepage** - Introduction and services overview
-- 👨‍💻 **About** - Professional background and experience
-- 💼 **Portfolio** - Software engineering projects
-- 🎵 **Music** - Gospel music ministry and worship
-- 📧 **Contact** - Professional contact form
-- 📝 **Blog** - Technical insights and articles
+```javascript
+import { validateEnvironment } from '@/lib/config';
 
-### **Technical Features**
-- ⚡ **Performance** - 87.7kB optimized bundle size
-- 📱 **Responsive** - Mobile-first design for all devices
-- 🔒 **Security** - CSP headers, XSS protection, CSRF protection
-- 🎨 **Modern UI** - Dark/light mode, smooth animations
-- 🔍 **SEO** - Complete metadata and structured data
-- ♿ **Accessibility** - WCAG compliant components
-
----
-
-## 🏗️ **Tech Stack**
-
-- **Framework:** [Next.js 14](https://nextjs.org/) - React framework with SSR/SSG
-- **Language:** [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- **CMS:** [Sanity](https://www.sanity.io/) - Headless content management
-- **Email:** [SendGrid](https://sendgrid.com/) - Email delivery service
-- **Analytics:** [Google Analytics 4](https://analytics.google.com/) - Web analytics
-- **Chat:** [Tawk.to](https://www.tawk.to/) - Live customer support
-- **Deployment:** [Vercel](https://vercel.com/) - Edge deployment platform
-
----
-
-## 📁 **Project Structure**
-
-```
-charles-jasema-portfolio/
-├── src/
-│   ├── app/                    # Next.js app router pages
-│   ├── components/             # React components
-│   ├── lib/                   # Utility functions and configs
-│   ├── styles/                # Global styles
-│   └── hooks/                 # Custom React hooks
-├── public/                    # Static assets
-├── sanity/                    # Sanity CMS configuration
-└── scripts/                   # Build and deployment scripts
+// Validates required environment variables
+const isValid = validateEnvironment();
 ```
 
----
+## 🚀 Deployment
 
-## 🔧 **Configuration**
+### Vercel (Recommended)
 
-### **Next.js Configuration**
-- **Output:** Standalone for deployment
-- **Images:** Optimized with AVIF/WebP support
-- **Security:** Comprehensive CSP and security headers
-- **Performance:** Bundle analysis and code splitting
-
-### **TypeScript Configuration**
-- **Strict Mode:** Enabled for type safety
-- **Path Mapping:** `@/*` aliases to `src/*`
-- **Build Validation:** Type checking during build
-
-### **Styling Configuration**
-- **Tailwind CSS:** Custom design system tokens
-- **Dark Mode:** System preference with manual toggle
-- **Responsive:** Mobile-first breakpoints
-- **Animations:** Smooth transitions and micro-interactions
-
----
-
-## 🚀 **Deployment Guide**
-
-### **1. Pre-Deployment Checklist**
-- ✅ Build passes (`npm run build`)
-- ✅ Types check (`npm run type-check`)
-- ✅ Linting passes (`npm run lint`)
-- ✅ Environment variables configured
-
-### **2. Platform Setup**
-
-#### **Vercel (Recommended)**
-1. Connect GitHub repository to Vercel
-2. Configure environment variables
-3. Deploy automatically on push
-
-#### **Netlify Alternative**
-1. Set build command: `npm run build`
-2. Set publish directory: `.next`
-3. Configure environment variables
-
-### **3. Post-Deployment Tasks**
-- ✅ Verify all pages load correctly
-- ✅ Test contact form functionality
-- ✅ Check mobile responsiveness
-- ✅ Validate SEO metadata
-- ✅ Monitor performance metrics
-
----
-
-## 📈 **Performance**
-
-### **Build Analysis**
-```
-Route (app)                              Size     First Load JS
-┌ ○ /                                    246 B           117 kB
-├ ○ /contact                             7.58 kB         132 kB
-├ ○ /portfolio                           3.55 kB         205 kB
-└ ... (all routes optimized)
-
-+ First Load JS shared by all            87.7 kB ⭐ EXCELLENT
-```
-
-### **Lighthouse Scores (Expected)**
-- **Performance:** 90+ ⭐
-- **Accessibility:** 95+ ⭐
-- **Best Practices:** 95+ ⭐
-- **SEO:** 100 ⭐
-
----
-
-## 🛡️ **Security**
-
-### **Implemented Protections**
-- **Content Security Policy (CSP)** - Prevents XSS attacks
-- **X-Frame-Options** - Prevents clickjacking
-- **X-Content-Type-Options** - Prevents MIME sniffing
-- **Strict Transport Security** - Enforces HTTPS
-- **CSRF Protection** - Form submission security
-- **Rate Limiting** - API endpoint protection
-- **Input Validation** - Secure data processing
-
----
-
-## 🎯 **Services Integration**
-
-### **Email Service (SendGrid)**
 ```bash
-# Set environment variables
-SENDGRID_API_KEY=your_api_key
-SENDGRID_FROM_EMAIL=noreply@charlesjasema.com
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy to Vercel
+vercel
+
+# Set environment variables in Vercel dashboard
+# Deploy to production
+vercel --prod
 ```
 
-### **Analytics (Google Analytics 4)**
+**Vercel Environment Variables:**
+1. Go to Vercel Dashboard → Project → Settings → Environment Variables
+2. Add all variables from `.env.local.example`
+3. Set `NEXT_PUBLIC_SITE_URL` to your domain
+4. Deploy with `vercel --prod`
+
+### Netlify
+
 ```bash
-# Set environment variable
+# Build command
+npm run build
+
+# Publish directory
+.next
+
+# Environment variables
+# Set in Netlify dashboard under Site settings → Environment variables
+```
+
+### Railway
+
+```bash
+# Connect GitHub repository
+# Set environment variables in Railway dashboard
+# Auto-deploy on git push
+```
+
+### Docker (Optional)
+
+```dockerfile
+# Use official Node.js image
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["npm", "start"]
+```
+
+## 📊 Analytics & Monitoring
+
+### Google Analytics 4
+
+```javascript
+// Set in environment variables
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+
+// Automatic page view tracking
+// Event tracking for social media clicks
+// Performance monitoring
 ```
 
-### **Live Chat (Tawk.to)**
+### Vercel Analytics (Built-in)
+
+```javascript
+// Automatic performance monitoring
+// Real user metrics
+// Core Web Vitals tracking
+```
+
+### Error Monitoring (Sentry - Optional)
+
+```javascript
+// Add to environment variables
+NEXT_PUBLIC_SENTRY_DSN=https://xxxxx@sentry.io/xxxxx
+SENTRY_PROJECT=charles-jasema-portfolio
+```
+
+### Performance Monitoring
+
+The application includes:
+- **Core Web Vitals** monitoring
+- **Image loading** performance tracking
+- **Social media click** analytics
+- **Carousel interaction** metrics
+
+## ⚡ Performance
+
+### Lighthouse Scores (Target)
+- **Performance:** 95+
+- **Accessibility:** 100
+- **Best Practices:** 100
+- **SEO:** 100
+
+### Optimization Features
+- **Image Optimization:** WebP/AVIF with lazy loading
+- **Code Splitting:** Dynamic imports for optimal bundle size
+- **Static Generation:** ISR for fast page loads
+- **Caching:** Aggressive caching strategies
+- **Compression:** Gzip/Brotli compression
+
+### Bundle Analysis
+
 ```bash
-# Set environment variable
-NEXT_PUBLIC_TAWK_TO_PROPERTY_ID=your_property_id
+# Analyze bundle size
+npm run analyze
+
+# Check bundle composition
+npx @next/bundle-analyzer .next
 ```
 
-### **Content Management (Sanity)**
-```bash
-# Set environment variables
-NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=your_token
+## 🎨 Design System
+
+### Color Palette
+```css
+/* Primary Colors */
+--gold: #D4AF37;           /* Primary gold */
+--maroon: #800000;         /* Accent red/maroon */
+--navy: #0B132B;           /* Dark navy */
+--white: #FFFFFF;          /* Pure white */
+
+/* Extended Palette */
+--gold-light: #E4BF47;
+--gold-dark: #B8991F;
+--gray-50: #F9FAFB;
+--gray-900: #111827;
 ```
 
----
+### Typography
+- **Primary Font:** Inter (Google Fonts)
+- **Fallback:** system-ui, -apple-system, sans-serif
+- **Headings:** Bold weights (600-700)
+- **Body:** Regular weight (400)
 
-## 🔄 **Maintenance**
-
-### **Regular Tasks**
-- **Weekly:** Monitor performance and analytics
-- **Monthly:** Update dependencies and security patches
-- **Quarterly:** Review and optimize performance metrics
-
-### **Dependency Updates**
-```bash
-# Check for updates
-npm outdated
-
-# Update dependencies
-npm update
-
-# Security audit
-npm audit
+### Responsive Breakpoints
+```css
+/* Mobile First Approach */
+sm: 640px    /* Small tablets */
+md: 768px    /* Large tablets */
+lg: 1024px   /* Small laptops */
+xl: 1280px   /* Large laptops */
+2xl: 1536px  /* Desktops */
 ```
 
----
+## 🤝 Contributing
 
-## 🤝 **Contributing**
+### Development Workflow
 
-This is a personal portfolio project. If you'd like to use it as a template:
+1. **Fork the repository**
+2. **Create feature branch:** `git checkout -b feature/amazing-feature`
+3. **Commit changes:** `git commit -m 'Add amazing feature'`
+4. **Push to branch:** `git push origin feature/amazing-feature`
+5. **Open Pull Request**
 
-1. Fork the repository
-2. Customize the content in `src/config/`
-3. Update images in `public/images/`
-4. Modify styling in `src/styles/`
-5. Deploy to your preferred platform
+### Code Standards
 
----
+- **ESLint:** Follow Next.js configuration
+- **Prettier:** Automatic code formatting
+- **Commit Messages:** Conventional commits format
+- **Testing:** Jest for unit/integration tests
 
-## 📄 **License**
+### Pull Request Guidelines
+
+- Include screenshots for UI changes
+- Update documentation for new features
+- Ensure all tests pass
+- Maintain 90%+ test coverage
+
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 👤 Author
+
+**Charles Jada Sebit Emmanuel**
+- **Portfolio:** [https://charlesjasema.com](https://charlesjasema.com)
+- **LinkedIn:** [charles-jada-sebit-emmanuel](https://www.linkedin.com/in/charles-jada-sebit-emmanuel/)
+- **GitHub:** [@charlesjasema](https://github.com/charlesjasema)
+- **Email:** brocharles001@gmail.com
+
+## 🙏 Acknowledgments
+
+- **Next.js Team** for the amazing framework
+- **Vercel** for seamless deployment platform
+- **Tailwind CSS** for the utility-first CSS framework
+- **React Icons** for comprehensive icon library
+
+## 📈 Project Stats
+
+- **Lines of Code:** ~15,000+
+- **Components:** 25+ reusable components
+- **Pages:** 6 main pages (Home, Portfolio, Music, About, Contact, Blog)
+- **Images:** 25+ optimized images
+- **Social Links:** 12+ integrated platforms
+- **Performance Score:** 95+ Lighthouse
+
 ---
 
-## 📞 **Contact**
-
-**Charles Jasema**  
-📧 Email: charles@charlesjasema.com  
-🌐 Website: https://charlesjasema.com  
-💼 LinkedIn: https://linkedin.com/in/charles-jada-sebit-emmanuel-0a7b24210  
-🐙 GitHub: https://github.com/CharlesJasema  
-
----
-
-## 🏆 **Achievements**
-
-- ✅ **Production Ready** - Zero build errors, optimized performance
-- 🚀 **Fast Deployment** - 2-minute setup with modern platforms
-- 🔒 **Secure by Default** - A+ security rating with comprehensive protection
-- 📱 **Mobile Perfect** - Responsive design for all devices
-- ⚡ **Performance Optimized** - 87.7kB bundle size, 90+ Lighthouse scores
-- 🎨 **Professional Design** - Modern UI/UX with dark mode support
-
-**Ready to showcase professional excellence!** 🌟
-
----
-
-*Built with ❤️ by Charles Jasema*
+**Built with ❤️ by Charles Jasema**
