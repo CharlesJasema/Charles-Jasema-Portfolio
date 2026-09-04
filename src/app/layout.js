@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import { Providers } from '@/components/providers';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
-import { AnalyticsProvider } from '@/components/AnalyticsProvider';
+import { StructuredData } from '@/components/StructuredData';
 
 export const metadata = {
   title: {
@@ -53,12 +53,21 @@ export const metadata = {
     title: 'Charles Jasema - Software Engineer & Gospel Artist',
     description: 'Professional software engineer, graphics designer, and gospel artist. Building technology solutions and spreading hope through music.',
     siteName: 'Charles Jasema Portfolio',
+    images: [
+      {
+        url: 'https://charlesjasema.com/images/professional/charles-jasema-professional.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Charles Jasema - Software Engineer & Gospel Artist',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Charles Jasema - Software Engineer & Gospel Artist',
     description: 'Professional software engineer, graphics designer, and gospel artist. Building technology solutions and spreading hope through music.',
     creator: '@charlesjasema',
+    images: ['https://charlesjasema.com/images/professional/charles-jasema-professional.jpg'],
   },
   robots: {
     index: true,
@@ -88,15 +97,14 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans">
-        <AnalyticsProvider>
-          <Providers>
-            <Navigation />
-            <main id="main-content" className="min-h-screen" role="main">
-              {children}
-            </main>
-            <Footer />
-          </Providers>
-        </AnalyticsProvider>
+        <StructuredData />
+        <Providers>
+          <Navigation />
+          <main id="main-content" className="min-h-screen" role="main">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

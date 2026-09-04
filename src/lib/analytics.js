@@ -98,28 +98,34 @@ export const trackContactForm = (method) => {
 export const trackPerformance = () => {
   if (!isAnalyticsEnabled() || typeof window === 'undefined') return;
 
-  // Track Core Web Vitals
-  import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-    getCLS(({ value }) => {
-      trackEvent('web_vitals', 'Performance', 'CLS', Math.round(value * 1000));
+  // Track Core Web Vitals - with error handling
+  try {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(({ value }) => {
+        trackEvent('web_vitals', 'Performance', 'CLS', Math.round(value * 1000));
+      });
+      
+      getFID(({ value }) => {
+        trackEvent('web_vitals', 'Performance', 'FID', Math.round(value));
+      });
+      
+      getFCP(({ value }) => {
+        trackEvent('web_vitals', 'Performance', 'FCP', Math.round(value));
+      });
+      
+      getLCP(({ value }) => {
+        trackEvent('web_vitals', 'Performance', 'LCP', Math.round(value));
+      });
+      
+      getTTFB(({ value }) => {
+        trackEvent('web_vitals', 'Performance', 'TTFB', Math.round(value));
+      });
+    }).catch(error => {
+      console.warn('Web Vitals not available:', error);
     });
-    
-    getFID(({ value }) => {
-      trackEvent('web_vitals', 'Performance', 'FID', Math.round(value));
-    });
-    
-    getFCP(({ value }) => {
-      trackEvent('web_vitals', 'Performance', 'FCP', Math.round(value));
-    });
-    
-    getLCP(({ value }) => {
-      trackEvent('web_vitals', 'Performance', 'LCP', Math.round(value));
-    });
-    
-    getTTFB(({ value }) => {
-      trackEvent('web_vitals', 'Performance', 'TTFB', Math.round(value));
-    });
-  });
+  } catch (error) {
+    console.warn('Performance tracking disabled:', error);
+  }
 };
 
 // Carousel interaction tracking
