@@ -130,6 +130,6 @@ export const contactConfig = {
       },
     ],
   },
-} as const;
+};
 
-export type ContactConfig = typeof contactConfig;
+export default contactConfig;

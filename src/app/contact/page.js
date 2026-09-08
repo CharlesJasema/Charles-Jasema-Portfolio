@@ -45,15 +45,18 @@ export default function ContactPage() {
   const [validationErrors, setValidationErrors] = useState([]);
 
   const serviceOptions = [
-    { value: '', label: 'Select a service...' },
-    { value: 'web-app-development', label: 'Web/App Development' },
-    { value: 'graphics-design', label: 'Graphics Design & Branding' },
-    { value: 'videography', label: 'Videography & Video Production' },
-    { value: 'it-support', label: 'IT Support & Consultation' },
-    { value: 'music-ministry', label: 'Music Ministry & Performance' },
-    { value: 'project-management', label: 'Project Management' },
-    { value: 'digital-literacy-training', label: 'Digital Literacy Training' },
-    { value: 'other', label: 'Other Services' },
+    { value: '', label: 'Select a service...', disabled: true },
+    { value: 'web-development', label: '💻 Web Development' },
+    { value: 'mobile-app-development', label: '📱 Mobile App Development' },
+    { value: 'graphics-design', label: '🎨 Graphics Design & Branding' },
+    { value: 'videography', label: '🎥 Videography & Video Production' },
+    { value: 'it-support', label: '🔧 IT Support & Consultation' },
+    { value: 'music-ministry', label: '🎵 Music Ministry & Performance' },
+    { value: 'project-management', label: '📊 Project Management' },
+    { value: 'digital-literacy-training', label: '🎓 Digital Literacy Training' },
+    { value: 'collaboration', label: '🤝 Partnership & Collaboration' },
+    { value: 'consultation', label: '💡 Technical Consultation' },
+    { value: 'other', label: '📋 Other Services' },
   ];
 
   const validateForm = () => {
@@ -241,10 +244,15 @@ export default function ContactPage() {
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  options={serviceOptions}
                   required
                   className="w-full"
-                />
+                >
+                  {serviceOptions.map((option, index) => (
+                    <option key={index} value={option.value} disabled={option.disabled}>
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
 
                 <TextArea
                   label="Message *"

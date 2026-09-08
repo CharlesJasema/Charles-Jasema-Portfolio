@@ -218,6 +218,6 @@ At the heart of my mission is a simple truth: to combine technology, creativity,
       link: '/contact',
     },
   },
-} as const;
+};
 
-export type AboutConfig = typeof aboutConfig;
+export default aboutConfig;

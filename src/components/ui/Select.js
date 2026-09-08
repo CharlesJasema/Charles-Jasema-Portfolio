@@ -39,11 +39,6 @@ export const Select = forwardRef(function Select({
         }}
         {...props}
       >
-        {placeholder && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
         {children}
       </select>
     </div>
