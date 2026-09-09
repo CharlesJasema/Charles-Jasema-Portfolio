@@ -34,9 +34,9 @@ export const socialLinks = {
 
 // Project Repository URLs
 export const projectUrls = {
-  karibuGroceries: process.env.NEXT_PUBLIC_KARIBU_GITHUB || 'https://github.com/CharlesJasema/Karibu-Groceries-Ltd-Uganda.git',
-  camConnect: process.env.NEXT_PUBLIC_CAM_CONNECT_GITHUB || 'https://github.com/CharlesJasema/CAM-CONNECT-MOBILE-APP.git',
-  portfolio: process.env.NEXT_PUBLIC_PORTFOLIO_GITHUB || 'https://github.com/CharlesJasema/Charles-Jasema-Portfolio.git',
+  karibuGroceries: process.env.NEXT_PUBLIC_KARIBU_GITHUB_URL || 'https://github.com/CharlesJasema/Karibu-Groceries-Ltd-Uganda.git',
+  camConnect: process.env.NEXT_PUBLIC_CAM_CONNECT_GITHUB_URL || 'https://github.com/CharlesJasema/CAM-CONNECT-MOBILE-APP.git',
+  portfolio: process.env.NEXT_PUBLIC_PORTFOLIO_GITHUB_URL || 'https://github.com/CharlesJasema/Charles-Jasema-Portfolio.git',
 };
 
 // Analytics Configuration (Optional)
