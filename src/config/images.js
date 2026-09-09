@@ -71,6 +71,6 @@ export const imagesConfig = {
     default: '/placeholder',
     project: '/images/project-placeholder.jpg',
   },
-} as const;
+};
 
-export type ImagesConfig = typeof imagesConfig;
+export default imagesConfig;

@@ -773,15 +773,15 @@ export const lyricsConfig = {
       {
         text: 'Listen on Mdundo',
         link: 'https://mdundo.com/a/148492',
-        variant: 'primary' as const,
+        variant: 'primary',
       },
       {
         text: 'Watch on YouTube',
         link: 'https://www.youtube.com/@CharlesJasemaMusic',
-        variant: 'secondary' as const,
+        variant: 'secondary',
       },
     ],
   },
-} as const;
+};
 
-export type LyricsConfig = typeof lyricsConfig;
+export default lyricsConfig;

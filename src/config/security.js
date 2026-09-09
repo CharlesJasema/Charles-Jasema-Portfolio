@@ -110,7 +110,7 @@ export const securityConfig = {
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'strict' as const,
+    sameSite: 'strict',
   },
 
   // API security settings
@@ -209,11 +209,8 @@ export const securityConfig = {
 /**
  * Validate security configuration
  */
-export function validateSecurityConfig(): {
-  isValid: boolean;
-  errors: string[];
-} {
-  const errors: string[] = [];
+export function validateSecurityConfig() {
+  const errors = [];
 
   // Validate required environment variables
   const missingEnvVars = securityConfig.requiredEnvVars.filter(

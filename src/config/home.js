@@ -14,17 +14,17 @@ export const homeConfig = {
       {
         text: 'View My Work',
         link: '/portfolio',
-        variant: 'primary' as const,
+        variant: 'primary',
       },
       {
         text: 'Get In Touch',
         link: '/contact',
-        variant: 'ghost' as const,
+        variant: 'ghost',
       },
       {
         text: 'Download CV',
         link: '#', // Update with actual CV link
-        variant: 'secondary' as const,
+        variant: 'secondary',
         icon: 'download',
       },
     ],
@@ -113,15 +113,15 @@ export const homeConfig = {
       {
         text: 'Start a Project',
         link: '/contact',
-        variant: 'primary' as const,
+        variant: 'primary',
       },
       {
         text: 'Explore Music Ministry',
         link: '/music',
-        variant: 'secondary' as const,
+        variant: 'secondary',
       },
     ],
   },
-} as const;
+};
 
-export type HomeConfig = typeof homeConfig;
+export default homeConfig;

@@ -352,7 +352,6 @@ export const musicConfig = {
     'Sinach',
     'Don Moen',
   ]
-} as const;
+};
 
-export type MusicConfig = typeof musicConfig;
-export type Song = typeof musicConfig.songs[number];
+export default musicConfig;

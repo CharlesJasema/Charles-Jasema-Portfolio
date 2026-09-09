@@ -30,7 +30,7 @@ export const portfolioProjects = [
   {
     id: 'karibu-groceries',
     title: 'Karibu Groceries Co. Ltd - E-commerce & Inventory System',
-    category: 'software' as const,
+    category: 'software',
     description: 'Scalable inventory and sales management system with role-based access control, built for improved business efficiency and user experience.',
     image: '/images/karibu-groceries-screenshot.jpg',
     tags: ['React', 'Node.js', 'PostgreSQL', 'Docker', 'CI/CD', 'E-commerce', 'Inventory Management'],
@@ -85,7 +85,7 @@ export const portfolioProjects = [
   {
     id: 'charles-jasema-portfolio',
     title: 'Charles Jasema Portfolio & Digital Platform',
-    category: 'software' as const,
+    category: 'software',
     description: 'Comprehensive digital platform featuring portfolio showcase, music ministry platform, blog system, and business website with advanced CMS integration, analytics, and performance optimization.',
     image: '/images/portfolio-website-screenshot.jpg',
     tags: ['Next.js 14', 'TypeScript', 'Sanity CMS', 'Tailwind CSS', 'Vercel', 'Google Analytics', 'PWA', 'SEO'],
@@ -155,7 +155,7 @@ export const portfolioProjects = [
   {
     id: 'cam-connect-app',
     title: 'CAM CONNECT - Hospitality Services Platform',
-    category: 'software' as const,
+    category: 'software',
     description: 'Mobile application for premium hospitality services including accommodation booking, conference facilities, and loyalty rewards system.',
     image: '/images/cam-connect-app-screenshot.jpg',
     tags: ['React Native', 'Mobile Development', 'Hospitality', 'Booking System', 'Loyalty Program', 'UI/UX Design'],
@@ -212,7 +212,7 @@ export const portfolioProjects = [
   {
     id: 'church-management-system',
     title: 'Church Management & Live Streaming Platform',
-    category: 'software' as const,
+    category: 'software',
     description: 'Complete church management system with member registration, event management, donation tracking, and integrated live streaming capabilities for worship services.',
     image: '/images/church-management-preview.jpg',
     tags: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Stripe', 'WebRTC', 'Express.js'],
@@ -275,5 +275,4 @@ export const portfolioProjects = [
   },
 ];
 
-export type PortfolioProject = typeof portfolioProjects[number];
-export type ProjectCategory = 'all' | 'software' | 'design' | 'videography' | 'music';
+export default portfolioProjects;

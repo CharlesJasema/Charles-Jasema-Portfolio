@@ -184,7 +184,7 @@ export const initializeAnalytics = () => {
   console.log('Analytics system initialized');
 };
 
-export default {
+const analyticsModule = {
   initializeAnalytics,
   trackPageView,
   trackEvent,
@@ -198,3 +198,5 @@ export default {
   trackError,
   isAnalyticsEnabled,
 };
+
+export default analyticsModule;
