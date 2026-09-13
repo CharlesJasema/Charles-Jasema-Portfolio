@@ -4,6 +4,8 @@
  * ⚠️ ADMIN: Edit this file to update your contact page content
  */
 
+import { socialLinks } from '@/lib/config';
+
 export const contactConfig = {
   // Page Header
   header: {
@@ -17,9 +19,10 @@ export const contactConfig = {
       id: 'email',
       icon: 'envelope',
       title: 'Email',
-      value: 'contact@charlesjasema.com', // Will be overridden by siteConfig
+      value: process.env.NEXT_PUBLIC_EMAIL || 'brocharles001@gmail.com',
       description: 'Send me an email anytime',
       color: 'primary-gold',
+      link: `mailto:${process.env.NEXT_PUBLIC_EMAIL || 'brocharles001@gmail.com'}`,
     },
     {
       id: 'whatsapp',
@@ -28,15 +31,23 @@ export const contactConfig = {
       value: '+256 785 446 877',
       description: 'Chat with me on WhatsApp Business',
       color: 'tech-teal',
-      link: 'https://wa.me/256785446877',
+      link: process.env.NEXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/256785446877',
     },
     {
-      id: 'phone',
+      id: 'phone-uganda',
       icon: 'phone',
-      title: 'Phone',
+      title: 'Phone (Uganda)',
       value: '+256 785 446 877',
-      description: 'Call me directly',
+      description: 'Call me directly in Uganda',
       color: 'accent-red',
+    },
+    {
+      id: 'phone-south-sudan',
+      icon: 'phone',
+      title: 'Phone (South Sudan)',
+      value: process.env.NEXT_PUBLIC_PHONE_SOUTH_SUDAN || '+211 927 889594',
+      description: 'Call me directly in South Sudan',
+      color: 'accent-blue',
     },
   ],
 
