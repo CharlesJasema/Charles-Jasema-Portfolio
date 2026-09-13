@@ -3,6 +3,7 @@ import { Providers } from '@/components/providers';
 import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
 import { StructuredData } from '@/components/StructuredData';
+import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 
 export const metadata = {
   title: {
@@ -98,13 +99,15 @@ export default function RootLayout({ children }) {
       </head>
       <body className="font-sans">
         <StructuredData />
-        <Providers>
-          <Navigation />
-          <main id="main-content" className="min-h-screen" role="main">
-            {children}
-          </main>
-          <Footer />
-        </Providers>
+        <AnalyticsProvider>
+          <Providers>
+            <Navigation />
+            <main id="main-content" className="min-h-screen" role="main">
+              {children}
+            </main>
+            <Footer />
+          </Providers>
+        </AnalyticsProvider>
       </body>
     </html>
   );
