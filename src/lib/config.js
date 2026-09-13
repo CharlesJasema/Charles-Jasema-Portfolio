@@ -27,6 +27,7 @@ export const socialLinks = {
   },
   contact: {
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/256785446877',
+    phone: process.env.NEXT_PUBLIC_PHONE_SOUTH_SUDAN || '+211927889594',
     email: `mailto:${process.env.NEXT_PUBLIC_EMAIL || 'brocharles001@gmail.com'}`,
     credly: process.env.NEXT_PUBLIC_CREDLY_URL || 'https://www.credly.com/users/charles-jada-sebit-emmanuel',
   }
