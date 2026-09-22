@@ -4,6 +4,7 @@ import { Navigation } from '@/components/navigation';
 import Footer from '@/components/footer';
 import { StructuredData } from '@/components/StructuredData';
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
+import { AIChatWidget } from '@/components/chat';
 
 export const metadata = {
   title: {
@@ -106,6 +107,7 @@ export default function RootLayout({ children }) {
               {children}
             </main>
             <Footer />
+            <AIChatWidget />
           </Providers>
         </AnalyticsProvider>
       </body>
