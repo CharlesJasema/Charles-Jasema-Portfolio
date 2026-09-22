@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://charlesjasema.com/sitemap.xml
+
+# Disallow search engine indexing of admin and API routes
+Disallow: /api/
+Disallow: /_next/
+Disallow: /.well-known/
+
+# Allow important pages
+Allow: /
+Allow: /about
+Allow: /portfolio
+Allow: /music
+Allow: /contact
+
+# Crawl delay (optional)
+Crawl-delay: 1

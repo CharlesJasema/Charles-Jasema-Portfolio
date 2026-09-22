@@ -83,7 +83,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: 'your-google-site-verification',
+    google: 'G-VBD2T2LCQH',
   },
   category: 'technology',
 };
