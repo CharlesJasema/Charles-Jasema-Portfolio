@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { StructuredData } from '@/components/StructuredData';
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 import { AIChatWidget } from '@/components/chat';
+import EnvValidator from '@/components/EnvValidator';
 
 export const metadata = {
   title: {
@@ -99,6 +100,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="font-sans">
+        <EnvValidator />
         <StructuredData />
         <AnalyticsProvider>
           <Providers>
@@ -107,9 +109,9 @@ export default function RootLayout({ children }) {
               {children}
             </main>
             <Footer />
-            <AIChatWidget />
           </Providers>
         </AnalyticsProvider>
+        <AIChatWidget />
       </body>
     </html>
   );
