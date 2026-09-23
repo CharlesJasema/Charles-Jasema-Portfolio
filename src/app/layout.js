@@ -40,24 +40,24 @@ export const metadata = {
   authors: [
     {
       name: 'Charles Jada Sebit Emmanuel',
-      url: 'https://charlesjasema.com',
+      url: 'https://charles-jasema-portfolio.vercel.app',
     },
   ],
   creator: 'Charles Jada Sebit Emmanuel',
-  metadataBase: new URL('https://charlesjasema.com'),
+  metadataBase: new URL('https://charles-jasema-portfolio.vercel.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://charlesjasema.com',
+    url: 'https://charles-jasema-portfolio.vercel.app',
     title: 'Charles Jasema - Software Engineer & Gospel Artist',
     description: 'Professional software engineer, graphics designer, and gospel artist. Building technology solutions and spreading hope through music.',
     siteName: 'Charles Jasema Portfolio',
     images: [
       {
-        url: 'https://charlesjasema.com/images/professional/charles-jasema-professional.jpg',
+        url: 'https://charles-jasema-portfolio.vercel.app/images/professional/charles-jasema-professional.jpg',
         width: 1200,
         height: 630,
         alt: 'Charles Jasema - Software Engineer & Gospel Artist',
@@ -69,7 +69,7 @@ export const metadata = {
     title: 'Charles Jasema - Software Engineer & Gospel Artist',
     description: 'Professional software engineer, graphics designer, and gospel artist. Building technology solutions and spreading hope through music.',
     creator: '@charlesjasema',
-    images: ['https://charlesjasema.com/images/professional/charles-jasema-professional.jpg'],
+    images: ['https://charles-jasema-portfolio.vercel.app/images/professional/charles-jasema-professional.jpg'],
   },
   robots: {
     index: true,

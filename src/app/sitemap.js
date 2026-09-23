@@ -1,5 +1,10 @@
+/**
+ * Dynamic Sitemap Generator for Next.js
+ * Generates sitemap.xml automatically for search engines
+ */
+
 export default function sitemap() {
-  const baseUrl = 'https://charlesjasema.com';
+  const baseUrl = 'https://charles-jasema-portfolio.vercel.app';
   
   return [
     {
@@ -11,7 +16,7 @@ export default function sitemap() {
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'monthly', 
       priority: 0.9,
     },
     {
