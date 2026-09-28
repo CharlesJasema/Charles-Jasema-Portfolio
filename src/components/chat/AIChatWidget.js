@@ -48,6 +48,7 @@ const AIChatWidget = () => {
     setIsLoading(true);
 
     try {
+      console.log('Sending message to AI:', input.trim());
       const response = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: {
@@ -62,7 +63,9 @@ const AIChatWidget = () => {
         }),
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (data.success) {
         const aiMessage = {
@@ -71,8 +74,10 @@ const AIChatWidget = () => {
           sender: 'ai',
           timestamp: new Date(),
         };
+        console.log('Adding AI message:', aiMessage);
         setMessages(prev => [...prev, aiMessage]);
       } else {
+        console.error('AI response error:', data.error);
         throw new Error(data.error || 'Failed to get response');
       }
     } catch (error) {

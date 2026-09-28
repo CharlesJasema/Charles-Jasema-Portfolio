@@ -124,7 +124,7 @@ export async function POST(request) {
     
     const response = {
       success: true,
-      response: aiResponse,
+      message: aiResponse,
       timestamp: new Date().toISOString(),
       type: 'ai-assistant'
     };
