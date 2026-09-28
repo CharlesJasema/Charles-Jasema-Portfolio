@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// AI Chat responses about Charles Jasema
+// AI Chat responses about Charles Jasema - Updated for intelligent responses
 const aiKnowledgeBase = {
   personal: {
     name: "Charles Jada Sebit Emmanuel (Charles Jasema)",
