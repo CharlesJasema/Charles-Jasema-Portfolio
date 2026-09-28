@@ -58,18 +58,41 @@ export default function TestAIPage() {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message to test the AI..."
+              placeholder="Try: 'hi', 'how to contact him', 'tell me about his music'"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           
-          <button
-            onClick={testAI}
-            disabled={loading || !message.trim()}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? 'Testing...' : 'Test AI Chat'}
-          </button>
+          <div className="flex space-x-2">
+            <button
+              onClick={testAI}
+              disabled={loading || !message.trim()}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
+            >
+              {loading ? 'Testing...' : 'Test AI Chat'}
+            </button>
+            
+            <button
+              onClick={() => setMessage('hi')}
+              className="bg-gray-500 text-white px-3 py-2 rounded-md hover:bg-gray-600"
+            >
+              Try "hi"
+            </button>
+            
+            <button
+              onClick={() => setMessage('how to contact him')}
+              className="bg-gray-500 text-white px-3 py-2 rounded-md hover:bg-gray-600"
+            >
+              Try "contact"
+            </button>
+            
+            <button
+              onClick={() => setMessage('tell me about his music')}
+              className="bg-gray-500 text-white px-3 py-2 rounded-md hover:bg-gray-600"
+            >
+              Try "music"
+            </button>
+          </div>
           
           {response && (
             <div className="mt-4 p-4 bg-gray-50 rounded-md">
